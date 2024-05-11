@@ -1,7 +1,14 @@
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { Auth } from './pages';
+
 function App() {
 	return (
 		<>
-			<div>hola</div>
+			<Router>
+				<Routes>
+					<Route path='/auth' element={<Auth />} />
+				</Routes>
+			</Router>
 		</>
 	);
 }
