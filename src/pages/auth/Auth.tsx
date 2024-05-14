@@ -1,19 +1,15 @@
-import logo from '../../assets/SVG/logo.svg';
-import SigninButton from './components/signin-button';
-import LoginButton from './components/login-button';
+import { useState } from "react";
+import BasicAuth from "./components/BasicAuth";
+import Login from "./login/Login";
 
 const Auth = () => {
-	return (
-		<div className='flex flex-col w-full h-screen bg-[#18151A]'>
-			<div className='flex justify-center items-center w-full h-2/4'>
-				<img src={logo} alt='logo' className='as:size-40 size-full' />
-			</div>
-			<div className='flex flex-col justify-center items-center w-full h-2/4 gap-y-5'>
-				<SigninButton />
-				<LoginButton />
-			</div>
-		</div>
-	);
+  const [isSelected, setIsSelected] = useState("BasicAuth");
+
+  if (isSelected === "BasicAuth") return <BasicAuth setIsSelected={setIsSelected} />;
+
+  if (isSelected === "SignIn") return <div>SignIn</div>;
+
+  if (isSelected === "LogIn") return <Login setIsSelected={setIsSelected} />;
 };
 
 export default Auth;
