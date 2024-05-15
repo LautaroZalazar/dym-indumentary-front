@@ -3,7 +3,8 @@ import visibilityEye from "@/assets/SVG/visibilityEye.svg";
 import { IVisibilityEye } from "../models/visibility-eye.interface";
 
 const VisibilityEyeButton: React.FC<IVisibilityEye> = ({ visibility, setVisibility }) => {
-  const handleOnClick = () => {
+  const handleOnClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    e.preventDefault();
     visibility === "text" ? setVisibility("password") : setVisibility("text");
   };
   return (
