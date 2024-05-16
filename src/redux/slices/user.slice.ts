@@ -1,4 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { COMMON_HEADERS } from '../constants/custom-headers';
 
 const baseUrl = import.meta.env.VITE_BACK_URL;
 
@@ -11,7 +12,7 @@ export const userSlice = createApi({
 				url: '/v1/user',
 				method: 'POST',
 				body: data,
-				headers: { 'Content-type': 'application/json; charset=UTF-8' },
+				headers: COMMON_HEADERS,
 			}),
 		}),
 
@@ -20,7 +21,7 @@ export const userSlice = createApi({
 				url: '/v1/auth/login',
 				method: 'POST',
 				body: data,
-				headers: { 'Content-type': 'application/json; charset=UTF-8' },
+				headers: COMMON_HEADERS,
 			}),
 		}),
 	}),
