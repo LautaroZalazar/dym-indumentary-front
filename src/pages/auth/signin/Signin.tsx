@@ -6,56 +6,66 @@ import Input from '../../../components/Input';
 import VisibilityEyeButton from '../../../components/VisibilityEye';
 import { useState } from 'react';
 import Button from '../components/button';
+import { useUserRegisterMutation } from '../../../redux/slices/user.slice';
 
 const Signin: React.FC<ILogin> = () => {
 	const [passwordVisibility, setPasswordVisibility] = useState('password');
-	const [form, setForm] = useState({
+
+	const initialState = {
 		name: '',
 		email: '',
 		password: '',
-	});
+		phone: '3413113502',
+		newsletter: false,
+	};
+
+	const [form, setForm] = useState(initialState);
+
+	const [userRegister] = useUserRegisterMutation();
+
+	const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
+		e.preventDefault();
+		try {
+			await userRegister(form);
+
+			setForm(initialState);
+		} catch (error: any) {
+			throw new Error(error.message);
+		}
+	};
 
 	return (
-		<div className='bg-transparent'>		
-			<div className='flex flex-col items-center justify-center mt-4'>
-				<form className='flex flex-col items-center'>
+		<div className="bg-transparent">
+			<div className="flex flex-col items-center justify-center mt-4">
+				<form className="flex flex-col items-center">
 					<Input
-						name='name'
-						type='text'
+						name="name"
+						type="text"
 						value={form.name}
-						onChange={(e) =>
-							setForm({ ...form, name: e.target.value })
-						}
+						onChange={(e) => setForm({ ...form, name: e.target.value })}
 						preImage={human.toString()}
 					/>
 					<Input
-						name='email'
-						type='email'
+						name="email"
+						type="email"
 						value={form.email}
-						onChange={(e) =>
-							setForm({ ...form, email: e.target.value })
-						}
+						onChange={(e) => setForm({ ...form, email: e.target.value })}
 						preImage={email.toString()}
 					/>
 					<Input
-						name='password'
+						name="password"
 						type={passwordVisibility}
 						value={form.password}
-						onChange={(e) =>
-							setForm({ ...form, password: e.target.value })
-						}
-						preImage={lock.toString()}>
+						onChange={(e) => setForm({ ...form, password: e.target.value })}
+						preImage={lock.toString()}
+					>
 						<VisibilityEyeButton
 							visibility={passwordVisibility}
 							setVisibility={setPasswordVisibility}
 						/>
 					</Input>
-					<div className='mt-8'>
-						<Button
-							primary={true}
-							name='Sign In'
-							onClick={() => {}}
-						/>
+					<div className="mt-8">
+						<Button primary={true} name="Sign In" onClick={handleSubmit} />
 					</div>
 				</form>
 			</div>
