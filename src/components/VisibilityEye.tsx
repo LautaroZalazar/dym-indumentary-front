@@ -1,5 +1,5 @@
 import React from "react";
-import visibilityEye from "@/assets/SVG/visibilityEye.svg";
+import visibilityEye from "../assets/SVG/visibilityEye.svg";
 import { IVisibilityEye } from "../models/visibility-eye.interface";
 
 const VisibilityEyeButton: React.FC<IVisibilityEye> = ({ visibility, setVisibility }) => {

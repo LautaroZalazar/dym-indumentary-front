@@ -1,16 +1,16 @@
 import { ILogin } from '../models/login.interface';
-import lock from '@/assets/SVG/lock.svg';
-import human from '@/assets/SVG/human.svg';
-import email from '@/assets/SVG/email.svg';
+import lock from '../../../assets/SVG/lock.svg';
+import human from '../../../assets/SVG/human.svg';
+import email from '../../../assets/SVG/email.svg';
 import Input from '../../../components/Input';
-import VisibilityEyeButton from '../../../components/VisibilityEye';
+import VisibilityEyeButton from '../../../assets/SVG/visibilityEye.svg';
 import { useState } from 'react';
 import Button from '../components/button';
 import { useUserRegisterMutation } from '../../../redux/slices/user.slice';
 
 const Signin: React.FC<ILogin> = () => {
 	const [passwordVisibility, setPasswordVisibility] = useState('password');
-
+	
 	const initialState = {
 		name: '',
 		email: '',

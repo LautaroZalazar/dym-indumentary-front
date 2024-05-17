@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import lock from '@/assets/SVG/lock.svg';
-import email from '@/assets/SVG/email.svg';
+import lock from '../../../assets/SVG/lock.svg';
+import email from '../../../assets/SVG/email.svg';
 import Input from '../../../components/Input';
 import VisibilityEyeButton from '../../../components/VisibilityEye';
 import Button from '../components/button';
