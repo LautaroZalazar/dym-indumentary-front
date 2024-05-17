@@ -23,9 +23,4 @@
   },
   "include": ["src/*"],
   "references": [{ "path": "./tsconfig.node.json" }],
-  "paths": {
-    "@/assets": ["src/assets"],
-    "@/component": ["src/components"],
-    "@/*": ["src/*"]
-  },
 }

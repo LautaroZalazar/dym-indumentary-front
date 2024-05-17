@@ -1,4 +1,4 @@
-import backArrow from "@/assets/SVG/backArrow.svg";
+import backArrow from "../assets/SVG/backArrow.svg";
 import { IBackButton } from "../models/back-button.interface";
 
 const BackButton: React.FC<IBackButton> = ({ onClick }) => {

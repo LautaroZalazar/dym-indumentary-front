@@ -2,7 +2,7 @@ import { useState } from 'react';
 import BasicAuth from './components/BasicAuth';
 import Login from './login/Login';
 import Signin from './signin/Signin';
-import logo from '@/assets/SVG/logo.svg';
+import logo from '../../assets/SVG/logo.svg';
 import BackButton from '../../components/BackButton';
 
 const Auth = () => {
