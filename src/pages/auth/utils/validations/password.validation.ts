@@ -8,3 +8,19 @@ export const validationPassword = (validatePassword: string) => {
     ];
     return validations;
   };
+
+  export const validationName = (name: string) => {
+    const validations = [
+      { condition: /^[a-zA-Z\s]+$/.test(name), message: 'Solo se permiten letras'},
+      { condition: name.length >= 3, message: 'Mínimo 3 caracteres'},
+    ]
+    return validations;
+  }
+
+  export const validationEmail = ( email: string ) => {
+    const validations = [
+      { condition: /@/.test(email), message: 'Debe contener un @' },
+      { condition: /[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/.test(email), message: 'Luego del punto, mminimo 2 caracteres y maximo 4' },
+    ]
+    return validations;
+  }
