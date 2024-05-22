@@ -8,7 +8,7 @@ import { ILogin } from '../models/login.interface';
 import { useUserLoginMutation } from '../../../redux/slices/user.slice';
 import { useNavigate } from 'react-router-dom';
 
-const Login: React.FC<ILogin> = () => {
+const Login: React.FC<ILogin> = ({setIsSelected}) => {
 	const [passwordVisibility, setPasswordVisibility] = useState('password');
 
 	const initialState = {
@@ -61,7 +61,10 @@ const Login: React.FC<ILogin> = () => {
 						/>
 					</Input>
 					<div className="mt-8">
-						<Button primary={true} name="Log In" onClick={handleSubmit} />
+						<Button primary={true} name="Log In" onClick={handleSubmit} />					
+							<p className='mt-4 hidden md:flex'>No tienes una cuenta?
+								<button onClick={() => {setIsSelected('SignIn')}} className='text-[#F26426]'>&nbsp;Registrate</button>
+							</p>
 					</div>
 				</form>
 			</div>

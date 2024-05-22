@@ -14,7 +14,7 @@ import {
 } from '../utils/validations/password.validation';
 import ValidationToolTip from '../components/validationToolTip';
 
-const Signin: React.FC<ILogin> = () => {
+const Signin: React.FC<ILogin> = ({setIsSelected}) => {
 	const [passwordVisibility, setPasswordVisibility] = useState('password');
 	const [showTooltip, setShowTooltip] = useState({
 		name: false,
@@ -169,7 +169,6 @@ const Signin: React.FC<ILogin> = () => {
 									});
 								}}
 								className='w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800'
-								required
 							/>
 						</div>
 						<label
@@ -185,6 +184,9 @@ const Signin: React.FC<ILogin> = () => {
 							onClick={handleSubmit}
 							disabled={validateError()}
 						/>
+						<p className='mt-4 hidden md:flex'>Ya tienes una cuenta?
+								<button onClick={() => {setIsSelected('LogIn')}} className='text-[#F26426]'>&nbsp;Inicia sesión</button>
+							</p>
 					</div>
 				</form>
 			</div>

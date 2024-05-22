@@ -6,7 +6,7 @@ const BackButton: React.FC<IBackButton> = ({ onClick }) => {
     window.history.back();
   };
   return (
-    <button className="w-full justify-start flex pl-2 pt-2" onClick={onClick || handleOnClick}>
+    <button className="w-full justify-start flex pl-2 pt-2 md:hidden" onClick={onClick || handleOnClick}>
       <img src={backArrow.toString()} alt="backArrow" className="size-6 md:size-10 inline-block" />
     </button>
   );

@@ -20,14 +20,14 @@ const Auth = () => {
 					<BackButton />
 				)}
 			</div>
-			<div className='flex justify-center items-center w-full md:w-2/4 h-2/5'>
+			<div className='flex justify-center md:justify-end items-center w-full md:w-2/4 h-2/5 md:pr-24'>
 				<img
 					src={logo.toString()}
 					alt='logo'
-					className='as:size-40 size-full'
+					className='size-40 md:size-96'
 				/>
 			</div>
-			<div className='flex justify-center items-center w-full md:w-2/4 h-2/5'>
+			<div className='flex justify-center md:justify-start items-center w-full md:w-2/4 h-2/5 md:pl-24'>
 				{isSelected === 'LogIn' ? (
 					<Login setIsSelected={setIsSelected} />
 				) : isSelected === 'SignIn' ? (
