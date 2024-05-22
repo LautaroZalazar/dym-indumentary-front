@@ -10,13 +10,17 @@ import { useUserRegisterMutation } from '../../../redux/slices/user.slice';
 import {
 	validationPassword,
 	validationName,
-  validationEmail,
+	validationEmail,
 } from '../utils/validations/password.validation';
 import ValidationToolTip from '../components/validationToolTip';
 
 const Signin: React.FC<ILogin> = () => {
 	const [passwordVisibility, setPasswordVisibility] = useState('password');
-	const [showTooltip, setShowTooltip] = useState({name: false, email: false, password: false});
+	const [showTooltip, setShowTooltip] = useState({
+		name: false,
+		email: false,
+		password: false,
+	});
 	const [error, setError] = useState({
 		name: true,
 		email: true,
@@ -45,8 +49,7 @@ const Signin: React.FC<ILogin> = () => {
 		}
 	};
 
-	const handleChange = (
-		e: React.ChangeEvent<HTMLInputElement>) => {
+	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		setForm({
 			...form,
 			[e.target.name]: e.target.value,
@@ -68,77 +71,92 @@ const Signin: React.FC<ILogin> = () => {
 		<div className='bg-transparent'>
 			<div className='flex flex-col items-center justify-center mt-4'>
 				<form className='flex flex-col items-center'>
-					<Input
-						name='name'
-						type='text'
-						value={form.name}
-						onChange={handleChange}
-						preImage={human.toString()}
-						onFocus={() => {
-							setShowTooltip({...showTooltip, name: true});
-						}}
-						onBlur={() => {
-							setShowTooltip({...showTooltip, name: false});
-						}}
-					/>
-					{showTooltip.name && (
-						<ValidationToolTip
-              top={"[31%]"}
-							validate={validationName(form.name)}
-							setError={handleError}
-							error={error.name}
-							base='name'
+					<div className='relative mb-2'>
+						<Input
+							name='name'
+							type='text'
+							value={form.name}
+							onChange={handleChange}
+							preImage={human.toString()}
+							onFocus={() => {
+								setShowTooltip({ ...showTooltip, name: true });
+							}}
+							onBlur={() => {
+								setShowTooltip({ ...showTooltip, name: false });
+							}}
 						/>
-					)}
-					<Input
-						name='email'
-						type='email'
-						value={form.email}
-						onChange={handleChange}
-						preImage={email.toString()}
-            onFocus={() => {
-							setShowTooltip({...showTooltip, email: true});
-						}}
-						onBlur={() => {
-							setShowTooltip({...showTooltip, email: false});
-						}}
-					/>
-          	{showTooltip.email && (
-						<ValidationToolTip
-              top={"[31%]"}
-							validate={validationEmail(form.email)}
-							setError={handleError}
-							error={error.email}
-							base='name'
+						{showTooltip.name && (
+							<ValidationToolTip
+								validate={validationName(form.name)}
+								setError={handleError}
+								error={error.name}
+								base='name'
+							/>
+						)}
+					</div>
+
+					<div className='relative mb-2'>
+						<Input
+							name='email'
+							type='email'
+							value={form.email}
+							onChange={handleChange}
+							preImage={email.toString()}
+							onFocus={() => {
+								setShowTooltip({ ...showTooltip, email: true });
+							}}
+							onBlur={() => {
+								setShowTooltip({
+									...showTooltip,
+									email: false,
+								});
+							}}
 						/>
-					)}
-					<Input
-						name='password'
-						type={passwordVisibility}
-						value={form.password}
-						onChange={handleChange}
-						preImage={lock.toString()}
-						onFocus={() => {
-							setShowTooltip({...showTooltip, password: true});
-						}}
-						onBlur={() => {
-							setShowTooltip({...showTooltip, password: false});
-						}}>
-						<VisibilityEyeButton
-							visibility={passwordVisibility}
-							setVisibility={setPasswordVisibility}
-						/>
-					</Input>
-					{showTooltip.password && (
-						<ValidationToolTip
-              top={60}
-							validate={validationPassword(form.password)}
-							setError={handleError}
-							error={error.password}
-							base='password'
-						/>
-					)}
-					<div className='flex w-full items-start m-3'>
+						{showTooltip.email && (
+							<ValidationToolTip
+								validate={validationEmail(form.email)}
+								setError={handleError}
+								error={error.email}
+								base='email'
+							/>
+						)}
+					</div>
+
+					<div className='relative mb-2'>
+						<Input
+							name='password'
+							type={passwordVisibility}
+							value={form.password}
+							onChange={handleChange}
+							preImage={lock.toString()}
+							onFocus={() => {
+								setShowTooltip({
+									...showTooltip,
+									password: true,
+								});
+							}}
+							onBlur={() => {
+								setShowTooltip({
+									...showTooltip,
+									password: false,
+								});
+							}}>
+							<VisibilityEyeButton
+								visibility={passwordVisibility}
+								setVisibility={setPasswordVisibility}
+							/>
+						</Input>
+						{showTooltip.password && (
+							<ValidationToolTip
+								validate={validationPassword(form.password)}
+								setError={handleError}
+								error={error.password}
+								base='password'
+							/>
+						)}
+					</div>
+
+					<div className='flex w-full items-start m-2'>
 						<div className='flex items-center h-5'>
 							<input
 								id='newsletter'
@@ -157,7 +175,7 @@ const Signin: React.FC<ILogin> = () => {
 						<label
 							htmlFor='newsletter'
 							className='ms-2 text-sm font-medium text-gray-900 dark:text-gray-300'>
-							Newsletter suscription
+							Newsletter subscription
 						</label>
 					</div>
 					<div className='mt-8'>

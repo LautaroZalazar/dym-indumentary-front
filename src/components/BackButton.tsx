@@ -7,7 +7,7 @@ const BackButton: React.FC<IBackButton> = ({ onClick }) => {
   };
   return (
     <button className="w-full justify-start flex pl-2 pt-2" onClick={onClick || handleOnClick}>
-      <img src={backArrow.toString()} alt="backArrow" className="size-6 inline-block" />
+      <img src={backArrow.toString()} alt="backArrow" className="size-6 md:size-10 inline-block" />
     </button>
   );
 };

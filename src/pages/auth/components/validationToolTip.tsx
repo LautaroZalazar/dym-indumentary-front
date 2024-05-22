@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 
-const ValidationToolTip: React.ElementType = ({ validate, error, setError, base, top }): any => {
+const ValidationToolTip: React.ElementType = ({ validate, error, setError, base }): any => {
 
   useEffect(() => {
     if (validate.length > 0) {
@@ -11,7 +11,7 @@ const ValidationToolTip: React.ElementType = ({ validate, error, setError, base,
     }
   }, [validate, error, setError]);
   return (
-    <div className={`absolute w-3/4 top-${top} left-50 mt-2 p-2 rounded bg-gray-300 border border-gray-300`}>
+    <div className="absolute bottom-full left-0 w-full transform -translate-y-2 bg-gray-300 text-white text-sm rounded p-2">
       {validate.map((validation: any, index: any) => (
         <p
           key={index}
