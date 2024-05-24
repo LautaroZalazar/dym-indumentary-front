@@ -6,6 +6,19 @@ module.exports = {
 			screens: {
 				as: { max: '360px' },
 			},
+			keyframes: {
+				flipHorizontal: {
+					'0%, 100%': {
+						transform: 'rotateY(0deg)',
+					},
+					'50%': {
+						transform: 'rotateY(180deg) scaleX(-1)',
+					},
+				},
+			},
+			animation: {
+				flipHorizontal: 'flipHorizontal 3s linear infinite',
+			},
 		},
 	},
 	plugins: [],
