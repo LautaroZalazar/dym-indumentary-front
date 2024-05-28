@@ -73,7 +73,7 @@ const Login: React.FC<ILogin> = ({ setIsSelected }) => {
               setVisibility={setPasswordVisibility}
             />
           </Input>
-          <div className="mt-8">
+          <div className="mt-8 flex flex-col items-center">
             <Button primary={true} name="Log In" onClick={handleSubmit} disabled={disabled} />
             <p className="mt-4 hidden md:flex">
               No tienes una cuenta?
