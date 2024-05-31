@@ -12,7 +12,12 @@ export interface Product {
     gender: string;
     image: string[];
     brand: Brand;
-    size: Size[];
-    color: Color[];
     category: Category[];
+    inventory: Array<{
+        size: Size,
+        stock: Array<{
+            quantity: number,
+            color: Color,
+        }>,
+    }>
 }
