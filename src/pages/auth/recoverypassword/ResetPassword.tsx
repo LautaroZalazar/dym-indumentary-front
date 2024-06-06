@@ -54,10 +54,9 @@ const ResetPassword: React.FC<IResetPassword> = () => {
 		e.preventDefault();
 		try {
 			const response = await authResetPassword({ password: form.password });
-			console.log(response);
 
 			if (response.error) {
-				setShowModalError('No se pudo actualizar la contraseña');
+				setShowModalError('Ha ocurrido un error');
 			}
 			alert(response.data.message);
 
@@ -95,7 +94,6 @@ const ResetPassword: React.FC<IResetPassword> = () => {
 			</div>
 			<div className="flex justify-center md:justify-start items-center w-full md:w-2/4 h-2/5 md:pl-24">
 				<div className="flex flex-col items-center justify-center mt-4">
-					{showModalError && <ErrorModal message={showModalError} />}
 					<form className="flex flex-col items-center">
 						<div className="relative mb-2">
 							<Input
@@ -130,6 +128,7 @@ const ResetPassword: React.FC<IResetPassword> = () => {
 									base="password"
 								/>
 							)}
+							{showModalError && <ErrorModal message={showModalError} />}
 						</div>
 
 						<div className="relative mb-2">
