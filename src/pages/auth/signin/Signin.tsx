@@ -5,7 +5,7 @@ import email from "../../../assets/SVG/email.svg";
 import Input from "../../../components/Input";
 import VisibilityEyeButton from "../../../components/VisibilityEye";
 import { useState } from "react";
-import Button from "../components/button";
+import Button from "../../../components/button";
 import { useUserRegisterMutation } from "../../../redux/slices/user.slice";
 import {
   validationPassword,

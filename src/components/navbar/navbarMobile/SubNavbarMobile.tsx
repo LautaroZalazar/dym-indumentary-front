@@ -14,12 +14,12 @@ const SubNavbarMobile = () => {
 		if (showInput && inputRef.current) {
 		  setTimeout(() => {
 			inputRef.current?.focus();
-		  }, 100); // Retraso de 100 milisegundos
+		  }, 100);
 		}
 	  }, [showInput]);
 
 	return (
-		<nav className='bg-dymOrange p-1 fixed top-0 w-full flex justify-around items-center'>
+		<nav className='bg-dymOrange p-1 top-0 w-full flex justify-around items-center'>
 			<div className='flex w-full'>
 				<div className='relative w-full flex items-center'>
 					<HamburguerButton />

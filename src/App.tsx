@@ -8,13 +8,11 @@ function App() {
 	return (
 		<Router>
 			<SubNavbarMobile />
-			<div className="pb-16 pt-12">
 				<Routes>
 					<Route path="/" element={<Home />} />
 					<Route path="/auth" element={<Auth />} />
 					<Route path="/reset-password" element={<ResetPassword />} />
 				</Routes>
-			</div>
 			<NavbarMobile />
 		</Router>
 	);

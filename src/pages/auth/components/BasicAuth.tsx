@@ -1,6 +1,6 @@
-import React from 'react';
-import Button from './button';
-import { IBasicAuth } from '../models/basic-auth.interface';
+import React from "react";
+import Button from "../../../components/button";
+import { IBasicAuth } from "../models/basic-auth.interface";
 
 const BasicAuth: React.FC<IBasicAuth> = ({ setIsSelected }) => {
 	return (
