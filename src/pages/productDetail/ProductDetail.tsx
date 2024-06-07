@@ -1,16 +1,11 @@
 import { useParams } from 'react-router-dom';
 import { useFetchProductQuery } from '../../redux/slices/product.slice';
 import { useEffect, useState } from 'react';
-// import ImageSlider from '../../components/ImageSlider';
+import ImageSlider from '../../components/ImageSlider';
 import Loader from '../../components/loader';
 import Button from '../../components/button';
 import { IProductInventory } from '../../models/product/product-inventory.model';
-
-interface ISelectedProduct {
-	color: string;
-	quantity: string;
-	size: string;
-}
+import { ISelectedProduct } from '../productDetail/models/selectedProduct.model'
 
 const ProductDetail = () => {
 	const { id } = useParams();
@@ -25,8 +20,6 @@ const ProductDetail = () => {
 		quantity: '',
 		size: '',
 	});
-
-	console.log(selectedProduct);
 
 	useEffect(() => {
 		if (data && data.inventory.length > 0) {
@@ -119,7 +112,7 @@ const ProductDetail = () => {
 		<section className='flex justify-center items-center overflow-hidden md:h-screen bg-dymBlack pb-20 pt-6 md:p-0'>
 			<div className='container px-5 mx-auto'>
 				<div className='lg:w-4/5 mx-auto flex flex-wrap md:flex-nowrap'>
-					{/* <ImageSlider images={data.image} /> */}
+					<ImageSlider images={data.image} />
 					<div className='lg:w-1/2 w-full lg:py-6 mt-6 lg:mt-0'>
 						<div>
 							<h1 className='text-dymAntiPop text-3xl font-medium'>
