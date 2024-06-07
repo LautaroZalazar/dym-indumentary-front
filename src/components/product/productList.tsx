@@ -1,30 +1,33 @@
-import React from "react";
-import { NavLink } from "react-router-dom";
-import { ProductCardProps } from "../../models/productCard.interface";
+import React from 'react';
+import { NavLink } from 'react-router-dom';
+import { ProductCardProps } from '../../models/productCard.interface';
 
 const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
-  return (
-    <div className="bg-dymAntiPop shadow-md rounded-lg h-40 w-72 my-2 md:mx-8 md:w-1/3 flex flex-row">
-      <div className="w-1/2 flex justify-center items-center">
-        <img src={product.image[0]} alt={product.name} />
-      </div>
-      <div className="overflow-auto flex flex-col justify-evenly w-1/2">
-        <div>
-          <p className="text-dymBlack font-medium">{product.name}</p>
-          <p className="text-dymBlack font-medium">{product.brand.name}</p>
-          <p className="text-dymBlack font-medium">${product.price.toFixed(2)}</p>
-        </div>
-        <div className="flex justify-center">
-          <NavLink
-            className="rounded-lg py-1 px-2 font-medium bg-dymOrange text-dymBlack shadow-md"
-            to={`/detail/${product._id}`}
-          >
-            Ver detalle
-          </NavLink>
-        </div>
-      </div>
-    </div>
-  );
+	return (
+		<div className='flex flex-row md:flex-col border overflow-hidden shadow-sm md:h-full h-40 w-80 md:w-full'>
+			<div className='relative w-full'>
+				<img
+					src={product.image[0]}
+					alt={product.name}
+					className='w-full md:h-96 h-full object-cover md:object-fit'
+				/>
+			</div>
+			<div className='bg-dymAntiPop p-4 text-dymBlack w-full'>
+				<p className='text-md font-bold'>{product.brand.name}</p>
+				<h2 className='text-lg font-semibold'>
+					{product.name}
+					<p className='text-xl font-bold'>${product.price}</p>
+				</h2>
+				<div className='flex justify-center mt-2'>
+					<NavLink
+						to={`/detail/${product._id}`}
+						className='rounded-lg py-1 px-2 font-medium bg-dymOrange text-dymBlack shadow-md'>
+						Ver detalle
+					</NavLink>
+				</div>
+			</div>
+		</div>
+	);
 };
 
 export default ProductCard;

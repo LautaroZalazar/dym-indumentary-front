@@ -1,23 +1,27 @@
-import Loader from "../../components/loader";
-import { useFetchProductsQuery } from "../../redux/slices/product.slice";
-import { Product } from "../../models/product/product.model";
-import ProductCard from "../../components/product/productList";
+import Loader from '../../components/loader';
+import { useFetchProductsQuery } from '../../redux/slices/product.slice';
+import { IProduct } from '../../models/product/product.model';
+import ProductCard from '../../components/product/productList';
 
 const Home = () => {
-  const { data, error, isLoading } = useFetchProductsQuery(null);
+	const { data, error, isLoading } = useFetchProductsQuery(null);
 
-  if (isLoading) return <Loader />;
+	if (isLoading) return <Loader />;
 
-  if (error) return <div>Error</div>;
+	if (error) return <div>Error</div>;
 
-  const products: Product[] = data;
+	const products: IProduct[] = data;
 
-  return (
-    <div className="flex flex-col items-center md:flex-row flex-wrap md:justify-center">
-      {products.map((product) => (
-        <ProductCard product={product} key={product._id} />
-      ))}
-    </div>
-  );
+	return (
+		<div className='flex p-6 md:w-full justify-center'>
+			<div className='flex  items-center'>
+				<div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'>
+					{products.map((product) => (
+						<ProductCard product={product} key={product._id} />
+					))}
+				</div>
+			</div>
+		</div>
+	);
 };
 export default Home;
