@@ -2,7 +2,7 @@ import logo from '../../../assets/SVG/logo.svg';
 import lock from '../../../assets/SVG/lock.svg';
 import Input from '../../../components/Input';
 import VisibilityEyeButton from '../../../components/VisibilityEye';
-import Button from '../components/button';
+import Button from '../../../components/button';
 import { useState } from 'react';
 import { IResetPassword } from '../models/reset-password.interface';
 import ValidationToolTip from '../components/validationToolTip';
