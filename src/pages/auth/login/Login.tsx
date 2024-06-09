@@ -1,12 +1,12 @@
-import { useState } from 'react';
-import lock from '../../../assets/SVG/lock.svg';
-import email from '../../../assets/SVG/email.svg';
-import Input from '../../../components/Input';
-import VisibilityEyeButton from '../../../components/VisibilityEye';
-import Button from '../components/button';
-import { ILogin } from '../models/login.interface';
-import { useUserLoginMutation } from '../../../redux/slices/user.slice';
-import { useNavigate } from 'react-router-dom';
+import { useState } from "react";
+import lock from "../../../assets/SVG/lock.svg";
+import email from "../../../assets/SVG/email.svg";
+import Input from "../../../components/Input";
+import VisibilityEyeButton from "../../../components/VisibilityEye";
+import Button from "../../../components/button";
+import { ILogin } from "../models/login.interface";
+import { useUserLoginMutation } from "../../../redux/slices/user.slice";
+import { useNavigate } from "react-router-dom";
 
 const Login: React.FC<ILogin> = ({ setIsSelected }) => {
 	const [passwordVisibility, setPasswordVisibility] = useState('password');

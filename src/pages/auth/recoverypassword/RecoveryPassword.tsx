@@ -1,7 +1,7 @@
 import React from 'react';
 import email from '../../../assets/SVG/email.svg';
 import Input from '../../../components/Input';
-import Button from '../components/button';
+import Button from '../../../components/button';
 import { useState } from 'react';
 import { IRecoveryPassword } from '../models/recovery-password.interface';
 import ValidationToolTip from '../components/validationToolTip';

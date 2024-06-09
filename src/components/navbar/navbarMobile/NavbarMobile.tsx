@@ -24,10 +24,10 @@ const NavbarMobile = () => {
 	
 
 	return (
-		<nav className='bg-dymOrange p-4 fixed bottom-0 w-full flex justify-around items-center'>
+		<nav className='bg-dymOrange p-4 sticky bottom-0 w-full md:hidden flex justify-around items-center'>
 			<div className='flex justify-around w-full'>
 				<a href='/' className='text-white flex align-center'>
-					{isIconFill ? (
+					{isIconFill.home ? (
 						<img src={homeIconFill.toString()} />
 					) : (
 						<img src={homeIcon.toString()} />
