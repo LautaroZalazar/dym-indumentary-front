@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { COMMON_HEADERS } from '../constants/custom-headers';
+import { AUTH_HEADERS, COMMON_HEADERS } from '../constants/custom-headers';
 
 const baseUrl = import.meta.env.VITE_BACK_URL;
 
@@ -24,7 +24,14 @@ export const userSlice = createApi({
 				headers: COMMON_HEADERS,
 			}),
 		}),
+		getUserById: builder.query({
+            query: () => ({
+                url: '/v1/user/detail',
+                method: 'GET',
+                headers: AUTH_HEADERS,
+            }),
+        }),
 	}),
 });
 
-export const { useUserRegisterMutation, useUserLoginMutation } = userSlice;
+export const { useUserRegisterMutation, useUserLoginMutation, useGetUserByIdQuery } = userSlice;

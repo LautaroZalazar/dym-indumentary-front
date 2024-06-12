@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import ModalImage from './modalImage'
+import ModalImage from './modalImage';
 
 const ImageSlider = ({ images }: any) => {
 	const [activeIndex, setActiveIndex] = useState(0);
@@ -38,12 +38,13 @@ const ImageSlider = ({ images }: any) => {
 	return (
 		<>
 			{' '}
-			<ModalImage images={images} activeIndex={activeIndex} isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen}/>
-			<div
-				className='flex items-center'
-				onMouseEnter={() => handleMouseEnter(activeIndex)}
-				onTouchStart={handleTouchStart}
-				onTouchEnd={handleTouchEnd}>
+			<ModalImage
+				images={images}
+				activeIndex={activeIndex}
+				isModalOpen={isModalOpen}
+				setIsModalOpen={setIsModalOpen}
+			/>
+			<div className='flex items-center'>
 				<div className='flex justify-end w-full flex-col md:flex-row-reverse'>
 					<div className='relative md:w-4/5 h-72 sm:h-80 md:h-96 lg:h-[40rem] rounded overflow-hidden'>
 						{images.map((image: string, index: number) => (
@@ -62,6 +63,11 @@ const ImageSlider = ({ images }: any) => {
 									className='w-full h-full object-cover md:object-fill object-center p-2 border border-gray-200 cursor-pointer'
 									alt={`Slide ${index + 1}`}
 									onClick={toggleModal}
+									onMouseEnter={() =>
+										handleMouseEnter(activeIndex)
+									}
+									onTouchStart={handleTouchStart}
+									onTouchEnd={handleTouchEnd}
 								/>
 							</div>
 						))}

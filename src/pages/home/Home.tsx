@@ -4,13 +4,13 @@ import { IProduct } from '../../models/product/product.model';
 import ProductCard from '../../components/product/productList';
 
 const Home = () => {
-	const { data, error, isLoading } = useFetchProductsQuery(null);
+	const { data: productData , error: productError , isLoading: productIsLoading } = useFetchProductsQuery(null);
 
-	if (isLoading) return <Loader />;
+	if (productIsLoading) return <Loader />;
 
-	if (error) return <div>Error</div>;
+	if (productError) return <div>Error</div>;
 
-	const products: IProduct[] = data;
+	const products: IProduct[] = productData;
 
 	return (
 		<div className='flex p-6 md:w-full justify-center'>

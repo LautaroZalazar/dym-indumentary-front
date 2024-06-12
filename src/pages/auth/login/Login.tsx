@@ -11,6 +11,7 @@ import { useNavigate } from "react-router-dom";
 const Login: React.FC<ILogin> = ({ setIsSelected }) => {
 	const [passwordVisibility, setPasswordVisibility] = useState('password');
 	const [disabled, setDisabled] = useState(true);
+	const sessionTime = import.meta.env.VITE_SESSION_TIME
 
 	const initialState = {
 		email: '',
@@ -29,6 +30,9 @@ const Login: React.FC<ILogin> = ({ setIsSelected }) => {
 
 			if (!response.error) {
 				localStorage.setItem('user', JSON.stringify(response.data));
+				setTimeout(() => {
+					localStorage.removeItem('user')
+				}, sessionTime * 36000000);
 				navigate('/');
 			}
 

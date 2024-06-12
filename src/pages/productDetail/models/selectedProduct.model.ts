@@ -1,5 +1,5 @@
 export interface ISelectedProduct {
-	color: string;
+	color: {_id: string, hex: string};
 	quantity: string;
-	size: string;
+	size: {_id: string, name: string};
 }
