@@ -3,6 +3,7 @@ import { NavLink } from 'react-router-dom';
 import { ProductCardProps } from '../../models/productCard.interface';
 
 const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
+
 	return (
 		<div className='flex flex-row md:flex-col border overflow-hidden shadow-sm md:h-full h-40 w-80 md:w-full'>
 			<div className='relative w-full'>

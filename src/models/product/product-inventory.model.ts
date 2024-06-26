@@ -1,10 +1,10 @@
-import { Size } from './size.model';
-import { Color } from './color.model';
+import { ISize } from './size.model';
+import { IColor } from './color.model';
 
 export interface IProductInventory {
-	size: Size;
+	size: ISize;
 	stock: Array<{
 		quantity: number;
-		color: Color;
+		color: IColor;
 	}>;
 }
