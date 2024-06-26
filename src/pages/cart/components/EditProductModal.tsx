@@ -56,10 +56,7 @@ const EditProductModal: React.FC<IEditProductModalProps> = ({
 		});
 	}, [product]);
 
-	console.log(product.size);
-
 	const handleSizeChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-		console.log(event.target.value);
 		setSelectedUpdate({ ...selectedUpdate, sizeId: event.target.value });
 	};
 	const handleColorClick = (color: string, id: string) => {
@@ -93,7 +90,6 @@ const EditProductModal: React.FC<IEditProductModalProps> = ({
 	const filteredColor = productData?.inventory?.filter(
 		(i: any) => i.size._id === selectedUpdate.sizeId
 	);
-	console.log(filteredColor);
 
 	const renderColorOptions = () =>
 		filteredColor?.flatMap((i) =>
@@ -120,8 +116,6 @@ const EditProductModal: React.FC<IEditProductModalProps> = ({
 			</option>
 		));
 	};
-
-	console.log(product);
 
 	return (
 		<div className='fixed inset-0 bg-black bg-opacity-85 flex justify-center items-center'>
