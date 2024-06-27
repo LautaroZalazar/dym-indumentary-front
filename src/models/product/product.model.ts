@@ -1,10 +1,10 @@
-import { Size } from "./size.model";
+import { ISize } from "./size.model";
 import { Brand } from "./brand.model";
-import { Color } from "./color.model";
+import { IColor } from "./color.model";
 import { Category } from "./category.model";
 
 export interface IProduct {
-    _id: number;
+    _id: string;
     name: string;
     description: string;
     price: number;
@@ -14,10 +14,10 @@ export interface IProduct {
     brand: Brand;
     category: Category[];
     inventory: Array<{
-        size: Size,
+        size: ISize,
         stock: Array<{
             quantity: number,
-            color: Color,
+            color: IColor,
         }>,
     }>
 }

@@ -33,7 +33,7 @@ const NavbarMobile = () => {
 						<img src={homeIcon.toString()} />
 					)}
 				</a>
-				<a href='/#' className='text-white text-center'>
+				<a href='/cart' className='text-white text-center'>
 					<img src={shoppingBag.toString()} />
 				</a>
 					<a href='/auth' className='text-white text-center'>

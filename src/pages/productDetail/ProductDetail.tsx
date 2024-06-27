@@ -79,20 +79,32 @@ const ProductDetail = () => {
 
 	const handleAddProductCart = async (e: any) => {
 		e.preventDefault();
-		const productToCart = {
+		const productToCartForBackend = {
 			colorId: selectedProduct.color._id,
 			quantity: Number(selectedProduct.quantity),
 			sizeId: selectedProduct.size._id,
 			productId: id,
 		};
+
+		const productToCartForLocalStorage = {
+			product: {
+				name: data.name,
+				price: data.price,
+				image: data.image,
+				_id: id,
+			},
+			color: selectedProduct.color,
+			size: selectedProduct.size,
+			quantity: Number(selectedProduct.quantity),
+		};
 		try {
 			if (localStorage.getItem('user')) {
 				await addProductCart({
-					products: [productToCart],
+					products: [productToCartForBackend],
 					cartId: userData.cart._id,
 				});
 			} else {
-				ValidateProductToCart(productToCart);
+				ValidateProductToCart(productToCartForLocalStorage);
 			}
 		} catch (error: any) {
 			throw new Error(error.message);
@@ -182,7 +194,7 @@ const ProductDetail = () => {
 											},
 										});
 									}}
-									className='w-20 rounded overflow-y-auto border appearance-none border-gray-400 py-2 focus:outline-none focus:border-dymOrange text-base pl-3 pr-10 mr-6 mb-2'>
+									className='w-20 rounded overflow-y-auto border border-gray-400 py-2 focus:outline-none focus:border-dymOrange text-base pl-3 mr-6 mb-2'>
 									{renderSizeOptions()}
 								</select>
 								<span className='mr-4 mb-2'>Cantidad</span>
@@ -193,7 +205,7 @@ const ProductDetail = () => {
 											quantity: e.target.value,
 										})
 									}
-									className='w-20 rounded overflow-y-auto border appearance-none border-gray-400 py-2 focus:outline-none focus:border-dymOrange text-base pl-3 pr-10 mb-2'>
+									className='w-20 rounded overflow-y-auto border border-gray-400 py-2 focus:outline-none focus:border-dymOrange text-base pl-3 mr-6 mb-2'>
 									{renderQuantityOptions()}
 								</select>
 							</div>

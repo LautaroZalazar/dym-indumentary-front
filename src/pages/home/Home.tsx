@@ -4,7 +4,12 @@ import { IProduct } from '../../models/product/product.model';
 import ProductCard from '../../components/product/productList';
 
 const Home = () => {
-	const { data: productData , error: productError , isLoading: productIsLoading } = useFetchProductsQuery(null);
+	const {
+		data: productData,
+		error: productError,
+		isLoading: productIsLoading,
+	} = useFetchProductsQuery(null);
+
 
 	if (productIsLoading) return <Loader />;
 

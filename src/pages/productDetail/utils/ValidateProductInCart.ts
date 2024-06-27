@@ -1,12 +1,12 @@
-const ValidateProductInCart = ( productToCart: any ) => {
+const ValidateProductInCart = (productToCart: any) => {
 	let cart = localStorage.getItem('cart');
 	let parsedCart = cart ? JSON.parse(cart) : [];
 
 	const existingProductIndex = parsedCart.findIndex(
 		(item: any) =>
-			item.colorId === productToCart.colorId &&
-			item.sizeId === productToCart.sizeId &&
-			item.productId === productToCart.productId
+			item.colorId === productToCart.color._id &&
+			item.sizeId === productToCart.size._id &&
+			item.productId === productToCart.product._id
 	);
 
 	if (existingProductIndex !== -1) {
