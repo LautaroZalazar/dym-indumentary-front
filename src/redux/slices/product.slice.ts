@@ -7,9 +7,9 @@ export const productSlice = createApi({
     reducerPath: 'productSlice',
     baseQuery: fetchBaseQuery({ baseUrl }),
     endpoints: (builder) => ({
-        fetchProducts: builder.query({
-            query: () => ({
-                url: '/v1/product',
+        fetchProducts: builder.query<any, { limit: number; page: number }>({
+            query: ({limit, page}) => ({
+                url: `/v1/product?limit=${limit}&page=${page}`,              
                 method: 'GET',
                 headers: COMMON_HEADERS,
             }),
@@ -25,7 +25,7 @@ export const productSlice = createApi({
 
         createProduct: builder.mutation({
             query: (data) => ({
-                url: '/v1/product',
+                url: '/v1/admin/product',
                 method: 'POST',
                 body: data,
                 headers: AUTH_HEADERS,
@@ -34,7 +34,7 @@ export const productSlice = createApi({
 
         updateProduct: builder.mutation({
             query: (data) => ({
-                url: `/v1/product`,
+                url: `/v1/admin/product`,
                 method: 'PUT',
                 body: data,
                 headers: AUTH_HEADERS,
