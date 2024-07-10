@@ -31,7 +31,14 @@ export const userSlice = createApi({
                 headers: AUTH_HEADERS,
             }),
         }),
+		fecthAllUsers: builder.query({
+            query: () => ({
+                url: '/v1/admin/user',
+                method: 'GET',
+                headers: AUTH_HEADERS,
+            }),
+        }),
 	}),
 });
 
-export const { useUserRegisterMutation, useUserLoginMutation, useGetUserByIdQuery } = userSlice;
+export const { useUserRegisterMutation, useUserLoginMutation, useGetUserByIdQuery, useFecthAllUsersQuery } = userSlice;

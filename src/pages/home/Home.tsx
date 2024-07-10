@@ -8,8 +8,7 @@ const Home = () => {
 		data: productData,
 		error: productError,
 		isLoading: productIsLoading,
-	} = useFetchProductsQuery(null);
-
+	} = useFetchProductsQuery({ limit: 30, page: 1 });
 
 	if (productIsLoading) return <Loader />;
 
