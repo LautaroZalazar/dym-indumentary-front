@@ -40,8 +40,6 @@ const AddProductForm: React.FC = () => {
 		combinations: [],
 	});
 
-	console.log(categoriesData)
-
 	useEffect(() => {
 		validateProductForm(formData, setErrors);
 	}, [formData]);

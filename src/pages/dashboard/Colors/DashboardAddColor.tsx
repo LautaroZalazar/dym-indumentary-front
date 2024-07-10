@@ -33,7 +33,6 @@ const DashboardAddColor: React.FC = () => {
 						color: color.name.toLowerCase(),
 						hex: color.hex,
 					};
-					console.log(newColor)
 					await createColor(newColor);
 				}
 			}

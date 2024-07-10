@@ -5,7 +5,6 @@ import { IUserMap } from './models/user-map.interface'
 const DashboardUsersList = () => {
 	const { data: userData, isLoading: userIsLoading } =
 		useFecthAllUsersQuery('');
-	console.log(userData);
 
 	if (userIsLoading) return <Loader />;
 
