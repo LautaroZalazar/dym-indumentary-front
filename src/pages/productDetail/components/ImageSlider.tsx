@@ -46,7 +46,7 @@ const ImageSlider = ({ images }: any) => {
 			/>
 			<div className='flex items-center'>
 				<div className='flex justify-end w-full flex-col md:flex-row-reverse'>
-					<div className='relative md:w-4/5 h-72 sm:h-80 md:h-96 lg:h-[40rem] rounded overflow-hidden'>
+					<div className='relative w-full h-72 sm:h-80 md:h-96 lg:h-[40rem] rounded overflow-hidden'>
 						{images.map((image: string, index: number) => (
 							<div
 								key={index}
@@ -60,7 +60,7 @@ const ImageSlider = ({ images }: any) => {
 								}>
 								<img
 									src={image.toString()}
-									className='w-full h-full object-cover md:object-fill object-center p-2 border border-gray-200 cursor-pointer'
+									className='w-full h-full object-cover md:object-fit object-center p-2 border border-gray-200 cursor-pointer'
 									alt={`Slide ${index + 1}`}
 									onClick={toggleModal}
 									onMouseEnter={() =>
