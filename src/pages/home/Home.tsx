@@ -17,7 +17,7 @@ const Home = () => {
 	const products: IProduct[] = productData;
 
 	return (
-		<div className='flex p-6 md:w-full justify-center'>
+		<div className='flex p-4 md:w-full justify-center'>
 			<div className='flex  items-center'>
 				<div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'>
 					{products.map((product) => (

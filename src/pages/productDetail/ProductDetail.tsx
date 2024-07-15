@@ -3,7 +3,6 @@ import { useFetchProductQuery } from '../../redux/slices/product.slice';
 import { useEffect, useState } from 'react';
 import ImageSlider from './components/ImageSlider';
 import Loader from '../../components/loader';
-import Button from '../../components/button';
 import { IProductInventory } from '../../models/product/product-inventory.model';
 import { ISelectedProduct } from '../productDetail/models/selectedProduct.model';
 import { useAddProductToCartMutation } from '../../redux/slices/cart.slice';
@@ -25,6 +24,7 @@ const ProductDetail = () => {
 		quantity: '',
 		size: { _id: '', name: '' },
 	});
+	const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
 
 	useEffect(() => {
 		if (data && data.inventory.length > 0) {
@@ -152,23 +152,39 @@ const ProductDetail = () => {
 			)
 		);
 
+	const toggleDescription = () => {
+		setIsDescriptionExpanded(!isDescriptionExpanded);
+	};
+
 	return (
 		<div className='flex items-center md:h-screen container mx-auto px-4 py-8 md:py-16'>
-			<div className='flex flex-col md:flex-row items-center md:items-start'>
-				<section className='w-full md:w-1/2 mb-8 md:mb-0'>
+			<div className='flex w-full flex-col md:flex-row items-center md:items-start md:justify-center'>
+				<section className='w-full md:w-[45%] mb-8 md:mb-0'>
 					<ImageSlider images={data.image} />
 				</section>
-				<div className='flex flex-col w-full md:w-1/2 md:pl-8'>
+				<div className='flex flex-col w-full md:w-1/3 md:pl-8'>
 					<section className='mb-8'>
 						<h1 className='text-dymAntiPop text-3xl font-medium mb-4'>
-							{data.name}
+							{data.name.charAt(0).toUpperCase() +
+								data.name.slice(1)}
 						</h1>
-						<div className='h-auto md:h-48'>
-							<div className='overflow-auto max-h-full md:max-h-48'>
-								<p className='text-dymAntiPop leading-relaxed'>
-									{data.description}
+						<div className='lg:h-48'>
+							<div
+								className={`lg:h-full lg:overflow-y-auto ${
+									isDescriptionExpanded ? '' : 'line-clamp-1'
+								}`}>
+								<p className='text-dymAntiPop leading-relaxed pr-2'>
+									{data.description.charAt(0).toUpperCase() +
+										data.description.slice(1)}
 								</p>
 							</div>
+							<button
+								onClick={toggleDescription}
+								className='mt-2 text-dymOrange lg:hidden'>
+								{isDescriptionExpanded
+									? 'Leer menos'
+									: 'Leer más'}
+							</button>
 						</div>
 					</section>
 					<section>
@@ -215,12 +231,11 @@ const ProductDetail = () => {
 								${data.price * Number(selectedProduct.quantity)}
 							</span>
 							<div className='ml-auto'>
-								<Button
-									primary={true}
-									name='Agregar al carrito'
-									disabled={false}
+								<button
 									onClick={handleAddProductCart}
-								/>
+									className='text-nowrap xl:w-56 rounded-full bg-dymOrange border-[1px] p-2'>
+									Agregar al carrito
+								</button>
 							</div>
 						</div>
 					</section>
