@@ -14,9 +14,11 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
 				/>
 			</div>
 			<div className='bg-dymAntiPop p-4 text-dymBlack w-full'>
-				<p className='text-md font-bold'>{product.brand.name}</p>
+				<p className='text-md font-bold'>{product.brand.name.charAt(0).toUpperCase() +
+								product.brand.name.slice(1)}</p>
 				<h2 className='text-lg font-semibold'>
-					{product.name}
+				{product.name.charAt(0).toUpperCase() +
+								product.name.slice(1)}
 					<p className='text-xl font-bold'>${product.price}</p>
 				</h2>
 				<div className='flex justify-center mt-2'>

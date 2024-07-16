@@ -1,4 +1,4 @@
 export interface ISizeMap {
-    _id: number;
+    _id: string;
     name: string;
 }
