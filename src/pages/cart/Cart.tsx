@@ -69,11 +69,11 @@ const Cart = () => {
 
 	const handleRemoveItem = async (
 		productId: string,
-		colorId: string,
-		sizeId: string
+		sizeId: string,
+		colorId: string
 	) => {
 		try {
-			if (cartData) {
+			if (user && cartData) {
 				await axios.delete(`${baseUrl}/v1/cart`, {
 					headers: {
 						'Content-Type': 'application/json; charset=UTF-8',
@@ -89,9 +89,11 @@ const Cart = () => {
 			} else {
 				const updatedCart = localCart.filter(
 					(product) =>
-						product.product._id === productId &&
-						product.color._id === colorId &&
-						product.size._id === sizeId
+						!(
+							product.product._id === productId &&
+							product.size._id === sizeId &&
+							product.color._id === colorId
+						)
 				);
 				setLocalCart(updatedCart);
 				localStorage.setItem('cart', JSON.stringify(updatedCart));
@@ -223,7 +225,7 @@ const Cart = () => {
 			)}
 			{isModalOpen && (
 				<EditProductModal
-				    isModalOpen={isModalOpen}
+					isModalOpen={isModalOpen}
 					setIsModalOpen={setIsModalOpen}
 					onClose={closeModal}
 					product={updateModalProducts}

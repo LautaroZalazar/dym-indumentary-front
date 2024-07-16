@@ -11,6 +11,7 @@ const calculateTotal = (cart: ICartItem[]) => {
 	return { subtotal };
 };
 
+
 const renderCartSummary = (cart: ICartItem[], shippingCost: number) => {
 	const { subtotal } = calculateTotal(cart);
 	const total = subtotal + shippingCost;
