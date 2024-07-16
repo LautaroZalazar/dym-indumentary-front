@@ -1,5 +1,4 @@
 import { useState, useRef, useEffect } from 'react';
-import HamburguerButton from '../../HamburguerButton';
 import searchIcon from '../../../assets/SVG/searchIcon.svg';
 import shoppingBag from '../../../assets/SVG/shoppingBag.svg';
 import userIcon from '../../../assets/SVG/userIcon.svg';
@@ -24,7 +23,6 @@ const SubNavbarMobile = () => {
 		<nav className='bg-dymOrange p-1 top-0 w-full flex justify-around items-center'>
 			<div className='flex w-full'>
 				<div className='relativ w-full flex items-center mr-4'>
-					<HamburguerButton />
 						<div className='w-full flex justify-end space-x-6 items-center p-2'>
 						<input
 							type='text'

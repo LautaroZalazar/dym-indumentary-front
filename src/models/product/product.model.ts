@@ -12,7 +12,7 @@ export interface IProduct {
     gender: string;
     image: string[];
     brand: Brand;
-    category: Category[];
+    category: Category;
     inventory: Array<{
         size: ISize,
         stock: Array<{
