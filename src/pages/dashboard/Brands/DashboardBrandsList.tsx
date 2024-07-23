@@ -1,46 +1,46 @@
 import { useState, useMemo } from 'react';
 import Loader from '../../../components/loader';
-import { useFetchColorsQuery } from '../../../redux/slices/catalogs.silce';
-import { IColorMap } from './models/color-map.interface';
+import { useFetchBrandsQuery } from '../../../redux/slices/catalogs.silce';
+import { IBrandMap } from './models/brand-map.interface';
 
-const DashboardColorsList = () => {
-	const { data: colorData, isLoading: colorIsLoading } =
-		useFetchColorsQuery('');
+const DashboardBrandsList = () => {
+	const { data: brandData, isLoading: dataIsLoading } =
+		useFetchBrandsQuery('');
 	const [searchTerm, setSearchTerm] = useState('');
 	const [sortOrder, setSortOrder] = useState('');
 
-	const filteredColor = useMemo(() => {
-		if (!colorData) return [];
-		let filtered = colorData.filter((color: IColorMap) =>
-			color.name.toLowerCase().includes(searchTerm.toLowerCase())
+	const filteredBrand = useMemo(() => {
+		if (!brandData) return [];
+		let filtered = brandData.filter((brand: IBrandMap) =>
+			brand.name.toLowerCase().includes(searchTerm.toLowerCase())
 		);
 
 		if (sortOrder === 'asc') {
-			filtered.sort((a: IColorMap, b: IColorMap) =>
+			filtered.sort((a: IBrandMap, b: IBrandMap) =>
 				a.name.localeCompare(b.name)
 			);
 		} else if (sortOrder === 'desc') {
-			filtered.sort((a: IColorMap, b: IColorMap) =>
+			filtered.sort((a: IBrandMap, b: IBrandMap) =>
 				b.name.localeCompare(a.name)
 			);
 		}
 
 		return filtered;
-	}, [colorData, searchTerm, sortOrder]);
+	}, [brandData, searchTerm, sortOrder]);
 
 	const resetSortOrder = () => {
 		setSortOrder('');
 	};
 
-	if (colorIsLoading) return <Loader />;
+	if (dataIsLoading) return <Loader />;
 
 	return (
-		<div className='w-full h-screen'>
-			<div className='flex flex-col bg-dymBlack h-full overflow-hidden p-4'>
+		<div className='h-screen'>
+			<div className='flex flex-col bg-dymBlack h-screen overflow-hidden p-4'>
 				<div className='flex flex-row md:space-x-32 space-x-4 h-10 mt-4'>
 					<input
 						className='md:w-1/2 w-44% rounded-md p-2 border border-gray-300'
-						placeholder='Buscar color'
+						placeholder='Buscar marca'
 						value={searchTerm}
 						onChange={(e) => setSearchTerm(e.target.value)}
 					/>
@@ -65,56 +65,34 @@ const DashboardColorsList = () => {
 					</div>
 				</div>
 				<div
-					className='overflow-y-auto pb-10 mt-16'
+					className='overflow-y-auto mt-24'
 					style={{ maxHeight: 'calc(100vh - 150px)' }}>
-					<table className='w-full md:w-2/4 mx-auto text-center'>
+					<table className='w-1/6 mx-auto text-center'>
 						<thead>
 							<tr className='text-dymAntiPop'>
 								<th className='py-2 px-4'>Nombre</th>
-								<th className='py-2 px-4'>Vista</th>
 							</tr>
 						</thead>
 						<tbody>
-							{filteredColor.length ? (
-								filteredColor.map((color: IColorMap) => (
+							{filteredBrand.length ? (
+								filteredBrand.map((brand: IBrandMap) => (
 									<tr
-										key={color.name}
+										key={brand.name}
 										className='text-dymAntiPop'>
 										<td className='w-1/4 py-4 px-4 border-b border-gray-300'>
-											{color.name
+											{brand.name
 												.charAt(0)
 												.toUpperCase() +
-												color.name.slice(1)}
-										</td>
-										<td className='w-1/4 py-4 px-4 border-b border-gray-300'>
-											<div>
-												<button
-													disabled
-													className='w-14 h-6 relative group'
-													style={{
-														backgroundColor:
-															color.hex,
-													}}>
-													<div
-														className='absolute -top-8 w-24 h-24 border border-dymAntiPop hidden group-hover:block rounded-lg'
-														style={{
-															backgroundColor:
-																color.hex,
-															transform:
-																'translateX(-8rem)',
-														}}
-													/>
-												</button>
-											</div>
+												brand.name.slice(1)}
 										</td>
 									</tr>
 								))
 							) : (
 								<tr>
 									<td
-										colSpan={2}
+										colSpan={1}
 										className='text-center py-4'>
-										No hay colores disponibles
+										No hay marcas disponibles
 									</td>
 								</tr>
 							)}
@@ -126,4 +104,4 @@ const DashboardColorsList = () => {
 	);
 };
 
-export default DashboardColorsList;
+export default DashboardBrandsList;

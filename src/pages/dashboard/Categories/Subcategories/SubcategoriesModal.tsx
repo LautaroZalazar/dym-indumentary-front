@@ -27,24 +27,31 @@ const SubcategoriesModal: React.FC<ISubcategoriesModalProps> = ({
 							/>
 						</button>
 					</div>
-					<table className='w-full mx-auto text-center'>
-						<thead>
-							<tr className='text-dymAntiPop'>
-								<th className='py-2 px-4'>Nombre</th>
-							</tr>
-						</thead>
-						<tbody>
-							{subCategories.map((subCategory) => (
-								<tr
-									key={subCategory._id}
-									className='text-dymAntiPop'>
-									<td className='py-4 px-4 border-b border-gray-300'>
-										{subCategory.name}
-									</td>
+					<div
+						className='overflow-y-auto'
+						style={{ maxHeight: 'calc(100vh - 150px)' }}>
+						<table className='w-full mx-auto text-center'>
+							<thead>
+								<tr className='text-dymAntiPop'>
+									<th className='py-2 px-4'>Nombre</th>
 								</tr>
-							))}
-						</tbody>
-					</table>
+							</thead>
+							<tbody>
+								{subCategories.map((subCategory) => (
+									<tr
+										key={subCategory._id}
+										className='text-dymAntiPop'>
+										<td className='py-4 px-4 border-b border-gray-300'>
+											{subCategory.name
+												.charAt(0)
+												.toUpperCase() +
+												subCategory.name.slice(1)}
+										</td>
+									</tr>
+								))}
+							</tbody>
+						</table>
+					</div>
 				</div>
 				<div className='mt-auto text-center'>
 					<button

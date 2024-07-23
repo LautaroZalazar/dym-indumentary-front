@@ -14,6 +14,8 @@ import DashboardCategoriesList from './pages/dashboard/Categories/DashboardCateg
 import DashboardUsersList from './pages/dashboard/Users/DashboardUsersList'
 import DashboardAddSize from './pages/dashboard/Sizes/DashboardAddSize'
 import DashboardAddCategory from './pages/dashboard/Categories/DashboardAddCategory'
+import DashboardBrandsList from './pages/dashboard/Brands/DashboardBrandsList'
+import DashboardAddBrand from './pages/dashboard/Brands/DashboardAddBrand'
 function App() {
 	return (
 		<Router>
@@ -55,6 +57,14 @@ function App() {
 				<Route
 					path='/dashboard-add-category'
 					element={<DashboardAddCategory />}
+				/>
+				<Route
+					path='/dashboard-brands'
+					element={<DashboardBrandsList />}
+				/>
+				<Route
+					path='/dashboard-add-brand'
+					element={<DashboardAddBrand />}
 				/>
 				<Route
 					path='/dashboard-users'

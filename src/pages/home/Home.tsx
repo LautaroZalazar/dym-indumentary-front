@@ -85,9 +85,15 @@ const Home = () => {
 					</div>
 					<div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4'>
 						{sortedProducts.map((product) => (
-							<div key={product._id} className='max-w-xl mx-auto'>
-								<ProductCard product={product} />
-							</div>
+							<>
+								{product.isActive && (
+									<div
+										key={product._id}
+										className='max-w-xl mx-auto'>
+										<ProductCard product={product} />
+									</div>
+								)}
+							</>
 						))}
 					</div>
 				</div>

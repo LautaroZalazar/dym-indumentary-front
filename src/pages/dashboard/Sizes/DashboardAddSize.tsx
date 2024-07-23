@@ -1,9 +1,11 @@
 import { ChangeEvent, useState } from 'react';
 import { useCreateSizeMutation } from '../../../redux/slices/catalogs.silce';
+import { useMessage } from '../../../hooks/alertMessage';
 
 const DashboardAddSize: React.FC = () => {
 	const [createSize] = useCreateSizeMutation();
-	const [sizes, setSizes] = useState([{name: ''}]);
+	const [sizes, setSizes] = useState([{ name: '' }]);
+	const { MessageComponent, showMessage } = useMessage();
 
 	const handleChange = (
 		index: number,
@@ -30,13 +32,20 @@ const DashboardAddSize: React.FC = () => {
 			for (const size of sizes) {
 				if (size.name) {
 					const newSize = {
-						size: size.name.toLowerCase()
+						size: size.name.toLowerCase(),
 					};
-					await createSize(newSize);
+					await createSize(newSize).unwrap();
+					showMessage(
+						'success',
+						'El talle se agregó correctamente',
+						3000
+					);
 				}
+				showMessage('error', 'El nombre no debe estar vacío', 3000);
 			}
-			setSizes([{ name: ''}]);
+			setSizes([{ name: '' }]);
 		} catch (error: any) {
+			showMessage('error', 'Error al agregar el talle', 3000);
 			throw new Error(error);
 		}
 	};
@@ -77,6 +86,7 @@ const DashboardAddSize: React.FC = () => {
 					</button>
 				</div>
 			</div>
+			{MessageComponent && <MessageComponent />}
 		</form>
 	);
 };

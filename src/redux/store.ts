@@ -5,6 +5,7 @@ import { productSlice } from './slices/product.slice';
 import { authSlice } from './slices/auth.slice';
 import { cartSlice } from './slices/cart.slice';
 import { catalogsSlice } from './slices/catalogs.silce'
+import { adminSlice } from './slices/admin.slice';
 import filterReducer from './slices/filter.slice';
 
 export const store = configureStore({
@@ -14,6 +15,7 @@ export const store = configureStore({
 		[authSlice.reducerPath]: authSlice.reducer,
 		[cartSlice.reducerPath]: cartSlice.reducer,
 		[catalogsSlice.reducerPath]: catalogsSlice.reducer,
+		[adminSlice.reducerPath]: adminSlice.reducer,
 		filters: filterReducer,
 	},
 	middleware: (getDefaultMiddleware) =>
@@ -23,6 +25,7 @@ export const store = configureStore({
 			authSlice.middleware,
 			cartSlice.middleware,
 			catalogsSlice.middleware,
+			adminSlice.middleware
 		),
 });
 
