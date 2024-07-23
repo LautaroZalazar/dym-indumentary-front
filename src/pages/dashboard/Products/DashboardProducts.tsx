@@ -214,99 +214,96 @@ const DashboardProducts = () => {
 								</th>
 							</tr>
 						</thead>
-						{!loadingMore ? (
-							<tbody>
-								{filteredAndSortedProducts.length ? (
-									filteredAndSortedProducts.map(
-										(e: IProduct, productIndex: number) => (
-											<tr
-												className='border-b border-gray-300 text-dymAntiPop'
-												key={productIndex}>
-												<td className='py-4 px-4'>
-													<p>${e.price}</p>
-												</td>
-												<td className='py-4 px-4'>
-													{e.name.length < 18 ? (
-														<p className='pl-2'>
-															{e.name
+						<tbody>
+							{filteredAndSortedProducts.length ? (
+								filteredAndSortedProducts.map(
+									(e: IProduct, productIndex: number) => (
+										<tr
+											className='border-b border-gray-300 text-dymAntiPop'
+											key={productIndex}>
+											<td className='py-4 px-4'>
+												<p>${e.price}</p>
+											</td>
+											<td className='py-4 px-4'>
+												{e.name.length < 18 ? (
+													<p className='pl-2'>
+														{e.name
+															.charAt(0)
+															.toUpperCase() +
+															e.name.slice(1)}
+													</p>
+												) : (
+													<p
+														className='pl-2'
+														title={
+															e.name
 																.charAt(0)
 																.toUpperCase() +
-																e.name.slice(1)}
-														</p>
-													) : (
-														<p
-															className='pl-2'
-															title={
-																e.name
-																	.charAt(0)
-																	.toUpperCase() +
-																e.name.slice(1)
-															}>
-															{e.name
-																.slice(0, 12)
-																.concat('...')}
-														</p>
-													)}
-												</td>
-												<td className='py-4 px-4'>
-													{e.inventory.some(
-														(i: any) =>
-															i.stock.length > 0
-													) ? (
-														<p className='text-green-600'>
-															Disponible
-														</p>
-													) : (
-														<p className='text-red-600'>
-															No Disponible
-														</p>
-													)}
-												</td>
-												<td className='py-4 px-4'>
-													<label className='inline-flex items-center cursor-pointer'>
-														<input
-															type='checkbox'
-															checked={
-																!e.isActive
-															}
-															onChange={() =>
-																handleCheckboxChange(
-																	e._id,
-																	e.isActive,
-																	e.name
-																)
-															}
-															className='sr-only peer'
-														/>
-														<div className="relative w-11 h-6 peer-focus:outline-none rounded-full peer bg-dymAntiPop peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-red-500 peer-checked:after:bg-red-500 after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-green-500 after:border-green-500 after:border after:rounded-full after:h-5 after:w-5 after:transition-all"></div>
-													</label>
-												</td>
-												<td className='py-4 px-4'>
-													<button
-														className='underline text-dymAntiPop roundedfocus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50'
-														onClick={() =>
-															handleUpdateModal(
-																e._id
-															)
+															e.name.slice(1)
 														}>
-														Editar
-													</button>
-												</td>
-											</tr>
-										)
+														{e.name
+															.slice(0, 12)
+															.concat('...')}
+													</p>
+												)}
+											</td>
+											<td className='py-4 px-4'>
+												{e.inventory.some(
+													(i: any) =>
+														i.stock.length > 0
+												) ? (
+													<p className='text-green-600'>
+														Disponible
+													</p>
+												) : (
+													<p className='text-red-600'>
+														No Disponible
+													</p>
+												)}
+											</td>
+											<td className='py-4 px-4'>
+												<label className='inline-flex items-center cursor-pointer'>
+													<input
+														type='checkbox'
+														checked={!e.isActive}
+														onChange={() =>
+															handleCheckboxChange(
+																e._id,
+																e.isActive,
+																e.name
+															)
+														}
+														className='sr-only peer'
+													/>
+													<div className="relative w-11 h-6 peer-focus:outline-none rounded-full peer bg-dymAntiPop peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-red-500 peer-checked:after:bg-red-500 after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-green-500 after:border-green-500 after:border after:rounded-full after:h-5 after:w-5 after:transition-all"></div>
+												</label>
+											</td>
+											<td className='py-4 px-4'>
+												<button
+													className='underline text-dymAntiPop roundedfocus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50'
+													onClick={() =>
+														handleUpdateModal(e._id)
+													}>
+													Editar
+												</button>
+											</td>
+										</tr>
 									)
-								) : (
-									<tr>
-										<td
-											colSpan={5}
-											className='text-center py-4'>
-											No hay productos disponibles
-										</td>
-									</tr>
-								)}
-							</tbody>
-						) : (
-							<Loader />
+								)
+							) : (
+								<tr>
+									<td
+										colSpan={5}
+										className='text-center py-4'>
+										No hay productos disponibles
+									</td>
+								</tr>
+							)}
+						</tbody>
+						{loadingMore && (
+							<div className='flex justify-center py-4'>
+								<Loader />
+							</div>
 						)}
 					</table>
 				</div>
