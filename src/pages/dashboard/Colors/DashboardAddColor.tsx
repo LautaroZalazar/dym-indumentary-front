@@ -1,9 +1,11 @@
 import { ChangeEvent, useState } from 'react';
 import { useCreateColorMutation } from '../../../redux/slices/catalogs.silce';
+import { useMessage } from '../../../hooks/alertMessage';
 
 const DashboardAddColor: React.FC = () => {
 	const [createColor] = useCreateColorMutation();
 	const [colors, setColors] = useState([{ name: '', hex: '#000000' }]);
+	const { MessageComponent, showMessage } = useMessage();
 
 	const handleChange = (
 		index: number,
@@ -33,11 +35,22 @@ const DashboardAddColor: React.FC = () => {
 						color: color.name.toLowerCase(),
 						hex: color.hex,
 					};
-					await createColor(newColor);
+					await createColor(newColor).unwrap();
+					showMessage(
+						'success',
+						'El color se agregó correctamente',
+						3000
+					);
 				}
+				showMessage(
+					'error',
+					'El nombre o el color no debe estar vacío',
+					3000
+				);
 			}
 			setColors([{ name: '', hex: '#000000' }]);
 		} catch (error: any) {
+			showMessage('error', 'Error al agregar el color', 3000);
 			throw new Error(error);
 		}
 	};
@@ -85,6 +98,7 @@ const DashboardAddColor: React.FC = () => {
 					</button>
 				</div>
 			</div>
+			{MessageComponent && <MessageComponent />}
 		</form>
 	);
 };

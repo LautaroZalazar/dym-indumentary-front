@@ -2,6 +2,7 @@ import axios from 'axios';
 import React, { useState } from 'react';
 import ImageCrop from './utils/ImageCrop';
 import { IPreset } from './models/upload-image-preset.interface';
+import { IUploadImageResponse } from './models/upload-image-response.interface';
 
 interface CroppedFilesState {
 	croppedImages: Blob[];
@@ -39,7 +40,7 @@ const UploadImage: React.FC<IPreset> = ({
 	};
 
 	const handleUpload = async (croppedImages: Blob[]) => {
-		const uploadedImageUrls: string[] = [];
+		const uploadedImageUrls: IUploadImageResponse[] = [];
 
 		try {
 			await Promise.all(
@@ -60,7 +61,8 @@ const UploadImage: React.FC<IPreset> = ({
 					);
 
 					const imageUrl = response.data.secure_url;
-					uploadedImageUrls.push(imageUrl);
+					const publicId = response.data.public_id;
+					uploadedImageUrls.push({url: imageUrl, public_id: publicId});
 				})
 			);
 			setUrl({ ...form, image: uploadedImageUrls });

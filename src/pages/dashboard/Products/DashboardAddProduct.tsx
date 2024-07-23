@@ -5,17 +5,29 @@ import {
 	useFetchColorsQuery,
 	useFetchSizeQuery,
 } from '../../../redux/slices/catalogs.silce';
-import { useCreateProductMutation } from '../../../redux/slices/product.slice';
+import { useCreateProductMutation } from '../../../redux/slices/admin.slice';
 import xIcon from '../../../assets/SVG/x.svg';
 import ICombination from './models/combination.interface';
 import IFormData from './models/form-product-data.interface';
 import validateProductForm from '../Products/utils/product-validaction-form';
 import ICatalogMap from './models/catalog-map.interface';
-import {ICategories} from './models/categories.interface'
+import { ICategories } from './models/categories.interface';
 import { IValidateProduct } from './models/validate-product.interface';
 import UploadImage from '../../../components/uploadImage/UploadImage';
+import { useMessage } from '../../../hooks/alertMessage';
 
 const AddProductForm: React.FC = () => {
+	const initialState = {
+		name: '',
+		price: '',
+		description: '',
+		categoryId: '',
+		subCategoryId: '',
+		brandId: '',
+		image: [],
+		gender: '',
+		combinations: [],
+	};
 	const [selectedCategory, setSelectedCategory] = useState<ICategories>({
 		_id: '',
 		name: '',
@@ -28,17 +40,8 @@ const AddProductForm: React.FC = () => {
 	const [createProduct] = useCreateProductMutation();
 	const [errors, setErrors] = useState<IValidateProduct>({});
 	const [hoveredField, setHoveredField] = useState<string | null>(null);
-	const [formData, setFormData] = useState<IFormData>({
-		name: '',
-		price: '',
-		description: '',
-		categoryId: '',
-		subCategoryId: '',
-		brandId: '',
-		image: [],
-		gender: '',
-		combinations: [],
-	});
+	const [formData, setFormData] = useState<IFormData>(initialState);
+	const { MessageComponent, showMessage } = useMessage();
 
 	useEffect(() => {
 		validateProductForm(formData, setErrors);
@@ -110,19 +113,30 @@ const AddProductForm: React.FC = () => {
 
 	const onSubmit = async (e: React.FormEvent<HTMLButtonElement>) => {
 		e.preventDefault();
-		if (validateProductForm(formData, setErrors)) {
-			const formatedProduct = {
-				name: formData.name,
-				price: Number(formData.price),
-				description: formData.description,
-				gender: formData.gender,
-				image: formData.image,
-				brand: formData.brandId,
-				category: formData.categoryId,
-				subCategory: formData.subCategoryId,
-				inventory: formData.combinations,
-			};
-			await createProduct(formatedProduct);
+		try {
+			if (validateProductForm(formData, setErrors)) {
+				const formatedProduct = {
+					name: formData.name,
+					price: Number(formData.price),
+					description: formData.description,
+					gender: formData.gender,
+					image: formData.image,
+					brand: formData.brandId,
+					category: formData.categoryId,
+					subCategory: formData.subCategoryId,
+					inventory: formData.combinations,
+				};
+				await createProduct(formatedProduct).unwrap();
+				showMessage(
+					'success',
+					'El producto se agregó correctamente',
+					3000
+				);
+			}
+			setFormData(initialState);
+		} catch (error: any) {
+			showMessage('error', 'Error al agregar el producto', 3000);
+			throw new Error(error);
 		}
 	};
 
@@ -153,7 +167,7 @@ const AddProductForm: React.FC = () => {
 
 	return (
 		<form className='w-full md:h-screen flex justify-center items-center p-4'>
-			<div className='sm:w-full md:w-2/4 lg:w-2/4 xl:w-1/4  h-3/4 flex flex-col justify-center space-y-4'>
+			<div className='w-full md:w-3/4 lg:w-2/4 xl:w-2/6 mt-4 flex flex-col justify-center space-y-4'>
 				<div
 					className='relative'
 					onMouseEnter={() => handleMouseEnter('name')}
@@ -367,93 +381,102 @@ const AddProductForm: React.FC = () => {
 						</span>
 					)}
 				</div>
-
 				<div
-					className='flex flex-col w-full items-center'
 					onMouseEnter={() => handleMouseEnter('combination')}
-					onMouseLeave={handleMouseLeave}>
-					{formData.combinations.map((combination, index) => (
-						<div className='flex flex-row w-full border border-dymOrange rounded-md mb-2'>
-							<div
-								key={index}
-								className='w-full flex flex-row space-x-2 justify-between items-center p-2 overflow-y-auto'>
-								<select
-									className='rounded-md w-32 h-10 pl-2'
-									value={combination.size}
-									onChange={(e) =>
-										handleCombinationChange(
-											index,
-											'sizeId',
-											e.target.value
-										)
-									}>
-									<option value='' hidden>
-										Talle
-									</option>
-									{sizeData &&
-										sizeData.map((size: ICatalogMap) => (
-											<option
-												key={size._id}
-												value={size._id}>
-												{size.name}
-											</option>
-										))}
-								</select>
-								<div className='flex flex-col mt-4 max-h-40 overflow-y-auto'>
-									<div className='grid grid-cols-2 md:grid-cols-3 gap-4'>
-										{colorData &&
-											colorData.map(
-												(color: ICatalogMap) => {
-													const stock =
-														combination.stock.find(
-															(stock) =>
-																stock.color ===
-																color._id
-														)?.quantity || '';
-													return (
-														<div
-															key={color._id}
-															className='flex flex-col items-center space-x-2 mx-2 mb-2 pr-4 md:pr-2'>
-															<span>
-																{color.name}
-															</span>
-															<input
-																type='number'
-																placeholder='Stock'
-																className={`rounded-md w-20 h-10 pl-2 ${
-																	stock &&
-																	'border border-dymOrange'
-																} [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:m-0`}
-																value={stock}
-																onChange={(e) =>
-																	handleCombinationChange(
-																		index,
-																		color._id,
-																		Number(
-																			e
-																				.target
-																				.value
-																		)
-																	)
-																}
-															/>
-														</div>
-													);
-												}
+					onMouseLeave={handleMouseLeave}
+					className='space-y-4'>
+					<div className='flex flex-col w-full items-center max-h-72 overflow-y-auto mb-6 p-2'>
+						{formData.combinations.map((combination, index) => (
+							<div className='flex flex-row w-full border border-dymOrange rounded-md mb-2'>
+								<div
+									key={index}
+									className='w-full flex flex-col md:flex-row md:space-x-2 justify-between items-center p-2 overflow-y-auto'>
+									<select
+										className='rounded-md w-32 h-10 pl-2'
+										value={combination.size}
+										onChange={(e) =>
+											handleCombinationChange(
+												index,
+												'sizeId',
+												e.target.value
+											)
+										}>
+										<option value='' hidden>
+											Talle
+										</option>
+										{sizeData &&
+											sizeData.map(
+												(size: ICatalogMap) => (
+													<option
+														key={size._id}
+														value={size._id}>
+														{size.name}
+													</option>
+												)
 											)}
+									</select>
+									<div className='flex flex-col mt-4 max-h-40 overflow-y-auto'>
+										<div className='grid grid-cols-2 md:grid-cols-3 gap-4'>
+											{colorData &&
+												colorData.map(
+													(color: ICatalogMap) => {
+														const stock =
+															combination.stock.find(
+																(stock) =>
+																	stock.color ===
+																	color._id
+															)?.quantity || '';
+														return (
+															<div
+																key={color._id}
+																className='flex flex-col items-center space-x-2 mx-2 mb-2 pr-4 md:pr-2'>
+																<span>
+																	{color.name}
+																</span>
+																<input
+																	type='number'
+																	placeholder='Stock'
+																	className={`rounded-md w-20 h-10 pl-2 ${
+																		stock &&
+																		'border border-dymOrange'
+																	} [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:m-0`}
+																	value={
+																		stock
+																	}
+																	onChange={(
+																		e
+																	) =>
+																		handleCombinationChange(
+																			index,
+																			color._id,
+																			Number(
+																				e
+																					.target
+																					.value
+																			)
+																		)
+																	}
+																/>
+															</div>
+														);
+													}
+												)}
+										</div>
 									</div>
 								</div>
+								<div className='h-full w-6 flex justify-end items-start m-2'>
+									<button
+										className='text-xs'
+										type='button'
+										onClick={() =>
+											removeCombination(index)
+										}>
+										<img src={xIcon.toString()} />
+									</button>
+								</div>
 							</div>
-							<div className='h-full w-6 flex justify-end items-start m-2'>
-								<button
-									className='text-xs'
-									type='button'
-									onClick={() => removeCombination(index)}>
-									<img src={xIcon.toString()} />
-								</button>
-							</div>
-						</div>
-					))}
+						))}
+					</div>
 					<button
 						type='button'
 						onClick={addCombination}
@@ -462,7 +485,7 @@ const AddProductForm: React.FC = () => {
 					</button>
 					{errors.combination && (
 						<span
-							className={`text-xs text-red-600 block mt-2 transition-opacity duration-200 ease-in-out ${
+							className={`text-xs text-red-600 text-center block mt-2 transition-opacity duration-200 ease-in-out ${
 								hoveredField === 'combination'
 									? 'opacity-100'
 									: 'opacity-0'
@@ -503,6 +526,7 @@ const AddProductForm: React.FC = () => {
 					</button>
 				</div>
 			</div>
+			{MessageComponent && <MessageComponent />}
 		</form>
 	);
 };

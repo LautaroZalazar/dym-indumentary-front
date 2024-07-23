@@ -8,6 +8,8 @@ const Dashboard = () => {
 		{ name: 'Agregar talle', ref: '/dashboard-add-size' },
 		{ name: 'Lista de categorías', ref: '/dashboard-categories' },
 		{ name: 'Agregar categoría', ref: '/dashboard-add-category' },
+		{ name: 'Lista de marcas', ref: '/dashboard-brands' },
+		{ name: 'Agregar marca', ref: '/dashboard-add-brand' },
 		{ name: 'Lista de productos', ref: '/dashboard-products' },
 		{ name: 'Lista de usuarios', ref: '/dashboard-users' },
 		{ name: 'Crear producto', ref: '/dashboard-add-product' },
@@ -22,7 +24,11 @@ const Dashboard = () => {
 				{cards.map((c) => (
 					<div key={c.ref} className='w-full md:w-1/2 lg:w-1/2 p-2'>
 						<NavLink
-							className='block text-lg md:text-xl text-dymAntiPop font-bold border border-dymOrange rounded-lg'
+							className={`block text-lg md:text-xl text-dymAntiPop font-bold ${
+								c.name === 'Crear producto'
+									? 'bg-dymOrange'
+									: 'border border-dymOrange'
+							} text-dymAntiPop rounded-lg`}
 							to={c.ref}>
 							<div className='w-full h-24 md:h-32 lg:h-20 bg-oasisGradient-antiFlashWhite flex justify-center items-center rounded-2xl'>
 								{c.name}

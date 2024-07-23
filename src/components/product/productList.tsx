@@ -8,7 +8,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
 		<div className='flex flex-row md:flex-col border overflow-hidden shadow-sm md:h-full h-40 w-80 md:w-full'>
 			<div className='relative w-full'>
 				<img
-					src={product.image[0]}
+					src={product.image[0].url}
 					alt={product.name}
 					className='w-full md:h-96 h-full object-cover md:object-fit'
 				/>

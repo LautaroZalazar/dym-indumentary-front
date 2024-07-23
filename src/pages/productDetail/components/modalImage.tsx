@@ -21,7 +21,7 @@ const ModalImage:React.FC<IModalProps> = ( {images, activeIndex, isModalOpen, se
                     &times;
                 </button>
                 <img
-                    src={images[activeIndex].toString()}
+                    src={images[activeIndex].url.toString()}
                     alt={`Pantalla completa de ${activeIndex + 1}`}
                     className='max-w-full max-h-[90vh] object-contain'
                 />

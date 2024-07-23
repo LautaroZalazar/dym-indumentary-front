@@ -16,7 +16,7 @@ const ProductInCartList = ({
 							className='flex justify-between mb-6 rounded-lg p-4 shadow-md border border-dymOrange'>
 							<div className='flex flex-1 pr-4'>
 								<img
-									src={e.product?.image[0]}
+									src={e.product?.image[0].url}
 									alt='product-image'
 									className='w-24 h-24 md:w-40 md:h-40 rounded-lg object-cover'
 								/>

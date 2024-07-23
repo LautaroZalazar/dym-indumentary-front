@@ -1,6 +1,7 @@
 import { ChangeEvent, useState } from 'react';
 import { useCreateSubCategoriesMutation } from '../../../../redux/slices/catalogs.silce';
 import { IAddSubcategoriesModalProps } from './models/addsubcategory-props.interface';
+import { useMessage } from '../../../../hooks/alertMessage';
 import XIcon from '../../../../assets/SVG/x.svg';
 
 const AddSubcategories = ({
@@ -10,6 +11,7 @@ const AddSubcategories = ({
 }: IAddSubcategoriesModalProps) => {
 	const [createSubcategory] = useCreateSubCategoriesMutation();
 	const [subcategories, setSubcategories] = useState([{ name: '' }]);
+	const { MessageComponent, showMessage } = useMessage();
 
 	const handleChange = (
 		index: number,
@@ -41,13 +43,20 @@ const AddSubcategories = ({
 						name: subCategory.name.toLowerCase(),
 						categoryId: categoryId,
 					};
-					await createSubcategory(newSubcategory);
+					await createSubcategory(newSubcategory).unwrap();
+					showMessage(
+						'success',
+						'La subcategoría se agregó correctamente',
+						3000
+					);
+					categoryRefetch();
+					closeModal();
 				}
+				showMessage('error', 'El nombre no debe estar vacío', 3000);
 			}
 			setSubcategories([{ name: '' }]);
-			categoryRefetch();
-			closeModal();
 		} catch (error: any) {
+			showMessage('error', 'Error al agregar la subcategoría', 3000);
 			throw new Error(error);
 		}
 	};
@@ -98,6 +107,7 @@ const AddSubcategories = ({
 					</div>
 				</div>
 			</div>
+			{MessageComponent && <MessageComponent />}
 		</form>
 	);
 };

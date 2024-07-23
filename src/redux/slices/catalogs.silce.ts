@@ -83,6 +83,13 @@ export const catalogsSlice = createApi({
 				headers: AUTH_HEADERS,
 			}),
 		}),
+		fetchRole: builder.query({
+			query: () => ({
+				url: `/v1/role`,
+				method: 'GET',
+				headers: AUTH_HEADERS,
+			}),
+		}),
 	}),
 });
 
@@ -97,4 +104,5 @@ export const {
 	useCreateSizeMutation,
 	useFetchSubCategoriesQuery,
 	useCreateSubCategoriesMutation,
+	useFetchRoleQuery,
 } = catalogsSlice;
