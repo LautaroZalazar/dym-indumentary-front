@@ -26,7 +26,7 @@ const Home = () => {
 	const filteredProducts = products.filter((product: IProduct) => {
 		const matchesProductType =
 			filters.productType.length === 0 ||
-			filters.productType.includes(product.category._id);
+			filters.productType.includes(product.subCategory._id);
 		const matchesGender =
 			filters.gender.length === 0 ||
 			filters.gender.includes(product.gender);
@@ -46,10 +46,6 @@ const Home = () => {
 
 	const sortedProducts = filteredProducts.sort((a, b) => {
 		switch (filters.sort) {
-			case 'Más relevantes':
-				return 0;
-			case 'Menos relevantes':
-				return 0;
 			case 'Precio más alto':
 				return b.price - a.price;
 			case 'Precio más bajo':
@@ -84,15 +80,13 @@ const Home = () => {
 						</h2>
 					</div>
 					<div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4'>
-						{sortedProducts.map((product) => (
+						{ sortedProducts && sortedProducts.map((product) => (
 							<>
-								{product.isActive && (
-									<div
-										key={product._id}
-										className='max-w-xl mx-auto'>
-										<ProductCard product={product} />
-									</div>
-								)}
+								<div
+									key={product._id}
+									className='max-w-xl mx-auto'>
+									<ProductCard product={product} />
+								</div>
 							</>
 						))}
 					</div>

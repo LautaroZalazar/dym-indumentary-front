@@ -72,18 +72,13 @@ const DashboardProducts = () => {
 	const handleScroll = useCallback(() => {
 		const container = containerRef.current;
 		if (container) {
-			const { scrollTop, scrollHeight, clientHeight } = container;
-			if (
-				scrollTop + clientHeight >= scrollHeight &&
-				!productIsLoading &&
-				hasMore &&
-				!loadingMore
-			) {
-				setLoadingMore(true);
-				setPage((prevPage) => prevPage + 1);
-			}
+		  const { scrollTop, scrollHeight, clientHeight } = container;
+		  if (container.scrollLeft === 0 && container.scrollLeft != 0 && scrollTop + clientHeight >= scrollHeight && !productIsLoading && hasMore && !loadingMore) {
+			setLoadingMore(true);
+			setPage((prevPage) => prevPage + 1);
+		  }
 		}
-	}, [productIsLoading, hasMore, loadingMore]);
+	  }, [productIsLoading, hasMore, loadingMore]);
 
 	useEffect(() => {
 		const container = containerRef.current;

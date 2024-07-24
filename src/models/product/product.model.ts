@@ -2,6 +2,7 @@ import { ISize } from "./size.model";
 import { Brand } from "./brand.model";
 import { IColor } from "./color.model";
 import { Category } from "./category.model";
+import { ISubCategory } from './subCategory.model'
 
 interface IImage {
     url: string;
@@ -20,6 +21,7 @@ export interface IProduct {
     isActive: boolean;
     brand: Brand;
     category: Category;
+    subCategory: ISubCategory;
     inventory: Array<{
         size: ISize,
         stock: Array<{

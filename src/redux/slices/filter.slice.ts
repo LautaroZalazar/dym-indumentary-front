@@ -7,7 +7,7 @@ const initialState: IFilterState = {
 	gender: [],
 	brand: [],
 	size: [],
-	sort: 'Más relevantes',
+	sort: 'Todos los productos',
 };
 
 interface ToggleFilterPayload {
@@ -36,7 +36,7 @@ const filterSlice = createSlice({
 			state.gender = [];
 			state.brand = [];
 			state.size = [];
-			state.sort = 'Más relevantes';
+			state.sort = 'Todos los productos';
 		},
 	},
 });
