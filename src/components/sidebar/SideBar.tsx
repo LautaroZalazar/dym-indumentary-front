@@ -208,9 +208,9 @@ const SideBar: React.FC<ISideBarProps> = ({ isOpen }) => {
 								<input
 									type='checkbox'
 									className='mr-2'
-									checked={filters.gender.includes('Hombre')}
+									checked={filters.gender.includes('hombre')}
 									onChange={() =>
-										handleFilterChange('gender', 'Hombre')
+										handleFilterChange('gender', 'hombre')
 									}
 								/>
 								Hombre
@@ -219,9 +219,9 @@ const SideBar: React.FC<ISideBarProps> = ({ isOpen }) => {
 								<input
 									type='checkbox'
 									className='mr-2'
-									checked={filters.gender.includes('Mujer')}
+									checked={filters.gender.includes('mujer')}
 									onChange={() =>
-										handleFilterChange('gender', 'Mujer')
+										handleFilterChange('gender', 'mujer')
 									}
 								/>
 								Mujer
@@ -230,9 +230,31 @@ const SideBar: React.FC<ISideBarProps> = ({ isOpen }) => {
 								<input
 									type='checkbox'
 									className='mr-2'
-									checked={filters.gender.includes('Unisex')}
+									checked={filters.gender.includes('niño')}
 									onChange={() =>
-										handleFilterChange('gender', 'Unisex')
+										handleFilterChange('gender', 'niño')
+									}
+								/>
+								Niño
+							</label>
+							<label className='block'>
+								<input
+									type='checkbox'
+									className='mr-2'
+									checked={filters.gender.includes('niña')}
+									onChange={() =>
+										handleFilterChange('gender', 'niña')
+									}
+								/>
+								Niña
+							</label>
+							<label className='block'>
+								<input
+									type='checkbox'
+									className='mr-2'
+									checked={filters.gender.includes('unisex')}
+									onChange={() =>
+										handleFilterChange('gender', 'unisex')
 									}
 								/>
 								Unisex
