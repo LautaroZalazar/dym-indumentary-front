@@ -10,6 +10,7 @@ export const productSlice = createApi({
 		fetchProducts: builder.query<any, { limit?: number; page?: number, name?: string }>({
 			query: ({ limit, page, name }) => ({
 				url: `/v1/product?limit=${limit}&page=${page}&${name}`,
+				credentials: 'include',
 				method: 'GET',
 				headers: COMMON_HEADERS,
 			}),
