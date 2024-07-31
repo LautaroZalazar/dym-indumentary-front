@@ -79,12 +79,13 @@ const Home = () => {
 								: sortedProducts.length + ' Resultados'}
 						</h2>
 					</div>
-					<div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4'>
+					<div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 overflow-y-auto'
+					style={{ maxHeight: 'calc(100vh - 150px)' }}>
 						{ sortedProducts && sortedProducts.map((product) => (
 							<>
 								<div
 									key={product._id}
-									className='max-w-xl mx-auto'>
+									className='max-w-xl mx-auto pb-2'>
 									<ProductCard product={product} />
 								</div>
 							</>

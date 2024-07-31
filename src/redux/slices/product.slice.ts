@@ -7,13 +7,24 @@ export const productSlice = createApi({
 	reducerPath: 'productSlice',
 	baseQuery: fetchBaseQuery({ baseUrl }),
 	endpoints: (builder) => ({
-		fetchProducts: builder.query<any, { limit?: number; page?: number, name?: string }>({
-			query: ({ limit, page, name }) => ({
-				url: `/v1/product?limit=${limit}&page=${page}&${name}`,
-				credentials: 'include',
-				method: 'GET',
-				headers: COMMON_HEADERS,
-			}),
+		fetchProducts: builder.query<
+			any,
+			{ limit?: number; page?: number; name?: string; isActive?: boolean }
+		>({
+			query: ({ limit, page, name, isActive }) => {
+				const params = new URLSearchParams();
+				if (limit !== undefined) params.append('limit', String(limit));
+				if (page !== undefined) params.append('page', String(page));
+				if (name !== undefined) params.append('productName', name);
+				if (isActive !== undefined)
+					params.append('isActive', String(isActive));
+				return {
+					url: `/v1/product?${params.toString()}`,
+					credentials: 'include',
+					method: 'GET',
+					headers: COMMON_HEADERS,
+				};
+			},
 		}),
 
 		fetchProduct: builder.query({
@@ -26,7 +37,4 @@ export const productSlice = createApi({
 	}),
 });
 
-export const {
-	useFetchProductsQuery,
-	useFetchProductQuery,
-} = productSlice;
+export const { useFetchProductsQuery, useFetchProductQuery } = productSlice;

@@ -193,7 +193,7 @@ const DashboardUpdateProductModal: React.FC<IUpdateProductProps> = ({
 					name: formData.name,
 					price: Number(formData.price),
 					description: formData.description,
-					gender: formData.gender,
+					gender: formData.gender.toLowerCase(),
 					image: formData.image,
 					brand: formData.brandId,
 					category: formData.categoryId,

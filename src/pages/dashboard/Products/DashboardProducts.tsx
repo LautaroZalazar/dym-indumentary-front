@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useMemo, useCallback } from 'react';
+import { useState, useMemo } from 'react';
 import { useFetchProductsQuery } from '../../../redux/slices/product.slice';
 import { useUpdateProductMutation } from '../../../redux/slices/admin.slice';
 import DashboardUpdateProductModal from './DashboardUpdateProductModal';
@@ -8,7 +8,6 @@ import { useMessage } from '../../../hooks/alertMessage';
 import { useConfirmModal } from '../../../components/confirm-modal/ConfirmModalContext';
 
 const DashboardProducts = () => {
-	const [page, setPage] = useState<number>(1);
 	const [searchTerm, setSearchTerm] = useState('');
 	const [sortOption, setSortOption] = useState('');
 	const [filterOption, setFilterOption] = useState('');
@@ -16,15 +15,12 @@ const DashboardProducts = () => {
 	const [productId, setProductId] = useState('');
 	const { MessageComponent, showMessage } = useMessage();
 	const { showConfirmModal } = useConfirmModal();
-	const containerRef = useRef<HTMLDivElement>(null);
-	const [hasMore, setHasMore] = useState(true);
-	const [loadingMore, setLoadingMore] = useState(false);
 
 	const {
 		data: productData,
 		isLoading: productIsLoading,
 		refetch: refetchProducts,
-	} = useFetchProductsQuery({ limit: 30, page });
+	} = useFetchProductsQuery({ limit: 100, page: 1, isActive:false });
 
 	const [updateProduct] = useUpdateProductMutation();
 
@@ -68,39 +64,6 @@ const DashboardProducts = () => {
 		setProductId(productId);
 		setUpdateModalOpen(true);
 	};
-
-	const handleScroll = useCallback(() => {
-		const container = containerRef.current;
-		if (container) {
-		  const { scrollTop, scrollHeight, clientHeight } = container;
-		  if (container.scrollLeft === 0 && container.scrollLeft != 0 && scrollTop + clientHeight >= scrollHeight && !productIsLoading && hasMore && !loadingMore) {
-			setLoadingMore(true);
-			setPage((prevPage) => prevPage + 1);
-		  }
-		}
-	  }, [productIsLoading, hasMore, loadingMore]);
-
-	useEffect(() => {
-		const container = containerRef.current;
-		if (container) {
-			container.addEventListener('scroll', handleScroll);
-			return () => {
-				container.removeEventListener('scroll', handleScroll);
-			};
-		}
-	}, [handleScroll]);
-
-	useEffect(() => {
-		if (productData) {
-			setHasMore(productData.length > 0);
-		}
-	}, [productData]);
-
-	useEffect(() => {
-		if (!productIsLoading) {
-			setLoadingMore(false);
-		}
-	}, [productIsLoading]);
 
 	const filteredAndSortedProducts = useMemo(() => {
 		if (!productData) return [];
@@ -186,9 +149,8 @@ const DashboardProducts = () => {
 					</div>
 				</div>
 				<div
-					ref={containerRef}
 					className='overflow-y-auto mt-24'
-					style={{ maxHeight: 'calc(100vh - 150px)' }}>
+					style={{ maxHeight: 'calc(85vh - 150px)' }}>
 					<table className='w-full'>
 						<thead>
 							<tr className='text-dymAntiPop'>
@@ -295,11 +257,6 @@ const DashboardProducts = () => {
 								</tr>
 							)}
 						</tbody>
-						{loadingMore && (
-							<div className='flex justify-center py-4'>
-								<Loader />
-							</div>
-						)}
 					</table>
 				</div>
 				{updateModalOpen && (

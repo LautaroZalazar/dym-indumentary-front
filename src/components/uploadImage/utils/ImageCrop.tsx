@@ -82,7 +82,7 @@ const ImageCrop: React.FC<ImageCropProps> = ({
 				onCropComplete([...croppedImages, croppedImage]);
 			}
 		} catch (error: any) {
-			throw new Error(error)
+			throw new Error(error);
 		}
 	}, [
 		croppedAreaPixels,
@@ -101,36 +101,42 @@ const ImageCrop: React.FC<ImageCropProps> = ({
 	};
 
 	return (
-		<div className='fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75'>
-			{files.length > 0 && (
-				<div className='relative flex justify-center bg-white rounded-lg shadow-lg p-4 h-3/4 w-2/4'>
-					<div className='m-4'>
-						<Cropper
-							image={URL.createObjectURL(files[currentFileIndex])}
-							crop={crop}
-							zoom={zoom}
-							aspect={1}
-							onCropChange={onCropChange}
-							onZoomChange={onZoomChange}
-							onCropComplete={onCropCompleteCallback}
-						/>
+		<div className='fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75 z-50'>
+			<div className='w-full h-screen flex flex-col justify-center items-center'>
+				{files.length > 0 && (
+					<div className='relative flex flex-col bg-white rounded-t-lg rounded-l-lg rounded-r-lg rounded-b-none shadow-lg p-4 h-3/4 w-2/4'>
+						<div className='flex-grow'>
+							<div className='m-4 h-full'>
+								<Cropper
+									image={URL.createObjectURL(
+										files[currentFileIndex]
+									)}
+									crop={crop}
+									zoom={zoom}
+									aspect={1}
+									onCropChange={onCropChange}
+									onZoomChange={onZoomChange}
+									onCropComplete={onCropCompleteCallback}
+								/>
+							</div>
+						</div>
 					</div>
-					<div className='flex justify-end items-end mt-4 z-50'>
-						<button
-							type='button'
-							onClick={showCroppedImage}
-							className='bg-blue-500 text-white px-4 py-2 rounded mr-2'>
-							Aceptar
-						</button>
-						<button
-							type='button'
-							onClick={handleCancel}
-							className='bg-red-500 text-white px-4 py-2 rounded'>
-							Cancelar
-						</button>
-					</div>
+				)}
+				<div className='rounded-b-lg p-2 flex justify-center space-x-2 bg-opacity-100 w-2/4 bg-dymBlack'>
+					<button
+						type='button'
+						onClick={showCroppedImage}
+						className='bg-dymOrange text-white px-4 py-2 rounded'>
+						Aceptar
+					</button>
+					<button
+						type='button'
+						onClick={handleCancel}
+						className='border border-dymOrange text-dymOrange px-4 py-2 rounded'>
+						Cancelar
+					</button>
 				</div>
-			)}
+			</div>
 		</div>
 	);
 };
