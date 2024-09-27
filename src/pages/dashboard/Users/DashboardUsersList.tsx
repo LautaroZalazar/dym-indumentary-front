@@ -1,26 +1,58 @@
-import { useState, useMemo } from 'react';
+import { useState } from 'react';
 import Loader from '../../../components/loader';
-import { useFecthAllUsersQuery } from '../../../redux/slices/user.slice';
-import { useUpdateUserMutation } from '../../../redux/slices/admin.slice';
+import {
+	useUpdateUserMutation,
+	useFecthAllAdminUsersQuery,
+} from '../../../redux/slices/admin.slice';
+import Pagination from '../components/Pagination/Pagination';
 import { useFetchRoleQuery } from '../../../redux/slices/catalogs.silce';
 import { IUserMap } from './models/user-map.interface';
 import ICatalogMap from '../Products/models/catalog-map.interface';
 import { useMessage } from '../../../hooks/alertMessage';
 import { useConfirmModal } from '../../../components/confirm-modal/ConfirmModalContext';
+import { IUserFilters } from '../models/filters.interface';
+import searchIcon from '../../../assets/SVG/searchIcon.svg';
+import x from '../../../assets/SVG/x.svg';
 
 const DashboardUsersList = () => {
+	const { data: roleData, isLoading: roleIsLoading } = useFetchRoleQuery('');
+	const { MessageComponent, showMessage } = useMessage();
+	const { showConfirmModal } = useConfirmModal();
+	const [inputValue, setInputValue] = useState('');
+	const [searchTerm, setSearchTerm] = useState('');
+	const [hasSearched, setHasSearched] = useState(false);
+	const [currentPage, setCurrentPage] = useState(1);
+	const [sortOrder, setSortOrder] = useState('');
+	const [filters, setFilters] = useState<IUserFilters>({
+		role: '',
+		newsletter: undefined,
+		isActive: undefined,
+	});
+	const [userUpdate] = useUpdateUserMutation();
 	const {
 		data: userData,
 		isLoading: userIsLoading,
 		refetch: userRefetch,
-	} = useFecthAllUsersQuery('');
-	const { data: roleData } = useFetchRoleQuery('');
-	const [userUpdate] = useUpdateUserMutation();
-	const { MessageComponent, showMessage } = useMessage();
-	const { showConfirmModal } = useConfirmModal();
-	const [searchTerm, setSearchTerm] = useState('');
-	const [sortOrder, setSortOrder] = useState('');
-	const [filter, setFilter] = useState('');
+	} = useFecthAllAdminUsersQuery({
+		limit: 10,
+		page: currentPage,
+		isActive: filters.isActive,
+		name: searchTerm,
+		role: filters.role,
+		newsletter: filters.newsletter,
+	});
+	
+	if (userIsLoading || roleIsLoading) return <Loader />;
+
+	const filterArray = [
+		{ label: 'Activo', value: 'active' },
+		{ label: 'Inactivo', value: 'inactive' },
+		{ label: 'Suscripto', value: 'suscribed' },
+		{ label: 'No suscripto', value: 'unsuscribed' },
+		roleData.map((e: any) => {
+			return { label: e.name, value: e.name };
+		}),
+	].flat();
 
 	const updateUserRole = (
 		userId: string,
@@ -50,90 +82,146 @@ const DashboardUsersList = () => {
 		});
 	};
 
-	const sortedAndFilteredUsers = useMemo(() => {
-		if (!userData) return [];
-
-		let filtered = userData.filter((user: IUserMap) =>
-			user.email.toLowerCase().includes(searchTerm.toLowerCase())
-		);
-
-		if (filter === 'suscripto') {
-			filtered = filtered.filter((user: IUserMap) => user.newsletter);
-		} else if (filter === 'no suscripto') {
-			filtered = filtered.filter((user: IUserMap) => !user.newsletter);
-		} else if (filter === 'activo') {
-			filtered = filtered.filter((user: IUserMap) => user.isActive);
-		} else if (filter === 'no activo') {
-			filtered = filtered.filter((user: IUserMap) => !user.isActive);
-		} else if (filter === 'admin') {
-			filtered = filtered.filter(
-				(user: IUserMap) => user.role.name === 'ADMIN'
-			);
-		} else if (filter === 'user') {
-			filtered = filtered.filter(
-				(user: IUserMap) => user.role.name === 'USER'
-			);
-		}
-
-		if (sortOrder === 'asc') {
-			filtered = filtered.sort((a: IUserMap, b: IUserMap) =>
-				a.name.localeCompare(b.name)
-			);
-		} else if (sortOrder === 'desc') {
-			filtered = filtered.sort((a: IUserMap, b: IUserMap) =>
-				b.name.localeCompare(a.name)
-			);
-		}
-
-		return filtered;
-	}, [userData, searchTerm, sortOrder, filter]);
-
-	const handleReset = () => {
-		setSearchTerm('');
-		setSortOrder('');
-		setFilter('');
+	const handlePageChange = (newPage: number) => {
+		setCurrentPage(newPage);
 	};
 
+	const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		setInputValue(e.target.value);
+	};
 
+	const handleSearch = () => {
+		if (inputValue) {
+			setSearchTerm(inputValue);
+			setHasSearched(true);
+		} else {
+			setHasSearched(false);
+			setSearchTerm('');
+		}
+	};
+	const handleSearchClear = () => {
+		setInputValue('');
+		setSearchTerm('');
+		setHasSearched(false);
+	};
 
-	if (userIsLoading) return <Loader />;
+	const handleFilterChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+		const value = e.target.value;
+		if (value === 'ADMIN' || value === 'USER') {
+			const role = roleData.find((r: any) => r.name === value)
+			setFilters({
+				...filters,
+				role: role._id,
+				newsletter: undefined,
+				isActive: undefined,
+			});
+		} else if (value === 'suscribed') {
+			setFilters({
+				...filters,
+				role: '',
+				newsletter: true,
+				isActive: undefined,
+			});
+		} else if (value === 'unsuscribed') {
+			setFilters({
+				...filters,
+				role: '',
+				newsletter: false,
+				isActive: undefined,
+			});
+		} else if (value === 'active') {
+			setFilters({
+				...filters,
+				role: '',
+				newsletter: undefined,
+				isActive: true,
+			});
+		} else if (value === 'inactive') {
+			setFilters({
+				...filters,
+				role: '',
+				newsletter: undefined,
+				isActive: false,
+			});
+		} else {
+			setFilters({
+				...filters,
+				newsletter: undefined,
+				isActive: undefined,
+				role: '',
+			});
+		}
+	};
+
+	const handleReset = () => {
+		setSortOrder('');
+		setFilters({
+			...filters,
+			role: '',
+			isActive: undefined,
+			newsletter: undefined,
+		});
+	};
+
 
 	return (
 		<div className='h-screen'>
 			<div className='flex flex-col bg-dymBlack h-screen overflow-hidden p-4'>
 				<div className='flex flex-col md:flex-row md:space-x-32 space-y-4 md:space-y-0 h-10 mt-4'>
-					<input
-						className='md:w-1/2 w-44% rounded-md p-2 border border-gray-300'
-						placeholder='Buscar usuario por email'
-						value={searchTerm}
-						onChange={(e) => setSearchTerm(e.target.value)}
-					/>
-					<div className='flex md:space-x-10 space-x-2 md:w-1/2 w-42'>
-						<select
-							className='w-42 rounded-md p-2 text-dymAntiPop border border-gray-300'
-							value={sortOrder}
-							onChange={(e) => setSortOrder(e.target.value)}>
-							<option value='' hidden>
-								Ordenar
-							</option>
-							<option value='asc'>Ascendente</option>
-							<option value='desc'>Descendente</option>
-						</select>
+					<div className='flex w-full md:w-1/4'>
+						<input
+							className='w-full rounded-md rounded-r-none p-2 border border-gray-300'
+							placeholder='Buscar usuario'
+							value={inputValue}
+							onChange={handleInputChange}
+							onKeyPress={(e) => {
+								if (e.key === 'Enter') {
+									handleSearch();
+								}
+							}}
+						/>
+						<button
+							className={`p-2 rounded-r-md ${
+								hasSearched
+									? 'border border-dymOrange'
+									: 'bg-dymOrange'
+							} text-white`}
+							onClick={
+								hasSearched ? handleSearchClear : handleSearch
+							}>
+							{hasSearched ? (
+								<img src={x.toString()} />
+							) : (
+								<img src={searchIcon.toString()} />
+							)}
+						</button>
+					</div>
+					<div className='flex md:space-x-10 space-x-2 md:w-1/2 w-42 justify-center'>
 						<select
 							className='md:w-42 rounded-md p-2 text-dymAntiPop border border-gray-300'
-							value={filter}
-							onChange={(e) => setFilter(e.target.value)}>
+							value={
+								filters.role || filters.newsletter !== undefined
+									? filters.newsletter?.toString()
+									: filters.isActive !== undefined
+									? filters.isActive?.toString()
+									: ''
+							}
+							onChange={(e) => {
+								handleFilterChange(e);
+							}}>
 							<option value='' hidden>
 								Filtrar
 							</option>
-							<option value='suscripto'>Suscripto</option>
-							<option value='no suscripto'>No suscripto</option>
-							<option value='activo'>Activo</option>
-							<option value='no activo'>No activo</option>
-							<option value='admin'>Administrador</option>
-							<option value='user'>Usuario</option>
+							{filterArray.map((f) => {
+								return (
+									<option value={f.value}>{f.label}</option>
+								);
+							})}
 						</select>
-						{(sortOrder || filter) && (
+						{(sortOrder ||
+							filters.role ||
+							filters.isActive != undefined ||
+							filters.newsletter != undefined) && (
 							<button
 								className='p-2 bg-red-500 text-white rounded-md'
 								onClick={handleReset}>
@@ -142,123 +230,134 @@ const DashboardUsersList = () => {
 						)}
 					</div>
 				</div>
-				<div
-					className='overflow-y-auto mt-24'
-					style={{ maxHeight: 'calc(100vh - 150px)' }}>
-					<table className='w-full'>
-						<thead>
-							<tr className='text-dymAntiPop'>
-								<th className='w-1/4 text-start py-2 px-4'>
-									Nombre
-								</th>
-								<th className='w-1/4 text-start py-2 px-4'>
-									Email
-								</th>
-								<th className='w-1/4 text-start py-2 px-4'>
-									Teléfono
-								</th>
-								<th className='w-1/6 text-start py-2 px-4'>
-									NewsLetter
-								</th>
-								<th className='w-1/6 text-start py-2 px-4'>
-									Activo
-								</th>
-								<th className='w-1/12 text-start py-2 px-4'>
-									Rol
-								</th>
-							</tr>
-						</thead>
-						<tbody>
-							{sortedAndFilteredUsers.length ? (
-								sortedAndFilteredUsers.map(
-									(user: IUserMap, userIndex: number) => (
-										<tr
-											className='border-b border-gray-300 text-dymAntiPop'
-											key={userIndex}>
-											<td className='py-4 px-4'>
-												<p>{user.name}</p>
-											</td>
-											<td className='py-4 px-4'>
-												{user.email.length < 46 ? (
-													<p className='pl-2'>
-														{user.email}
-													</p>
-												) : (
-													<p
-														className='pl-2'
-														title={user.email}>
-														{user.email
-															.slice(0, 12)
-															.concat('...')}
-													</p>
-												)}
-											</td>
-											<td className='py-4 px-4'>
-												<p>{user.phone}</p>
-											</td>
-											<td className='py-4 px-4'>
-												<div>
-													{user.newsletter
-														? 'Suscripto'
-														: 'No suscripto'}
-												</div>
-											</td>
-											<td className='py-4 px-4'>
-												<div>
-													{user.isActive
-														? 'Activo'
-														: 'No activo'}
-												</div>
-											</td>
-											<td className='py-4 px-4'>
-												<div>
-													{roleData && (
-														<select
-															className='p-2'
-															onChange={(e) =>
-																updateUserRole(
-																	user._id,
-																	e.target
-																		.value,
-																	user.name
-																)
-															}
-															value={
-																user.role._id
-															}>
-															{roleData.map(
-																(
-																	r: ICatalogMap
-																) => (
-																	<option
-																		key={
-																			r._id
-																		}
-																		value={
-																			r._id
-																		}>
-																		{r.name}
-																	</option>
-																)
-															)}
-														</select>
-													)}
-												</div>
-											</td>
-										</tr>
-									)
-								)
-							) : (
-								<tr>
-									<td
-										colSpan={6}
-										className='text-center py-4'>
-										No hay usuarios disponibles
-									</td>
+				<div className='flex flex-col justify-between h-full'>
+					<div
+						className='overflow-y-auto mt-24'
+						style={{ maxHeight: 'calc(100vh - 150px)' }}>
+						<table className='w-full'>
+							<thead>
+								<tr className='text-dymAntiPop'>
+									<th className='w-1/4 text-start py-2 px-4'>
+										Nombre
+									</th>
+									<th className='w-1/4 text-start py-2 px-4'>
+										Email
+									</th>
+									<th className='w-1/4 text-start py-2 px-4'>
+										Teléfono
+									</th>
+									<th className='w-1/6 text-start py-2 px-4'>
+										NewsLetter
+									</th>
+									<th className='w-1/6 text-start py-2 px-4'>
+										Activo
+									</th>
+									<th className='w-1/12 text-start py-2 px-4'>
+										Rol
+									</th>
 								</tr>
-							)}
-						</tbody>
-					</table>
+							</thead>
+							<tbody>
+								{userData?.users.length ? (
+									userData.users.map(
+										(user: IUserMap, userIndex: number) => (
+											<tr
+												className='border-b border-gray-300 text-dymAntiPop'
+												key={userIndex}>
+												<td className='py-4 px-4'>
+													<p>{user.name}</p>
+												</td>
+												<td className='py-4 px-4'>
+													{user.email.length < 46 ? (
+														<p className='pl-2'>
+															{user.email}
+														</p>
+													) : (
+														<p
+															className='pl-2'
+															title={user.email}>
+															{user.email
+																.slice(0, 12)
+																.concat('...')}
+														</p>
+													)}
+												</td>
+												<td className='py-4 px-4'>
+													<p>{user.phone}</p>
+												</td>
+												<td className='py-4 px-4'>
+													<div>
+														{user.newsletter
+															? 'Suscripto'
+															: 'No suscripto'}
+													</div>
+												</td>
+												<td className='py-4 px-4'>
+													<div>
+														{user.isActive
+															? 'Activo'
+															: 'No activo'}
+													</div>
+												</td>
+												<td className='py-4 px-4'>
+													<div>
+														{roleData && (
+															<select
+																className='p-2'
+																onChange={(e) =>
+																	updateUserRole(
+																		user._id,
+																		e.target
+																			.value,
+																		user.name
+																	)
+																}
+																value={
+																	user.role
+																		._id
+																}>
+																{roleData.map(
+																	(
+																		r: ICatalogMap
+																	) => (
+																		<option
+																			key={
+																				r._id
+																			}
+																			value={
+																				r._id
+																			}>
+																			{
+																				r.name
+																			}
+																		</option>
+																	)
+																)}
+															</select>
+														)}
+													</div>
+												</td>
+											</tr>
+										)
+									)
+								) : (
+									<tr>
+										<td
+											colSpan={6}
+											className='text-center py-4'>
+											No hay usuarios disponibles
+										</td>
+									</tr>
+								)}
+							</tbody>
+						</table>
+					</div>
+					<Pagination
+						currentPage={currentPage}
+						totalItems={userData.totalCount}
+						itemsPerPage={10}
+						onPageChange={handlePageChange}
+					/>
 				</div>
 			</div>
 			{MessageComponent && <MessageComponent />}

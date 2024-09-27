@@ -11,7 +11,6 @@ const calculateTotal = (cart: ICartItem[]) => {
 	return { subtotal };
 };
 
-
 const renderCartSummary = (cart: ICartItem[], shippingCost: number) => {
 	const { subtotal } = calculateTotal(cart);
 	const total = subtotal + shippingCost;
@@ -47,10 +46,7 @@ const renderCartSummary = (cart: ICartItem[], shippingCost: number) => {
 	);
 };
 
-const CartSummary: React.FC<ICartSummaryProps> = ({
-	cart,
-	shippingCost,
-}) => {
+const CartSummary: React.FC<ICartSummaryProps> = ({ cart, shippingCost }) => {
 	return <div>{renderCartSummary(cart, shippingCost)}</div>;
 };
 

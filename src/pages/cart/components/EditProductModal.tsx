@@ -4,7 +4,7 @@ import { NavLink } from 'react-router-dom';
 import useOutsideClick from '../../../hooks/handleClickOutside';
 import xIcon from '../../../assets/SVG/x.svg';
 import axios from 'axios';
-import { IProduct } from '../../../models/product/product.model';
+import { IProductData } from '../../../models/product/product.model';
 
 const baseUrl = import.meta.env.VITE_BACK_URL;
 
@@ -16,7 +16,7 @@ const EditProductModal: React.FC<IEditProductModalProps> = ({
 	setIsModalOpen,
 }) => {
 	const user = localStorage.getItem('user');
-	const [productData, setProductData] = useState<IProduct>();
+	const [productData, setProductData] = useState<IProductData>();
 	const [selectedUpdate, setSelectedUpdate] = useState({
 		sizeId: '',
 		colorId: '',
