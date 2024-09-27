@@ -6,7 +6,7 @@ import { authSlice } from './slices/auth.slice';
 import { cartSlice } from './slices/cart.slice';
 import { catalogsSlice } from './slices/catalogs.silce'
 import { adminSlice } from './slices/admin.slice';
-import filterReducer from './slices/filter.slice';
+import filterReducer from './slices/filter.silce';
 
 export const store = configureStore({
 	reducer: {
@@ -16,7 +16,7 @@ export const store = configureStore({
 		[cartSlice.reducerPath]: cartSlice.reducer,
 		[catalogsSlice.reducerPath]: catalogsSlice.reducer,
 		[adminSlice.reducerPath]: adminSlice.reducer,
-		filters: filterReducer,
+		filter: filterReducer,
 	},
 	middleware: (getDefaultMiddleware) =>
 		getDefaultMiddleware().concat(

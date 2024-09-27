@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { ISideBarProps } from './models/sidebar-props.interface';
 import { Category } from '../../models/product/category.model';
 import { Brand } from '../../models/product/brand.model';
@@ -10,17 +9,18 @@ import {
 	useFetchBrandsQuery,
 	useFetchSizeQuery,
 } from '../../redux/slices/catalogs.silce';
+import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../../redux/store';
-import { toggleFilter, setSort } from '../../redux/slices/filter.slice';
+import { setFilter, setSort } from '../../redux/slices/filter.silce';
 
 const SideBar: React.FC<ISideBarProps> = ({ isOpen }) => {
 	const dispatch = useDispatch();
-	const filters = useSelector((state: RootState) => state.filters);
+	const { filter, sort } = useSelector((state: RootState) => state.filter);
 	const { data: categoriesData } = useFetchCategoriesQuery('');
 	const { data: sizesData } = useFetchSizeQuery('');
 	const { data: brandsData } = useFetchBrandsQuery('');
 	const [openSections, setOpenSections] = useState({
-		productType: true,
+		category: true,
 		gender: true,
 		brand: true,
 		size: true,
@@ -43,10 +43,17 @@ const SideBar: React.FC<ISideBarProps> = ({ isOpen }) => {
 	};
 
 	const handleFilterChange = (
-		category: keyof Omit<IFilterState, 'sort'>,
-		value: string
+		type: keyof IFilterState['filter'],
+		id: string,
+		checked: boolean
 	) => {
-		dispatch(toggleFilter({ category, value }));
+		dispatch(
+			setFilter({
+				[type]: checked
+					? [...filter[type], id]
+					: filter[type].filter((item: string) => item !== id),
+			} as Partial<IFilterState['filter']>)
+		);
 	};
 
 	const handleSortChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -64,23 +71,23 @@ const SideBar: React.FC<ISideBarProps> = ({ isOpen }) => {
 				<div className='mb-6'>
 					<select
 						className='block w-full border border-zinc-300 rounded p-2'
-						value={filters.sort}
+						value={sort}
 						onChange={handleSortChange}>
-						<option value='Todos los productos'>
+						<option value=''>
 							Todos los productos
 						</option>
-						<option value='Precio más alto'>Precio más alto</option>
-						<option value='Precio más bajo'>Precio más bajo</option>
+						<option value='ASC'>Precio más alto</option>
+						<option value='DESC'>Precio más bajo</option>
 					</select>
 				</div>
 				<div className='mb-4'>
 					<button
-						onClick={() => toggleSection('productType')}
+						onClick={() => toggleSection('category')}
 						className='flex justify-between w-full text-left font-bold'>
-						Tipo de producto
-						<span>{openSections.productType ? '▲' : '▼'}</span>
+						Categorías
+						<span>{openSections.category ? '▲' : '▼'}</span>
 					</button>
-					{openSections.productType && categoriesData && (
+					{openSections.category && categoriesData && (
 						<div className='mt-2'>
 							{categoriesData.map((category: Category) => (
 								<div key={category._id} className='mb-2'>
@@ -103,6 +110,25 @@ const SideBar: React.FC<ISideBarProps> = ({ isOpen }) => {
 										category._id
 									) && (
 										<div className='ml-4 mt-2'>
+											<label
+												key={category._id}
+												className='block text-white'>
+												<input
+													type='checkbox'
+													className='mr-2 form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out'
+													checked={filter.category.includes(
+														category._id
+													)}
+													onChange={(e) =>
+														handleFilterChange(
+															'category',
+															category._id,
+															e.target.checked
+														)
+													}
+												/>
+												Todos
+											</label>
 											{category.subCategories.map(
 												(subCategory) => (
 													<label
@@ -111,13 +137,15 @@ const SideBar: React.FC<ISideBarProps> = ({ isOpen }) => {
 														<input
 															type='checkbox'
 															className='mr-2 form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out'
-															checked={filters.productType.includes(
+															checked={filter.subCategory.includes(
 																subCategory._id
 															)}
-															onChange={() =>
+															onChange={(e) =>
 																handleFilterChange(
-																	'productType',
-																	subCategory._id
+																	'subCategory',
+																	subCategory._id,
+																	e.target
+																		.checked
 																)
 															}
 														/>
@@ -151,13 +179,14 @@ const SideBar: React.FC<ISideBarProps> = ({ isOpen }) => {
 									<input
 										type='checkbox'
 										className='mr-2'
-										checked={filters.brand.includes(
+										checked={filter.brand.includes(
 											brand._id
 										)}
-										onChange={() =>
+										onChange={(e) =>
 											handleFilterChange(
 												'brand',
-												brand._id
+												brand._id,
+												e.target.checked
 											)
 										}
 									/>
@@ -182,11 +211,13 @@ const SideBar: React.FC<ISideBarProps> = ({ isOpen }) => {
 									<input
 										type='checkbox'
 										className='mr-2'
-										checked={filters.size.includes(
-											size._id
-										)}
-										onChange={() =>
-											handleFilterChange('size', size._id)
+										checked={filter.size.includes(size._id)}
+										onChange={(e) =>
+											handleFilterChange(
+												'size',
+												size._id,
+												e.target.checked
+											)
 										}
 									/>
 									{size.name.toUpperCase()}
@@ -208,9 +239,13 @@ const SideBar: React.FC<ISideBarProps> = ({ isOpen }) => {
 								<input
 									type='checkbox'
 									className='mr-2'
-									checked={filters.gender.includes('hombre')}
-									onChange={() =>
-										handleFilterChange('gender', 'hombre')
+									checked={filter.gender.includes('hombre')}
+									onChange={(e) =>
+										handleFilterChange(
+											'gender',
+											'hombre',
+											e.target.checked
+										)
 									}
 								/>
 								Hombre
@@ -219,9 +254,13 @@ const SideBar: React.FC<ISideBarProps> = ({ isOpen }) => {
 								<input
 									type='checkbox'
 									className='mr-2'
-									checked={filters.gender.includes('mujer')}
-									onChange={() =>
-										handleFilterChange('gender', 'mujer')
+									checked={filter.gender.includes('mujer')}
+									onChange={(e) =>
+										handleFilterChange(
+											'gender',
+											'mujer',
+											e.target.checked
+										)
 									}
 								/>
 								Mujer
@@ -230,9 +269,13 @@ const SideBar: React.FC<ISideBarProps> = ({ isOpen }) => {
 								<input
 									type='checkbox'
 									className='mr-2'
-									checked={filters.gender.includes('niño')}
-									onChange={() =>
-										handleFilterChange('gender', 'niño')
+									checked={filter.gender.includes('niño')}
+									onChange={(e) =>
+										handleFilterChange(
+											'gender',
+											'niño',
+											e.target.checked
+										)
 									}
 								/>
 								Niño
@@ -241,9 +284,13 @@ const SideBar: React.FC<ISideBarProps> = ({ isOpen }) => {
 								<input
 									type='checkbox'
 									className='mr-2'
-									checked={filters.gender.includes('niña')}
-									onChange={() =>
-										handleFilterChange('gender', 'niña')
+									checked={filter.gender.includes('niña')}
+									onChange={(e) =>
+										handleFilterChange(
+											'gender',
+											'niña',
+											e.target.checked
+										)
 									}
 								/>
 								Niña
@@ -252,9 +299,13 @@ const SideBar: React.FC<ISideBarProps> = ({ isOpen }) => {
 								<input
 									type='checkbox'
 									className='mr-2'
-									checked={filters.gender.includes('unisex')}
-									onChange={() =>
-										handleFilterChange('gender', 'unisex')
+									checked={filter.gender.includes('unisex')}
+									onChange={(e) =>
+										handleFilterChange(
+											'gender',
+											'unisex',
+											e.target.checked
+										)
 									}
 								/>
 								Unisex
