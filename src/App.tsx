@@ -17,6 +17,7 @@ import DashboardAddSize from './pages/dashboard/Sizes/DashboardAddSize';
 import DashboardAddCategory from './pages/dashboard/Categories/DashboardAddCategory';
 import DashboardBrandsList from './pages/dashboard/Brands/DashboardBrandsList';
 import DashboardAddBrand from './pages/dashboard/Brands/DashboardAddBrand';
+import PaymentFinished from './pages/paymentSuccess/PaymentFinished';
 function App() {
 	const [searchTerm, setSearchTerm] = useState('');
 
@@ -36,6 +37,7 @@ function App() {
 					<Route path='/cart' element={<Cart />} />
 					<Route path='/auth' element={<Auth />} />
 					<Route path='/dashboard' element={<Dashboard />} />
+					<Route path='/PaymentFinished' element={<PaymentFinished />} />
 					<Route
 						path='/dashboard-products'
 						element={<DashboardProducts />}

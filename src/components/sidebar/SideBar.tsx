@@ -76,8 +76,8 @@ const SideBar: React.FC<ISideBarProps> = ({ isOpen }) => {
 						<option value=''>
 							Todos los productos
 						</option>
-						<option value='ASC'>Precio más alto</option>
-						<option value='DESC'>Precio más bajo</option>
+						<option value='DESC'>Precio más alto</option>
+						<option value='ASC'>Precio más bajo</option>
 					</select>
 				</div>
 				<div className='mb-4'>

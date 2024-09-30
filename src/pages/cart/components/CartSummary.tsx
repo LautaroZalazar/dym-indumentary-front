@@ -1,6 +1,7 @@
 import React from 'react';
 import ICartItem from '../models/cartitem.interface';
 import ICartSummaryProps from '../models/cartsummaryprops.interface';
+import { useEffect } from 'react';
 
 const calculateTotal = (cart: ICartItem[]) => {
 	const subtotal = cart.reduce((total, item) => {
@@ -11,9 +12,20 @@ const calculateTotal = (cart: ICartItem[]) => {
 	return { subtotal };
 };
 
-const renderCartSummary = (cart: ICartItem[], shippingCost: number) => {
+const RenderCartSummary = (
+	cart: ICartItem[],
+	shippingCost: number,
+	setTotalPrice?: React.Dispatch<React.SetStateAction<number>>
+) => {
+	if (!cart || cart.length === 0) return;
 	const { subtotal } = calculateTotal(cart);
 	const total = subtotal + shippingCost;
+
+	useEffect(() => {
+		if (setTotalPrice) {
+			setTotalPrice(total);
+		}
+	}, [cart, shippingCost, total]);
 
 	return (
 		<div>
@@ -46,8 +58,8 @@ const renderCartSummary = (cart: ICartItem[], shippingCost: number) => {
 	);
 };
 
-const CartSummary: React.FC<ICartSummaryProps> = ({ cart, shippingCost }) => {
-	return <div>{renderCartSummary(cart, shippingCost)}</div>;
+const CartSummary: React.FC<ICartSummaryProps> = ({ cart, shippingCost, setTotalPrice }) => {
+	return <div>{RenderCartSummary(cart, shippingCost, setTotalPrice)}</div>;
 };
 
 export default CartSummary;
