@@ -33,11 +33,13 @@ const PaymentFinished = () => {
 			);
 			const status = paymentStatus === 'true' ? 'completed' : 'cancelled';
 			generateOrder(response.data, status);
+			if(paymentStatus === 'true'){
 			await axios.put(
 				`${baseUrl}/v1/cart/clear`,
 				{ products: [], cartId: response.data._id },
 				{ headers: AUTH_HEADERS }
 			);
+		}
 			setTimeout(() => {
 				navigate('/')
 			}, 2000);
