@@ -15,6 +15,7 @@ const Cart = () => {
 	const [cartVersion, setCartVersion] = useState(0);
 	const [updateModalProducts, setUpdateModalProducts] = useState(null);
 	const [isModalOpen, setIsModalOpen] = useState(false);
+	const [totalPrice, setTotalPrice] = useState<number>(0);
 	const baseUrl = import.meta.env.VITE_BACK_URL;
 	const user = localStorage.getItem('user');
 
@@ -185,6 +186,88 @@ const Cart = () => {
 		setUpdateModalProducts(null);
 	};
 
+	const handlePayment = () => {
+		setIsLoading(true);
+		// Paso 1: Función para obtener el token de autorización
+		async function obtenerToken() {
+			const url = import.meta.env.VITE_UALA_URL;
+
+			const body = {
+				username: import.meta.env.VITE_UALA_USER_NAME,
+				client_id: import.meta.env.VITE_UALA_CLIENT_ID,
+				client_secret_id: import.meta.env.VITE_UALA_CLIENT_SECRET_ID,
+				grant_type: 'client_credentials',
+			};
+
+			try {
+				if (url) {
+					const response = await fetch(url, {
+						method: 'POST',
+						headers: {
+							'Content-Type': 'application/json',
+						},
+						body: JSON.stringify(body),
+					});
+					if (!response.ok) {
+						throw new Error(
+							'Error en la solicitud: ' + response.statusText
+						);
+					}
+
+					const data = await response.json();
+					return data.access_token;
+				}
+			} catch (error) {
+				console.error('Error al obtener el token:', error);
+			}
+		}
+
+		// Paso 2: Función para crear una orden de pago
+		async function crearOrdenDePago(token: string) {
+			const url = import.meta.env.VITE_UALA_CREATE_ORDER_URL;
+
+			const body = {
+				amount: totalPrice,
+				description: 'DYM-VENTA',
+				callback_success: 'http://localhost:5173/PaymentFinished?paymentStatus=true',
+				callback_fail: 'http://localhost:5173/PaymentFinished?paymentStatus=false',
+				external_reference: 'DYM',
+			};
+
+			try {
+				if (url) {
+					const response = await fetch(url, {
+						method: 'POST',
+						headers: {
+							'Content-Type': 'application/json',
+							Authorization: `Bearer ${token}`, // Incluye el token de autorización
+						},
+						body: JSON.stringify(body),
+					});
+
+					if (!response.ok) {
+						throw new Error(
+							'Error en la solicitud: ' + response.statusText
+						);
+					}
+
+					const data = await response?.json();
+					(await data?.links?.checkout_link) &&
+						(window.location = data?.links?.checkout_link);
+					setIsLoading(false);
+					return data;
+				}
+			} catch (error) {
+				console.error('Error al generar la orden de pago:', error);
+				setIsLoading(false);
+			}
+		}
+		// Ejecución: Obtén el token y luego crea la orden de pago
+		obtenerToken().then((token) => {
+			crearOrdenDePago(token);
+		});
+	};
+
 	return (
 		<div className='md:h-screen py-10'>
 			<h1 className='mb-10 text-center text-2xl font-bold'>Mi Carrito</h1>
@@ -200,11 +283,14 @@ const Cart = () => {
 					</div>
 					<div className='mt-6 h-full rounded-lg border border-dymOrange p-6 shadow-md md:mt-0 md:w-1/3'>
 						<CartSummary
-							cart={cart.products}
-							shippingCost={cart.shippingCost}
+							cart={cart.products || []}
+							shippingCost={cart.shippingCost || 0}
+							setTotalPrice={setTotalPrice}
 						/>
 						{userData ? (
-							<button className='mt-6 w-full rounded-md bg-dymOrange py-1.5 font-medium text-blue-50 hover:bg-blue-600'>
+							<button
+								onClick={handlePayment}
+								className='mt-6 w-full rounded-md bg-dymOrange py-1.5 font-medium text-blue-50 hover:bg-blue-600'>
 								Comprar ahora
 							</button>
 						) : (
