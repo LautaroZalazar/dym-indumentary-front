@@ -13,6 +13,7 @@ import { useConfirmModal } from '../../../components/confirm-modal/ConfirmModalC
 import { IUserFilters } from '../models/filters.interface';
 import searchIcon from '../../../assets/SVG/searchIcon.svg';
 import x from '../../../assets/SVG/x.svg';
+import OrderModal from './components/OrderModal';
 
 const DashboardUsersList = () => {
 	const { data: roleData, isLoading: roleIsLoading } = useFetchRoleQuery('');
@@ -28,6 +29,7 @@ const DashboardUsersList = () => {
 		newsletter: undefined,
 		isActive: undefined,
 	});
+	const [activeUser, setActiveUser] = useState<string | null>(null);
 	const [userUpdate] = useUpdateUserMutation();
 	const {
 		data: userData,
@@ -41,7 +43,7 @@ const DashboardUsersList = () => {
 		role: filters.role,
 		newsletter: filters.newsletter,
 	});
-	
+
 	if (userIsLoading || roleIsLoading) return <Loader />;
 
 	const filterArray = [
@@ -108,7 +110,7 @@ const DashboardUsersList = () => {
 	const handleFilterChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
 		const value = e.target.value;
 		if (value === 'ADMIN' || value === 'USER') {
-			const role = roleData.find((r: any) => r.name === value)
+			const role = roleData.find((r: any) => r.name === value);
 			setFilters({
 				...filters,
 				role: role._id,
@@ -163,6 +165,13 @@ const DashboardUsersList = () => {
 		});
 	};
 
+	const openOrderModal = (userId: string) => {
+		setActiveUser(userId);
+	};
+
+	const closeOrderModal = () => {
+		setActiveUser(null);
+	};
 
 	return (
 		<div className='h-screen'>
@@ -241,6 +250,9 @@ const DashboardUsersList = () => {
 										Nombre
 									</th>
 									<th className='w-1/4 text-start py-2 px-4'>
+										Compras
+									</th>
+									<th className='w-1/4 text-start py-2 px-4'>
 										Email
 									</th>
 									<th className='w-1/4 text-start py-2 px-4'>
@@ -261,83 +273,117 @@ const DashboardUsersList = () => {
 								{userData?.users.length ? (
 									userData.users.map(
 										(user: IUserMap, userIndex: number) => (
-											<tr
-												className='border-b border-gray-300 text-dymAntiPop'
-												key={userIndex}>
-												<td className='py-4 px-4'>
-													<p>{user.name}</p>
-												</td>
-												<td className='py-4 px-4'>
-													{user.email.length < 46 ? (
-														<p className='pl-2'>
-															{user.email}
-														</p>
-													) : (
-														<p
-															className='pl-2'
-															title={user.email}>
-															{user.email
-																.slice(0, 12)
-																.concat('...')}
-														</p>
-													)}
-												</td>
-												<td className='py-4 px-4'>
-													<p>{user.phone}</p>
-												</td>
-												<td className='py-4 px-4'>
-													<div>
-														{user.newsletter
-															? 'Suscripto'
-															: 'No suscripto'}
-													</div>
-												</td>
-												<td className='py-4 px-4'>
-													<div>
-														{user.isActive
-															? 'Activo'
-															: 'No activo'}
-													</div>
-												</td>
-												<td className='py-4 px-4'>
-													<div>
-														{roleData && (
-															<select
-																className='p-2'
-																onChange={(e) =>
-																	updateUserRole(
-																		user._id,
-																		e.target
-																			.value,
-																		user.name
-																	)
-																}
-																value={
-																	user.role
-																		._id
+											<>
+												<tr
+													className='border-b border-gray-300 text-dymAntiPop'
+													key={userIndex}>
+													<td className='py-4 px-4'>
+														<p>{user.name}</p>
+													</td>
+													<td className='py-4 px-8'>
+														<button
+															onClick={() =>
+																openOrderModal(
+																	user._id
+																)
+															}
+															className='underline'>
+															Ver
+														</button>
+													</td>
+													<td className='py-4 px-4'>
+														{user.email.length <
+														46 ? (
+															<p className='pl-2'>
+																{user.email}
+															</p>
+														) : (
+															<p
+																className='pl-2'
+																title={
+																	user.email
 																}>
-																{roleData.map(
-																	(
-																		r: ICatalogMap
-																	) => (
-																		<option
-																			key={
-																				r._id
-																			}
-																			value={
-																				r._id
-																			}>
-																			{
-																				r.name
-																			}
-																		</option>
+																{user.email
+																	.slice(
+																		0,
+																		12
 																	)
-																)}
-															</select>
+																	.concat(
+																		'...'
+																	)}
+															</p>
 														)}
-													</div>
-												</td>
-											</tr>
+													</td>
+													<td className='py-4 px-4'>
+														<p>{user.phone}</p>
+													</td>
+													<td className='py-4 px-4'>
+														<div>
+															{user.newsletter
+																? 'Suscripto'
+																: 'No suscripto'}
+														</div>
+													</td>
+													<td className='py-4 px-4'>
+														<div>
+															{user.isActive
+																? 'Activo'
+																: 'No activo'}
+														</div>
+													</td>
+													<td className='py-4 px-4'>
+														<div>
+															{roleData && (
+																<select
+																	className='p-2'
+																	onChange={(
+																		e
+																	) =>
+																		updateUserRole(
+																			user._id,
+																			e
+																				.target
+																				.value,
+																			user.name
+																		)
+																	}
+																	value={
+																		user
+																			.role
+																			._id
+																	}>
+																	{roleData.map(
+																		(
+																			r: ICatalogMap
+																		) => (
+																			<option
+																				key={
+																					r._id
+																				}
+																				value={
+																					r._id
+																				}>
+																				{
+																					r.name
+																				}
+																			</option>
+																		)
+																	)}
+																</select>
+															)}
+														</div>
+													</td>
+												</tr>
+												{activeUser === user._id && (
+													<OrderModal
+														closeModal={
+															closeOrderModal
+														}
+														orders={user.orders}
+														email={user.email}
+													/>
+												)}
+											</>
 										)
 									)
 								) : (
