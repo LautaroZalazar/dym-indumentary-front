@@ -1,3 +1,4 @@
+import { IOrderMap } from "./order-map.interface";
 interface IRole {
 	_id: string;
 	name: string;
@@ -14,4 +15,5 @@ export interface IUserMap {
 	address: null;
 	role: IRole;
 	cart: {};
+	orders: IOrderMap[];
 }
