@@ -7,4 +7,5 @@ export interface IFilterState {
 		size: string[];
 	  };
 	  sort: string;
+	  page: number;
 }

@@ -11,7 +11,7 @@ import {
 } from '../../redux/slices/catalogs.silce';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../../redux/store';
-import { setFilter, setSort } from '../../redux/slices/filter.silce';
+import { setFilter, setPage, setSort } from '../../redux/slices/filter.silce';
 
 const SideBar: React.FC<ISideBarProps> = ({ isOpen }) => {
 	const dispatch = useDispatch();
@@ -47,6 +47,7 @@ const SideBar: React.FC<ISideBarProps> = ({ isOpen }) => {
 		id: string,
 		checked: boolean
 	) => {
+		dispatch(setPage(1))
 		dispatch(
 			setFilter({
 				[type]: checked
@@ -57,6 +58,7 @@ const SideBar: React.FC<ISideBarProps> = ({ isOpen }) => {
 	};
 
 	const handleSortChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+		dispatch(setPage(1))
 		dispatch(setSort(event.target.value));
 	};
 

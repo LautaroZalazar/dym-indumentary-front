@@ -10,6 +10,7 @@ const initialState: IFilterState = {
 		size: [],
 	},
 	sort: '',
+	page: 1,
 };
 
 const filterSlice = createSlice({
@@ -25,8 +26,11 @@ const filterSlice = createSlice({
 		setSort: (state, action: PayloadAction<string>) => {
 			state.sort = action.payload;
 		},
+		setPage: (state, action: PayloadAction<number>) => {
+			state.page = action.payload;
+		}
 	},
 });
 
-export const { setFilter, setSort } = filterSlice.actions;
+export const { setFilter, setSort, setPage } = filterSlice.actions;
 export default filterSlice.reducer;
