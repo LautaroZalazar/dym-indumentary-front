@@ -63,7 +63,7 @@ const AddSubcategories = ({
 
 	return (
 		<form className='fixed inset-0 flex justify-center items-center z-50 bg-dymBlack bg-opacity-80'>
-			<div className='bg-dymBlack border border-dymOrange rounded-lg shadow-lg w-full max-w-lg md:w-3/4 lg:w-2/4 xl:w-1/3 h-auto flex flex-col mx-2'>
+			<div className='bg-dymBlack border border-dymOrange rounded-lg shadow-lg w-full max-w-lg md:w-3/4 lg:w-2/4 xl:w-2/5 h-auto flex flex-col mx-2'>
 				<div className='flex justify-end'>
 					<button
 						type='button'

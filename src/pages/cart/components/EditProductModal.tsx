@@ -121,7 +121,7 @@ const EditProductModal: React.FC<IEditProductModalProps> = ({
 		<div className='fixed inset-0 bg-black bg-opacity-85 flex justify-center items-center'>
 			<div
 				ref={editModalRef}
-				className='bg-dymBlack border border-dymOrange p-4 rounded-lg w-full lg:w-1/4 mx-4 lg:m-0'>
+				className='bg-dymBlack border border-dymOrange p-4 rounded-lg w-full md:w-2/4 lg:w-1/3 xl:w-1/4 mx-4 lg:m-0'>
 				{localStorage.getItem('user') ? (
 					<>
 						<div className='flex justify-between items-center'>

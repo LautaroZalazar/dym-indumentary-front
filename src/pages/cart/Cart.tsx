@@ -6,6 +6,7 @@ import CartSummary from './components/CartSummary';
 import axios from 'axios';
 import { NavLink } from 'react-router-dom';
 import EditProductModal from './components/EditProductModal';
+import { useMessage } from '../../hooks/alertMessage';
 
 const Cart = () => {
 	const [userData, setUserData] = useState<any>(null);
@@ -18,6 +19,7 @@ const Cart = () => {
 	const [totalPrice, setTotalPrice] = useState<number>(0);
 	const baseUrl = import.meta.env.VITE_BACK_URL;
 	const user = localStorage.getItem('user');
+	const { MessageComponent, showMessage } = useMessage();
 
 	useEffect(() => {
 		const fetchUserAndCart = async () => {
@@ -85,6 +87,8 @@ const Cart = () => {
 					data: {
 						cartId: cartData._id,
 						productId: productId,
+						sizeId: sizeId,
+						colorId: colorId,
 					},
 				});
 			} else {
@@ -100,7 +104,17 @@ const Cart = () => {
 				localStorage.setItem('cart', JSON.stringify(updatedCart));
 			}
 			setCartVersion((prevVersion) => prevVersion + 1);
+			showMessage(
+				'success',
+				`El producto se eliminó correctamente`,
+				3000
+			);
 		} catch (error: any) {
+			showMessage(
+				'error',
+				`Error al eliminar el producto`,
+				3000
+			);
 			throw new Error(error);
 		}
 	};
@@ -164,7 +178,17 @@ const Cart = () => {
 				localStorage.setItem('cart', JSON.stringify(updatedCart));
 			}
 			setCartVersion((prevVersion) => prevVersion + 1);
+			showMessage(
+				'success',
+				`El producto se actualizó correctamente`,
+				3000
+			);
 		} catch (error: any) {
+			showMessage(
+				'error',
+				`Error al actualizar el producto`,
+				3000
+			);
 			throw new Error(error);
 		}
 	};
@@ -318,6 +342,7 @@ const Cart = () => {
 					updateProduct={updateProduct}
 				/>
 			)}
+			{MessageComponent && <MessageComponent />}
 		</div>
 	);
 };
