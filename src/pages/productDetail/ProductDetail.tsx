@@ -8,6 +8,7 @@ import { ISelectedProduct } from '../productDetail/models/selectedProduct.model'
 import { useAddProductToCartMutation } from '../../redux/slices/cart.slice';
 import ValidateProductToCart from './utils/ValidateProductInCart';
 import { useGetUserByIdQuery } from '../../redux/slices/user.slice';
+import { useMessage } from '../../hooks/alertMessage';
 
 const ProductDetail = () => {
 	const { id } = useParams();
@@ -25,6 +26,7 @@ const ProductDetail = () => {
 		size: { _id: '', name: '' },
 	});
 	const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
+	const { MessageComponent, showMessage } = useMessage();
 
 	useEffect(() => {
 		if (data && data.inventory.length > 0) {
@@ -106,7 +108,17 @@ const ProductDetail = () => {
 			} else {
 				ValidateProductToCart(productToCartForLocalStorage);
 			}
+			showMessage(
+				'success',
+				`Se agregó "${data.name}" al carrito`,
+				3000
+			);
 		} catch (error: any) {
+			showMessage(
+				'error',
+				`Error al agregar "${data.name}" al carrito`,
+				3000
+			);
 			throw new Error(error.message);
 		}
 	};
@@ -241,6 +253,7 @@ const ProductDetail = () => {
 					</section>
 				</div>
 			</div>
+			{MessageComponent && <MessageComponent />}
 		</div>
 	);
 };

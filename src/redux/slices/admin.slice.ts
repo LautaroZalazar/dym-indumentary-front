@@ -47,13 +47,13 @@ export const adminSlice = createApi({
 				const params = new URLSearchParams();
 				if (limit !== undefined) params.append('limit', String(limit));
 				if (page !== undefined) params.append('page', String(page));
-				if (name !== undefined) params.append('productName', name);
-				if (sort !== undefined) params.append('sort', sort);
+				if (name && name !== '') params.append('productName', name);
+				if (sort && sort !== '') params.append('sort', sort);
 				if (isActive !== undefined)
 					params.append('isActive', String(isActive));
 				if (stock !== undefined) params.append('stock', String(stock));
 				return {
-					url: `/v1/product?${params.toString()}`,
+					url: `/v1/admin/product?${params.toString()}`,
 					credentials: 'include',
 					method: 'GET',
 					headers: AUTH_HEADERS,

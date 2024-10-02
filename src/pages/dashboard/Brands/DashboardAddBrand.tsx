@@ -40,10 +40,10 @@ const DashboardAddBrand: React.FC = () => {
 						'La marca se agregó correctamente',
 						3000
 					);
-					setBrands([{ name: '' }]);
 				}
+				showMessage('error', 'El nombre no debe estar vacío', 3000);
 			}
-			showMessage('error', 'El nombre no debe estar vacío', 3000);
+			setBrands([{ name: '' }]);
 		} catch (error: any) {
 			showMessage('error', 'Error al agregar la marca', 3000);
 			throw new Error(error);

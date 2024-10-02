@@ -13,7 +13,7 @@ const Message: React.FC<MessageProps> = ({ type, text, duration }) => {
 
 	useEffect(() => {
 		setIsVisible(true);
-		const timer = setTimeout(() => setIsVisible(false), duration - 300); // 300ms para la animación de salida
+		const timer = setTimeout(() => setIsVisible(false), duration - 300);
 		return () => clearTimeout(timer);
 	}, [duration]);
 
