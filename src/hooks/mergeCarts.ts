@@ -30,7 +30,7 @@ const useMergeCarts = () => {
 						{
 							headers: {
 								'Content-Type': 'application/json; charset=UTF-8',
-								'Authorization': `Bearer ${user && JSON.parse(user).token}`,
+								'Authorization': `Bearer ${user && JSON.parse(user).user.token}`,
 							},
 						}
 					);

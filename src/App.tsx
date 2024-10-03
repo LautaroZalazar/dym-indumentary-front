@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { Auth, Home, ProductDetail } from './pages';
 import NavbarMobile from '../src/components/navbar/navbarMobile/NavbarMobile';
@@ -24,6 +24,26 @@ function App() {
 	const handleSearch = (term: string) => {
 		setSearchTerm(term);
 	};
+
+	useEffect(() => {
+		const checkSessionExpiration = () => {
+		  const sessionData = JSON.parse(localStorage.getItem('user') || 'null');
+	
+		  if (sessionData) {
+			const currentTime = new Date().getTime();
+	
+			if (currentTime > sessionData.expiryTime) {
+			  localStorage.removeItem('user');
+			}
+		  }
+		};
+	
+		checkSessionExpiration();
+	
+		const interval = setInterval(checkSessionExpiration, 180000);
+	
+		return () => clearInterval(interval);
+	  }, []);
 
 	return (
 		<Router>

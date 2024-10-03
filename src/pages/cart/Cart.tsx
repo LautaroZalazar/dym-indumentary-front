@@ -30,7 +30,7 @@ const Cart = () => {
 						headers: {
 							'Content-Type': 'application/json; charset=UTF-8',
 							Authorization: `Bearer ${
-								user && JSON.parse(user).token
+								user && JSON.parse(user).user.token
 							}`,
 						},
 					}
@@ -49,7 +49,7 @@ const Cart = () => {
 								'Content-Type':
 									'application/json; charset=UTF-8',
 								Authorization: `Bearer ${
-									user && JSON.parse(user).token
+									user && JSON.parse(user).user.token
 								}`,
 							},
 						}
@@ -81,7 +81,7 @@ const Cart = () => {
 					headers: {
 						'Content-Type': 'application/json; charset=UTF-8',
 						Authorization: `Bearer ${
-							user && JSON.parse(user).token
+							user && JSON.parse(user).user.token
 						}`,
 					},
 					data: {
@@ -161,7 +161,7 @@ const Cart = () => {
 						headers: {
 							'Content-Type': 'application/json; charset=UTF-8',
 							Authorization: `Bearer ${
-								user && JSON.parse(user).token
+								user && JSON.parse(user).user.token
 							}`,
 						},
 					}

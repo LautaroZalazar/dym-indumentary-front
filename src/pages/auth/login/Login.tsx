@@ -32,7 +32,13 @@ const Login: React.FC<ILogin> = ({ setIsSelected }) => {
 		try {
 			const response = await userLogin(form);
 			if (!response.error) {
-				localStorage.setItem('user', JSON.stringify(response.data));
+				const expiryTimeMinutes = 60;
+				const expiryTime = new Date().getTime() + expiryTimeMinutes * 60 * 1000;
+				const sessionData = {
+					user: response.data,
+					expiryTime,
+				}
+				localStorage.setItem('user', JSON.stringify(sessionData));
 				const user = await axios.get(`${baseUrl}/v1/user/detail`, {
 					headers:{
 						'Content-Type': 'application/json; charset=UTF-8',
