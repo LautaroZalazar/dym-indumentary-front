@@ -249,12 +249,13 @@ const Cart = () => {
 		// Paso 2: Función para crear una orden de pago
 		async function crearOrdenDePago(token: string) {
 			const url = import.meta.env.VITE_UALA_CREATE_ORDER_URL;
+			const deployUrl = import.meta.env.VITE_DEPLOY_FRONT_URL;
 
 			const body = {
 				amount: totalPrice,
 				description: 'DYM-VENTA',
-				callback_success: 'http://localhost:5173/PaymentFinished?paymentStatus=true',
-				callback_fail: 'http://localhost:5173/PaymentFinished?paymentStatus=false',
+				callback_success: `${deployUrl}/PaymentFinished?paymentStatus=true`,
+				callback_fail: `${deployUrl}/PaymentFinished?paymentStatus=false`,
 				external_reference: 'DYM',
 			};
 

@@ -36,7 +36,7 @@ const PaymentFinished = () => {
 			if(paymentStatus === 'true'){
 			await axios.put(
 				`${baseUrl}/v1/cart/clear`,
-				{ products: [], cartId: response.data._id },
+				{ cartId: response.data._id },
 				{ headers: AUTH_HEADERS }
 			);
 		}
