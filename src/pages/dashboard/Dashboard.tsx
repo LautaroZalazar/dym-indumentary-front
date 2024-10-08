@@ -16,7 +16,7 @@ const Dashboard = () => {
 	];
 
 	return (
-		<div className='w-full min-h-screen flex flex-col items-center px-4'>
+		<div className='w-full min-h-screen flex flex-col items-center px-4 pt-12 pb-12 md:pb-0'>
 			<h1 className='text-3xl md:text-5xl text-dymAntiPop mt-4'>
 				Dashboard
 			</h1>

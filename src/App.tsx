@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { Auth, Home, ProductDetail } from './pages';
-import NavbarMobile from '../src/components/navbar/navbarMobile/NavbarMobile';
-import SubNavbarMobile from '../src/components/navbar/navbarMobile/SubNavbarMobile';
+import NavbarMobile from './components/navbar/NavbarMobile';
+import Navbar from './components/navbar/Navbar';
 import ResetPassword from './pages/auth/recoverypassword/ResetPassword';
 import Dashboard from './pages/dashboard/Dashboard';
 import Cart from './pages/cart/Cart';
@@ -47,7 +47,7 @@ function App() {
 
 	return (
 		<Router>
-			<SubNavbarMobile onSearch={handleSearch} />
+			<Navbar onSearch={handleSearch} />
 				<Routes>
 					<Route
 						path='/'

@@ -10,7 +10,7 @@ const Auth = () => {
 	const [isSelected, setIsSelected] = useState('BasicAuth');
 
 	return (
-		<div className="flex flex-col md:flex-row w-full h-screen md:items-center md:justify-center bg-[#18151A]">
+		<div className="flex flex-col md:flex-row w-full h-screen md:items-center md:justify-center bg-[#18151A] pt-12 pb-12 md:pb-0">
 			<div
 				className={`${
 					isSelected === 'BasicAuth'

@@ -65,11 +65,11 @@ const SideBar: React.FC<ISideBarProps> = ({ isOpen }) => {
 	return (
 		<div
 			className={`
-            fixed top-0 left-0 h-full w-80 bg-dymBlack z-40 transition-transform duration-300 ease-in-out
+            fixed top-0 left-0 h-screen min-w-80 bg-dymBlack z-40 transition-transform duration-300 ease-in-out
             transform ${isOpen ? 'translate-x-0' : '-translate-x-full'}
             lg:relative lg:translate-x-0 lg:z-0
         `}>
-			<div className='p-4 overflow-y-auto h-screen pt-16'>
+			<div className='p-4 overflow-y-auto pt-16'>
 				<div className='mb-6'>
 					<select
 						className='block w-full border border-zinc-300 rounded p-2'

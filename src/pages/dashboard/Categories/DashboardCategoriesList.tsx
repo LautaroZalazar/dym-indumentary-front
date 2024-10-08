@@ -41,9 +41,9 @@ const DashboardCategoriesList = () => {
 	if (categoryIsLoading) return <Loader />;
 
 	return (
-		<div className='h-screen'>
-			<div className='flex flex-col bg-dymBlack h-screen overflow-hidden p-4'>
-				<div className='flex flex-row md:space-x-32 space-x-4 h-10 mt-4'>
+		<div className='min-h-screen flex flex-col overflow-hidden pt-12 pb-12 md:pb-0'>
+			<div className='flex flex-col bg-dymBlack flex-grow p-2'>
+				<div className='flex flex-col md:flex-row md:space-x-24 space-y-4 mt-4'>
 					<input
 						className='md:w-1/2 w-44% rounded-md p-2 border border-gray-300'
 						placeholder='Buscar categoría'
@@ -70,9 +70,7 @@ const DashboardCategoriesList = () => {
 						)}
 					</div>
 				</div>
-				<div
-					className='overflow-y-auto mt-24'
-					style={{ maxHeight: 'calc(100vh - 150px)' }}>
+				<div className='flex-grow overflow-y-auto mt-8 md:mt-16 max-h-[calc(100vh-150px)]'>
 					<table className='w-2/4 mx-auto text-center'>
 						<thead>
 							<tr className='text-dymAntiPop'>

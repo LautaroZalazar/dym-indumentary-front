@@ -62,9 +62,10 @@ const AddSubcategories = ({
 	};
 
 	return (
-		<form className='fixed inset-0 flex justify-center items-center z-50 bg-dymBlack bg-opacity-80'>
-			<div className='bg-dymBlack border border-dymOrange rounded-lg shadow-lg w-full max-w-lg md:w-3/4 lg:w-2/4 xl:w-2/5 h-auto flex flex-col mx-2'>
-				<div className='flex justify-end'>
+		<form className='fixed h-screen inset-0 flex justify-center items-center z-50 bg-dymBlack bg-opacity-80 pt-12'>
+			<div className='bg-dymBlack border border-dymOrange rounded-lg shadow-lg w-full max-w-lg md:w-3/4 lg:w-2/4 xl:w-2/5 h-auto max-h-[80vh] flex flex-col mx-2 overflow-y-auto'>
+				<div className='flex justify-between'>
+					<h1 className='m-2'>Agregar subcategoría</h1>
 					<button
 						type='button'
 						onClick={closeModal}

@@ -1,11 +1,11 @@
 import { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import searchIcon from '../../../assets/SVG/searchIcon.svg';
-import shoppingBag from '../../../assets/SVG/shoppingBag.svg';
-import userIcon from '../../../assets/SVG/userIcon.svg';
-import { ISubNavbarProps } from './models/subnavbar-props.interface';
+import searchIcon from '../../assets/SVG/searchIcon.svg';
+import shoppingBag from '../../assets/SVG/shoppingBag.svg';
+import userIcon from '../../assets/SVG/userIcon.svg';
+import { INavbarProps } from './models/navbar-props.interface';
 
-const SubNavbarMobile: React.FC<ISubNavbarProps> = ({ onSearch }) => {
+const Navbar: React.FC<INavbarProps> = ({ onSearch }) => {
 	const [showInput, setShowInput] = useState(false);
 	const [searchTerm, setSearchTerm] = useState('');
 	const inputRef = useRef<HTMLInputElement>(null);
@@ -56,14 +56,14 @@ const SubNavbarMobile: React.FC<ISubNavbarProps> = ({ onSearch }) => {
 	}, [showInput]);
 
 	return (
-		<nav className='bg-dymOrange top-0 w-full flex justify-around items-center overflow-hidden h-12'>
-			<div className='flex w-full'>
-				<div className='relative w-full flex items-center mr-4'>
-					<div className='w-full flex justify-end space-x-6 items-center p-2'>
+		<nav className='bg-dymOrange top-0 w-full fixed flex justify-around items-center overflow-hidden z-20'>
+			<div className='flex w-full md:justify-center justify-end items-center mr-4 h-12'>
+				<div className='w-full flex justify-end md:justify-center space-x-0 md:space-x-24 items-center'>
+					<div className='flex justify-end'>
 						<input
 							type='text'
 							ref={inputRef}
-							className={`md:w-2/12 transition-all duration-300 ease-in-out transform ${
+							className={`md:w-full transition-all duration-300 ease-in-out transform ${
 								showInput
 									? 'w-full ml-10 px-2 opacity-100'
 									: 'w-0 ml-0 opacity-0'
@@ -81,27 +81,26 @@ const SubNavbarMobile: React.FC<ISubNavbarProps> = ({ onSearch }) => {
 							}}
 						/>
 						<button
-							className={`text-white cursor-pointer hover:text-gray-300 transition mx-2 ${
-								showInput ? 'ml-2' : ''
-							}`}
+							className={`text-white cursor-pointer hover:text-gray-300 transition ml-4
+							`}
 							onClick={toggleSearch}>
 							<img src={searchIcon.toString()} />
 						</button>
-						<a
-							href='/cart'
-							className='text-white text-center hidden md:flex'>
-							<img src={shoppingBag.toString()} />
-						</a>
-						<a
-							href='/auth'
-							className='text-white text-center hidden md:flex'>
-							<img src={userIcon.toString()} />
-						</a>
 					</div>
+					<a
+						href='/cart'
+						className='text-white text-center hidden md:flex'>
+						<img src={shoppingBag.toString()} />
+					</a>
+					<a
+						href='/auth'
+						className='text-white text-center hidden md:flex'>
+						<img src={userIcon.toString()} />
+					</a>
 				</div>
 			</div>
 		</nav>
 	);
 };
 
-export default SubNavbarMobile;
+export default Navbar;

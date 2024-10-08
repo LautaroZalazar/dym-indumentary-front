@@ -174,9 +174,9 @@ const DashboardUsersList = () => {
 	};
 
 	return (
-		<div className='h-screen'>
-			<div className='flex flex-col bg-dymBlack h-screen overflow-hidden p-4'>
-				<div className='flex flex-col md:flex-row md:space-x-32 space-y-4 md:space-y-0 h-10 mt-4'>
+		<div className='min-h-screen flex flex-col overflow-hidden pt-12 pb-12 md:pb-0'>
+			<div className='flex flex-col bg-dymBlack flex-grow p-2'>
+				<div className='flex flex-col md:flex-row md:space-x-16 space-y-4 md:space-y-0 mt-4'>
 					<div className='flex w-full md:w-1/4'>
 						<input
 							className='w-full rounded-md rounded-r-none p-2 border border-gray-300'
@@ -205,7 +205,7 @@ const DashboardUsersList = () => {
 							)}
 						</button>
 					</div>
-					<div className='flex md:space-x-10 space-x-2 md:w-1/2 w-42 justify-center'>
+					<div className='flex space-x-2 w-42 justify-center'>
 						<select
 							className='md:w-42 rounded-md p-2 text-dymAntiPop border border-gray-300'
 							value={
@@ -239,10 +239,10 @@ const DashboardUsersList = () => {
 						)}
 					</div>
 				</div>
-				<div className='flex flex-col justify-between h-full'>
+				<div className='flex flex-col justify-center'>
 					<div
-						className='overflow-y-auto mt-24'
-						style={{ maxHeight: 'calc(100vh - 150px)' }}>
+						className="flex-grow overflow-y-auto mt-8 md:mt-16 max-h-[calc(100vh-320px)]"
+						>
 						<table className='w-full'>
 							<thead>
 								<tr className='text-dymAntiPop'>
