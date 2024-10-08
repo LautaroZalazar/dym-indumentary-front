@@ -294,11 +294,11 @@ const Cart = () => {
 	};
 
 	return (
-		<div className='md:h-screen py-10'>
-			<h1 className='mb-10 text-center text-2xl font-bold'>Mi Carrito</h1>
+		<div className='md:h-screen pt-12 pb-12 md:pb-0'>
+			<h1 className='m-4 text-center text-2xl font-bold'>Mi Carrito</h1>
 			{cart.products.length > 0 ? (
-				<div className='mx-auto max-w-5xl justify-center px-6 md:flex md:space-x-6 xl:px-0'>
-					<div className='rounded-lg md:w-2/3 md:overflow-auto overflow-hidden md:max-h-[90vh]'>
+				<div className='mx-auto max-w-5xl justify-center md:flex md:space-x-6 xl:px-0 p-4'>
+					<div className='rounded-lg md:w-2/3 md:overflow-auto overflow-hidden md:max-h-[80vh]'>
 						<ProductListInCart
 							product={cart.products}
 							removeItem={handleRemoveItem}

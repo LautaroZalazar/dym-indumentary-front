@@ -52,9 +52,9 @@ const PaymentFinished = () => {
 	if (userIsLoading) return <Loader />;
 
 	return (
-		<div className='flex justify-center w-full h-screen'>
-			<div className='flex flex-col w-3/4 justify-center items-center h-screen bg-dymBlack p-4'>
-				<section className='h-28 w-1/3 border border-dymOrange rounded-md'>
+		<div className='flex justify-center w-full h-screen pt-12 pb-12 md:pb-0'>
+			<div className='flex flex-col w-full md:w-3/4 justify-center items-center h-screen bg-dymBlack p-4'>
+				<section className='h-28 w-full md:w-1/2 xl:w-1/3 border border-dymOrange rounded-md'>
 					<div className='h-full flex flex-col justify-center items-center p-2'>
 						{paymentStatus === 'true' ? (
 							<h1>Gracias por tu compra!</h1>

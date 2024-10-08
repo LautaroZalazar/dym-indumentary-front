@@ -109,7 +109,7 @@ const DashboardProducts = () => {
 
 	const handleFilterChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
 		const value = e.target.value;
-		 if (value === 'inStock') {
+		if (value === 'inStock') {
 			setFilters({
 				...filters,
 				stock: true,
@@ -150,9 +150,9 @@ const DashboardProducts = () => {
 	if (adminProductsLoading) return <Loader />;
 
 	return (
-		<div className='h-screen w-full'>
-			<div className='flex flex-col bg-dymBlack h-screen overflow-hidden p-4'>
-				<div className='flex flex-col md:flex-row md:space-x-32 space-y-4 md:space-y-0 h-10 mt-4'>
+		<div className='min-h-screen flex flex-col overflow-hidden pt-12 pb-12 md:pb-0'>
+			<div className='flex flex-col bg-dymBlack flex-grow p-2'>
+				<div className='flex flex-col md:flex-row md:space-x-32 space-y-4 md:space-y-0 mt-4'>
 					<div className='flex w-full md:w-1/4'>
 						<input
 							className='w-full rounded-md rounded-r-none p-2 border border-gray-300'
@@ -221,10 +221,8 @@ const DashboardProducts = () => {
 						)}
 					</div>
 				</div>
-				<div className='flex flex-col justify-between h-full'>
-					<div
-						className='overflow-y-auto mt-24'
-						style={{ maxHeight: 'calc(85vh - 150px)' }}>
+				<div className='flex flex-col justify-center'>
+					<div className='flex-grow overflow-y-auto mt-8 md:mt-16 max-h-[calc(100vh-320px)]'>
 						<table className='w-full'>
 							<thead>
 								<tr className='text-dymAntiPop'>

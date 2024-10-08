@@ -170,7 +170,7 @@ const ProductDetail = () => {
 
 	return (
 		<div className='flex items-center md:h-screen container mx-auto px-4 py-8 md:py-16'>
-			<div className='flex w-full flex-col md:flex-row items-center md:items-start md:justify-center'>
+			<div className='flex w-full flex-col md:flex-row items-center md:items-start md:justify-center pt-12 pb-12 md:pb-0'>
 				<section className='w-full md:w-[45%] mb-8 md:mb-0'>
 					<ImageSlider images={data.image} />
 				</section>

@@ -166,7 +166,7 @@ const AddProductForm: React.FC = () => {
 	};
 
 	return (
-		<form className='w-full md:h-screen flex justify-center items-center p-4'>
+		<form className='w-full md:h-auto flex justify-center items-center p-4 pt-12 pb-12 md:pb-0'>
 			<div className='w-full md:w-3/4 lg:w-2/4 xl:w-2/6 mt-4 flex flex-col justify-center space-y-4'>
 				<div
 					className='relative'

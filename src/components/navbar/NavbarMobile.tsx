@@ -1,7 +1,7 @@
-import shoppingBag from '../../../assets/SVG/shoppingBag.svg';
-import userIcon from '../../../assets/SVG/userIcon.svg';
-import homeIcon from '../../../assets/SVG/homeIcon.svg';
-import homeIconFill from '../../../assets/SVG/homeIconFill.svg';
+import shoppingBag from '../../assets/SVG/shoppingBag.svg';
+import userIcon from '../../assets/SVG/userIcon.svg';
+import homeIcon from '../../assets/SVG/homeIcon.svg';
+import homeIconFill from '../../assets/SVG/homeIconFill.svg';
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 
@@ -24,7 +24,7 @@ const NavbarMobile = () => {
 	
 
 	return (
-		<nav className='bg-dymOrange p-4 sticky bottom-0 w-full md:hidden flex justify-around items-center'>
+		<nav className='bg-dymOrange p-4 fixed bottom-0 w-full md:hidden flex justify-around items-center h-12'>
 			<div className='flex justify-around w-full'>
 				<a href='/' className='text-white flex align-center'>
 					{isIconFill.home ? (

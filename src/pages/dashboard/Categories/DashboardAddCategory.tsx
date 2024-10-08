@@ -48,7 +48,7 @@ const DashboardAddCategory: React.FC = () => {
 	};
 
 	return (
-		<form className='flex justify-center items-center w-full min-h-screen p-4'>
+		<form className='flex justify-center items-center w-full min-h-screen p-4 pt-12 pb-12 md:pb-0'>
 			<div className='flex flex-col justify-center items-center bg-dymBlack w-full max-w-lg rounded-lg shadow-lg space-y-4 p-4'>
 				{categories.map((category, index) => (
 					<div

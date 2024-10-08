@@ -121,7 +121,7 @@ const Home: React.FC<IHomeProps> = ({ searchTerm }) => {
 	const hasMoreProducts = productData?.products.length === 30;
 
 	return (
-		<div className='relative'>
+		<div className='h-screen overflow-hidden'>
 			<div className='lg:hidden fixed top-1 left-1 z-50'>
 				<HamburgerButton
 					isOpen={isSidebarOpen}
@@ -132,8 +132,8 @@ const Home: React.FC<IHomeProps> = ({ searchTerm }) => {
 			<div className='flex'>
 				<SideBar isOpen={isSidebarOpen} />
 
-				<div className='flex-grow p-4'>
-					<div className='h-12 mb-8 flex justify-center items-center'>
+				<div className='flex-grow p-2 pt-12 pb-12 md:pb-0'>
+					<div className='h-12 flex static justify-center items-center text-cemter'>
 						<h2 className='text-sm font-bold'>
 							{productData.totalCount === 1
 								? productData.totalCount + ' Resultado'
@@ -142,7 +142,7 @@ const Home: React.FC<IHomeProps> = ({ searchTerm }) => {
 					</div>
 					<div
 						className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 overflow-y-auto'
-						style={{ maxHeight: 'calc(100vh - 150px)' }}
+						style={{ maxHeight: 'calc(100vh - 110px)' }}
 						ref={containerRef}>
 						{allProducts.map((product: IProductData) => (
 							<div
