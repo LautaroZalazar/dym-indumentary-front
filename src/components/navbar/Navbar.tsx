@@ -11,49 +11,49 @@ const Navbar: React.FC<INavbarProps> = ({ onSearch }) => {
 	const inputRef = useRef<HTMLInputElement>(null);
 	const navigate = useNavigate();
 
-	const toggleSearch = () => {
-		if (inputRef.current?.value) {
-			onSearch(inputRef.current.value);
-			setSearchTerm(inputRef.current.value);
-			navigate('/');
-		} else {
-			setShowInput(!showInput);
-		}
+  const toggleSearch = () => {
+    if (inputRef.current?.value) {
+      onSearch(inputRef.current.value);
+      setSearchTerm(inputRef.current.value);
+      navigate("/");
+    } else {
+      setShowInput(!showInput);
+    }
 
-		if (!showInput) {
-			setSearchTerm('');
-			onSearch('');
-		} else if (inputRef.current) {
-			inputRef.current.focus();
-		}
-	};
+    if (!showInput) {
+      setSearchTerm("");
+      onSearch("");
+    } else if (inputRef.current) {
+      inputRef.current.focus();
+    }
+  };
 
-	const enterKeySearch = () => {
-		if (inputRef.current?.value) {
-			onSearch(inputRef.current.value);
-			setSearchTerm(inputRef.current.value);
-			navigate('/');
-		} else {
-			onSearch('');
-			setSearchTerm('');
-		}
-	};
+  const enterKeySearch = () => {
+    if (inputRef.current?.value) {
+      onSearch(inputRef.current.value);
+      setSearchTerm(inputRef.current.value);
+      navigate("/");
+    } else {
+      onSearch("");
+      setSearchTerm("");
+    }
+  };
 
-	const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-		const value = e.target.value;
-		setSearchTerm(value);
-		if (searchTerm) {
-			onSearch('');
-		}
-	};
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setSearchTerm(value);
+    if (searchTerm) {
+      onSearch("");
+    }
+  };
 
-	useEffect(() => {
-		if (showInput && inputRef.current) {
-			setTimeout(() => {
-				inputRef.current?.focus();
-			}, 100);
-		}
-	}, [showInput]);
+  useEffect(() => {
+    if (showInput && inputRef.current) {
+      setTimeout(() => {
+        inputRef.current?.focus();
+      }, 100);
+    }
+  }, [showInput]);
 
 	return (
 		<nav className='bg-dymOrange top-0 w-full fixed flex justify-around items-center overflow-hidden z-20'>
