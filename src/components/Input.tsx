@@ -1,7 +1,27 @@
-import React from "react";
 import { IInputProps } from "../models/input.interface";
 
-const Input: React.FC<IInputProps> = ({ name, type, value, onChange, preImage, children }) => {
+const Input: React.FC<IInputProps> = ({
+  name,
+  type,
+  value,
+  onChange,
+  preImage,
+  children,
+  onFocus,
+  onBlur,
+}) => {
+  const handleFocus = () => {
+    if (onFocus) {
+      onFocus(true);
+    }
+  };
+
+  const handleBlur = () => {
+    if (onBlur) {
+      onBlur(false);
+    }
+  };
+
   return (
     <div className="flex justify-between bg-transparent border-b-2 border-[#F26426] mt-2 w-72 h-10">
       <div className="flex items-end">
@@ -11,10 +31,12 @@ const Input: React.FC<IInputProps> = ({ name, type, value, onChange, preImage, c
             name={name}
             type={type}
             id={name}
-            placeholder={name.charAt(0).toUpperCase() + name.slice(1)}
+            placeholder={`  ${name.charAt(0).toUpperCase() + name.slice(1)}`}
             value={value}
             onChange={onChange}
             className="text-white bg-transparent peer placeholder:text-transparent focus:outline-none"
+            onFocus={handleFocus}
+            onBlur={handleBlur}
           />
           <label
             htmlFor={name}

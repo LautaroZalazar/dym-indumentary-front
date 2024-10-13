@@ -1,3 +1,3 @@
 export interface ILogin {
-    setIsSelected?: React.Dispatch<React.SetStateAction<string>>;
+    setIsSelected: React.Dispatch<React.SetStateAction<string>>;
 }
