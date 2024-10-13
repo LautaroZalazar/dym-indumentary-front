@@ -6,22 +6,20 @@ import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 
 const NavbarMobile = () => {
+  const location = useLocation();
+  const [isIconFill, setIsIconFill] = useState({ home: false, cart: false, user: false });
 
-	const location = useLocation()
-	const [isIconFill, setIsIconFill] = useState({home: false, cart: false, user: false})
-
-	useEffect(() => {
-	  if(location.pathname === '/') {
-		setIsIconFill({...isIconFill, home: true})
-	  } 
-	  if (location.pathname === '/auth'){
-		setIsIconFill({...isIconFill, user: true})
-	  }
-	  if (location.pathname === ''){
-		setIsIconFill({...isIconFill, cart: true})
-	  }
-	}, [location.pathname])
-	
+  useEffect(() => {
+    if (location.pathname === "/") {
+      setIsIconFill({ ...isIconFill, home: true });
+    }
+    if (location.pathname === "/auth") {
+      setIsIconFill({ ...isIconFill, user: true });
+    }
+    if (location.pathname === "") {
+      setIsIconFill({ ...isIconFill, cart: true });
+    }
+  }, [location.pathname]);
 
 	return (
 		<nav className='bg-dymOrange p-4 fixed bottom-0 w-full md:hidden flex justify-around items-center h-12'>

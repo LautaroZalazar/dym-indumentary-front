@@ -18,96 +18,63 @@ import DashboardAddCategory from './pages/dashboard/Categories/DashboardAddCateg
 import DashboardBrandsList from './pages/dashboard/Brands/DashboardBrandsList';
 import DashboardAddBrand from './pages/dashboard/Brands/DashboardAddBrand';
 import PaymentFinished from './pages/paymentSuccess/PaymentFinished';
+import Profile from './pages/profile/Profile';
+
 function App() {
-	const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
 
-	const handleSearch = (term: string) => {
-		setSearchTerm(term);
-	};
+  const handleSearch = (term: string) => {
+    setSearchTerm(term);
+  };
 
-	useEffect(() => {
-		const checkSessionExpiration = () => {
-		  const sessionData = JSON.parse(localStorage.getItem('user') || 'null');
-	
-		  if (sessionData) {
-			const currentTime = new Date().getTime();
-	
-			if (currentTime > sessionData.expiryTime) {
-			  localStorage.removeItem('user');
-			}
-		  }
-		};
-	
-		checkSessionExpiration();
-	
-		const interval = setInterval(checkSessionExpiration, 180000);
-	
-		return () => clearInterval(interval);
-	  }, []);
+  useEffect(() => {
+    const checkSessionExpiration = () => {
+      const sessionData = JSON.parse(localStorage.getItem("user") || "null");
 
-	return (
-		<Router>
-			<Navbar onSearch={handleSearch} />
-				<Routes>
-					<Route
-						path='/'
-						element={<Home searchTerm={searchTerm} />}
-					/>
-					<Route path='/detail/:id' element={<ProductDetail />} />
-					<Route path='/cart' element={<Cart />} />
-					<Route path='/auth' element={<Auth />} />
-					<Route path='/dashboard' element={<Dashboard />} />
-					<Route path='/PaymentFinished' element={<PaymentFinished />} />
-					<Route
-						path='/dashboard-products'
-						element={<DashboardProducts />}
-					/>
-					<Route
-						path='/dashboard-add-product'
-						element={<DashboardAddProduct />}
-					/>
-					<Route
-						path='/dashboard-colors'
-						element={<DashboardColorsList />}
-					/>
-					<Route
-						path='/dashboard-add-color'
-						element={<DashboardAddColor />}
-					/>
-					<Route
-						path='/dashboard-sizes'
-						element={<DashboardSizesList />}
-					/>
-					<Route
-						path='/dashboard-add-size'
-						element={<DashboardAddSize />}
-					/>
-					<Route
-						path='/dashboard-categories'
-						element={<DashboardCategoriesList />}
-					/>
-					<Route
-						path='/dashboard-add-category'
-						element={<DashboardAddCategory />}
-					/>
-					<Route
-						path='/dashboard-brands'
-						element={<DashboardBrandsList />}
-					/>
-					<Route
-						path='/dashboard-add-brand'
-						element={<DashboardAddBrand />}
-					/>
-					<Route
-						path='/dashboard-users'
-						element={<DashboardUsersList />}
-					/>
-					<Route path='/reset-password' element={<ResetPassword />} />
-					<Route path='*' element={<div>Not Found</div>} />
-				</Routes>
-			<NavbarMobile />
-		</Router>
-	);
+      if (sessionData) {
+        const currentTime = new Date().getTime();
+
+        if (currentTime > sessionData.expiryTime) {
+          localStorage.removeItem("user");
+        }
+      }
+    };
+
+    checkSessionExpiration();
+
+    const interval = setInterval(checkSessionExpiration, 180000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  return (
+    <Router>
+      <Navbar onSearch={handleSearch} />
+      <Routes>
+        <Route path="/" element={<Home searchTerm={searchTerm} />} />
+        <Route path="/detail/:id" element={<ProductDetail />} />
+        <Route path="/cart" element={<Cart />} />
+        <Route path="/auth" element={<Auth />} />
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/PaymentFinished" element={<PaymentFinished />} />
+        <Route path="/dashboard-products" element={<DashboardProducts />} />
+        <Route path="/dashboard-add-product" element={<DashboardAddProduct />} />
+        <Route path="/dashboard-colors" element={<DashboardColorsList />} />
+        <Route path="/dashboard-add-color" element={<DashboardAddColor />} />
+        <Route path="/dashboard-sizes" element={<DashboardSizesList />} />
+        <Route path="/dashboard-add-size" element={<DashboardAddSize />} />
+        <Route path="/dashboard-categories" element={<DashboardCategoriesList />} />
+        <Route path="/dashboard-add-category" element={<DashboardAddCategory />} />
+        <Route path="/dashboard-brands" element={<DashboardBrandsList />} />
+        <Route path="/dashboard-add-brand" element={<DashboardAddBrand />} />
+        <Route path="/dashboard-users" element={<DashboardUsersList />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
+        <Route path="*" element={<div>Not Found</div>} />
+      </Routes>
+      <NavbarMobile />
+    </Router>
+  );
 }
 
 export default App;
