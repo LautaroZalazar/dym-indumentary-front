@@ -18,7 +18,7 @@ const InfoInput: React.FC<InfoInputProps> = ({ title, value }) => {
         disabled
         className={`bg-dymBlack border ${
           value ? "border-dymOrange" : "border-[#FF0000]"
-        } w-[23rem] h-9 rounded-md pl-3 text-sm`}
+        } w-[21rem] h-9 rounded-md pl-3 text-sm`}
       />
     </div>
   );
