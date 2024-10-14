@@ -122,7 +122,7 @@ const Home: React.FC<IHomeProps> = ({ searchTerm }) => {
 
 	return (
 		<div className='h-screen overflow-hidden'>
-			<div className='lg:hidden fixed top-1 left-1 z-50'>
+			<div className='lg:hidden fixed top-1 left-1'>
 				<HamburgerButton
 					isOpen={isSidebarOpen}
 					onClick={toggleSidebar}

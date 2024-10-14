@@ -77,7 +77,7 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({
             value={form.phone}
             onChange={handleChange}
             placeholder="Número de celular"
-            className={`bg-dymBlack border w-[23rem] h-9 rounded-md pl-3 text-sm`}
+            className={`bg-dymBlack border w-[23rem] h-9 rounded-md pl-3 text-sm [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:m-0`}
           />
         </div>
         <div className="flex justify-evenly">

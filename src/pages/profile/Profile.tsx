@@ -88,9 +88,6 @@ const Profile = () => {
         >
           Editar perfil
         </button>
-        <button className="w-96 h-12 bg-dymOrange text-dymAntiPop rounded-full mt-5 text-xl">
-          Cambiar contraseña
-        </button>
       </div>
       {MessageComponent && <MessageComponent />}
     </div>
