@@ -66,8 +66,8 @@ const Navbar: React.FC<INavbarProps> = ({ onSearch }) => {
 
 	return (
 		<nav className='bg-dymOrange top-0 w-full fixed flex justify-around items-center z-20'>
-			<div className='flex w-full justify-end items-center mr-4 h-12'>
-				<div className='w-full flex justify-end space-x-8 items-center pr-4'>
+			<div className='flex w-full justify-end items-center md:mr-4 h-12'>
+				<div className='w-full flex justify-end md:space-x-8 items-center pr-4'>
 					<div className='flex justify-end'>
 						<input
 							type='text'
