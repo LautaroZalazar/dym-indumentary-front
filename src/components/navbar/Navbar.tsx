@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import searchIcon from '../../assets/SVG/searchIcon.svg';
 import shoppingBag from '../../assets/SVG/shoppingBag.svg';
 import userIcon from '../../assets/SVG/userIcon.svg';
+import logo from '../../assets/SVG/logo.svg'
 import { INavbarProps } from './models/navbar-props.interface';
 import UserDropdown from './components/UserDropdown';
 import useOutsideClick from '../../hooks/handleClickOutside';
@@ -67,6 +68,11 @@ const Navbar: React.FC<INavbarProps> = ({ onSearch }) => {
 	return (
 		<nav className='bg-dymOrange top-0 w-full fixed flex justify-around items-center z-20'>
 			<div className='flex w-full justify-end items-center md:mr-4 h-12'>
+				<a
+						href='/'
+						className='text-white text-center hidden md:flex ml-4 rounded-full '>
+						<img src={logo.toString()} className='size-10'/>
+					</a>
 				<div className='w-full flex justify-end md:space-x-8 items-center pr-4'>
 					<div className='flex justify-end'>
 						<input
