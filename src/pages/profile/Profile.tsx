@@ -62,7 +62,7 @@ const Profile = () => {
   if (error) return <div>Error: </div>;
 
   return (
-    <div className="h-screen overflow-hidden">
+    <div className="h-screen overflow-hidden pt-12 pb-12 md:pb-0">
       {openEditProfile && (
         <EditProfileModal
           setOpenEditProfile={setOpenEditProfile}
@@ -77,19 +77,22 @@ const Profile = () => {
         <InfoInput title={"Correo electrónico"} value={userData.email} />
         <InfoInput title={"Número de celular"} value={userData.phone} />
         <button
-          className="w-96 h-12 bg-dymOrange text-dymAntiPop rounded-full mt-5 text-xl"
+          className="w-80 h-12 bg-dymOrange text-dymAntiPop rounded-full mt-5 text-xl"
           onClick={handleOrders}
         >
           Mis compras
         </button>
         <button
-          className="w-96 h-12 bg-dymOrange text-dymAntiPop rounded-full mt-5 text-xl"
+          className="w-80 h-12 bg-dymOrange text-dymAntiPop rounded-full mt-5 text-xl"
           onClick={handleEditProfile}
         >
           Editar perfil
         </button>
-        <button className="w-96 h-12 bg-dymOrange text-dymAntiPop rounded-full mt-5 text-xl">
-          Cambiar contraseña
+        <button
+          className="block md:hidden w-80 h-12 bg-dymOrange text-dymAntiPop rounded-full mt-5 text-xl"
+          onClick={handleEditProfile}
+        >
+          Cerrar sesión
         </button>
       </div>
       {MessageComponent && <MessageComponent />}

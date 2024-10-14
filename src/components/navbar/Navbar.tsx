@@ -4,61 +4,70 @@ import searchIcon from '../../assets/SVG/searchIcon.svg';
 import shoppingBag from '../../assets/SVG/shoppingBag.svg';
 import userIcon from '../../assets/SVG/userIcon.svg';
 import { INavbarProps } from './models/navbar-props.interface';
+import UserDropdown from './components/UserDropdown';
+import useOutsideClick from '../../hooks/handleClickOutside';
 
 const Navbar: React.FC<INavbarProps> = ({ onSearch }) => {
 	const [showInput, setShowInput] = useState(false);
 	const [searchTerm, setSearchTerm] = useState('');
+	const [showDropdown, setShowDropdown] = useState(false);
 	const inputRef = useRef<HTMLInputElement>(null);
 	const navigate = useNavigate();
 
-  const toggleSearch = () => {
-    if (inputRef.current?.value) {
-      onSearch(inputRef.current.value);
-      setSearchTerm(inputRef.current.value);
-      navigate("/");
-    } else {
-      setShowInput(!showInput);
-    }
+	const dropdownRef = useOutsideClick(() => {
+		if (showDropdown) {
+			setShowDropdown(false);
+		}
+	});
 
-    if (!showInput) {
-      setSearchTerm("");
-      onSearch("");
-    } else if (inputRef.current) {
-      inputRef.current.focus();
-    }
-  };
+	const toggleSearch = () => {
+		if (inputRef.current?.value) {
+			onSearch(inputRef.current.value);
+			setSearchTerm(inputRef.current.value);
+			navigate('/');
+		} else {
+			setShowInput(!showInput);
+		}
 
-  const enterKeySearch = () => {
-    if (inputRef.current?.value) {
-      onSearch(inputRef.current.value);
-      setSearchTerm(inputRef.current.value);
-      navigate("/");
-    } else {
-      onSearch("");
-      setSearchTerm("");
-    }
-  };
+		if (!showInput) {
+			setSearchTerm('');
+			onSearch('');
+		} else if (inputRef.current) {
+			inputRef.current.focus();
+		}
+	};
 
-  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setSearchTerm(value);
-    if (searchTerm) {
-      onSearch("");
-    }
-  };
+	const enterKeySearch = () => {
+		if (inputRef.current?.value) {
+			onSearch(inputRef.current.value);
+			setSearchTerm(inputRef.current.value);
+			navigate('/');
+		} else {
+			onSearch('');
+			setSearchTerm('');
+		}
+	};
 
-  useEffect(() => {
-    if (showInput && inputRef.current) {
-      setTimeout(() => {
-        inputRef.current?.focus();
-      }, 100);
-    }
-  }, [showInput]);
+	const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+		const value = e.target.value;
+		setSearchTerm(value);
+		if (searchTerm) {
+			onSearch('');
+		}
+	};
+
+	useEffect(() => {
+		if (showInput && inputRef.current) {
+			setTimeout(() => {
+				inputRef.current?.focus();
+			}, 100);
+		}
+	}, [showInput]);
 
 	return (
-		<nav className='bg-dymOrange top-0 w-full fixed flex justify-around items-center overflow-hidden z-20'>
-			<div className='flex w-full md:justify-center justify-end items-center mr-4 h-12'>
-				<div className='w-full flex justify-end md:justify-center space-x-0 md:space-x-24 items-center'>
+		<nav className='bg-dymOrange top-0 w-full fixed flex justify-around items-center z-20'>
+			<div className='flex w-full justify-end items-center md:mr-4 h-12'>
+				<div className='w-full flex justify-end md:space-x-8 items-center pr-4'>
 					<div className='flex justify-end'>
 						<input
 							type='text'
@@ -92,11 +101,21 @@ const Navbar: React.FC<INavbarProps> = ({ onSearch }) => {
 						className='text-white text-center hidden md:flex'>
 						<img src={shoppingBag.toString()} />
 					</a>
-					<a
-						href='/auth'
-						className='text-white text-center hidden md:flex'>
-						<img src={userIcon.toString()} />
-					</a>
+					<div
+						ref={dropdownRef}
+						className='text-white text-center relative'>
+						<button
+							onClick={() => setShowDropdown(!showDropdown)}
+							className='text-white text-center hidden md:flex'>
+							<img src={userIcon.toString()} alt='User Icon' />
+						</button>
+
+						{showDropdown && (
+							<div>
+								<UserDropdown />
+							</div>
+						)}
+					</div>
 				</div>
 			</div>
 		</nav>
