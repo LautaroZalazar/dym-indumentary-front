@@ -132,7 +132,7 @@ const Home: React.FC<IHomeProps> = ({ searchTerm }) => {
 			<div className='flex'>
 				<SideBar isOpen={isSidebarOpen} />
 
-				<div className='flex-grow p-2 pt-12 pb-12 md:pb-0'>
+				<div className='flex-grow p-2 pt-12'>
 					<div className='h-12 flex static justify-center items-center text-cemter'>
 						<h2 className='text-sm font-bold'>
 							{productData.totalCount === 1
@@ -141,8 +141,7 @@ const Home: React.FC<IHomeProps> = ({ searchTerm }) => {
 						</h2>
 					</div>
 					<div
-						className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 overflow-y-auto'
-						style={{ maxHeight: 'calc(100vh - 110px)' }}
+						className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 max-h-[calc(100vh-150px)] md:max-h-[calc(100vh-110px)] overflow-y-auto pr-2'
 						ref={containerRef}>
 						{allProducts.map((product: IProductData) => (
 							<div
