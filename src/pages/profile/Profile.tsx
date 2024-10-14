@@ -6,6 +6,7 @@ import InfoInput from "./components/infoInput";
 import EditProfileModal from "./components/modals/editProfileModal";
 import { useMessage } from "../../hooks/alertMessage";
 import OrderModal from "./components/modals/orderModal";
+import { useNavigate } from "react-router-dom";
 
 const Profile = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -14,6 +15,7 @@ const Profile = () => {
   const [openEditProfile, setOpenEditProfile] = useState<boolean>(false);
   const [openOrders, setOpenOrders] = useState<boolean>(false);
   const [updated, setUpdated] = useState<boolean>(false);
+  const navigate = useNavigate();
 
   const { MessageComponent, showMessage } = useMessage();
 
@@ -59,6 +61,11 @@ const Profile = () => {
       </div>
     );
 
+    const logOut = () => {
+      localStorage.removeItem('user');
+      navigate('/');
+    };
+
   if (error) return <div>Error: </div>;
 
   return (
@@ -77,20 +84,20 @@ const Profile = () => {
         <InfoInput title={"Correo electrónico"} value={userData.email} />
         <InfoInput title={"Número de celular"} value={userData.phone} />
         <button
-          className="w-80 h-12 bg-dymOrange text-dymAntiPop rounded-full mt-5 text-xl"
+          className="w-80 h-12 border border-dymOrange text-dymAntiPop rounded-full mt-5 text-xl"
           onClick={handleOrders}
         >
           Mis compras
         </button>
         <button
-          className="w-80 h-12 bg-dymOrange text-dymAntiPop rounded-full mt-5 text-xl"
+          className="w-80 h-12 border border-dymOrange text-dymAntiPop rounded-full mt-5 text-xl"
           onClick={handleEditProfile}
         >
           Editar perfil
         </button>
         <button
           className="block md:hidden w-80 h-12 bg-dymOrange text-dymAntiPop rounded-full mt-5 text-xl"
-          onClick={handleEditProfile}
+          onClick={() => logOut()}
         >
           Cerrar sesión
         </button>
