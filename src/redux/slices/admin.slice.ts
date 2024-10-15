@@ -25,10 +25,10 @@ export const adminSlice = createApi({
 			}),
 		}),
 		updateUser: builder.mutation({
-			query: ({ id, data }) => ({
+			query: ({ id, roleData, isActiveData }) => ({
 				url: `/v1/admin/user?userId=${id}`,
 				method: 'PATCH',
-				body: { roleId: data },
+				body: { roleId: roleData, isActive: isActiveData },
 				headers: AUTH_HEADERS,
 			}),
 		}),
