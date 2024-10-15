@@ -65,7 +65,7 @@ const DashboardUsersList = () => {
 			message: `¿Estás seguro que quieres modificar el rol del usuario "${userName}"?`,
 			onAccept: async () => {
 				try {
-					await userUpdate({ id: userId, data: roleId }).unwrap();
+					await userUpdate({ id: userId, roleData: roleId }).unwrap();
 					await userRefetch();
 					showMessage(
 						'success',
@@ -76,6 +76,42 @@ const DashboardUsersList = () => {
 					showMessage(
 						'error',
 						`Error al cambiar el rol del usuario "${userName}"`,
+						3000
+					);
+					throw new Error(error);
+				}
+			},
+		});
+	};
+
+	const handleCheckboxChange = (
+		userId: string,
+		currentActive: boolean,
+		productName: string
+	) => {
+		showConfirmModal({
+			message: `¿Estás seguro que quieres ${
+				currentActive === true ? 'desactivar' : 'activar'
+			} "${productName}"`,
+			onAccept: async () => {
+				const isActive = !currentActive;
+				try {
+					await userUpdate({
+						id: userId,
+						isActiveData: isActive,
+					}).unwrap();
+					await userRefetch();
+					showMessage(
+						'success',
+						`Se ${
+							currentActive === true ? 'desactivó' : 'activó'
+						} correctamente "${productName}"`,
+						3000
+					);
+				} catch (error: any) {
+					showMessage(
+						'error',
+						`Error al activar o desactivar "${productName}"`,
 						3000
 					);
 					throw new Error(error);
@@ -240,9 +276,7 @@ const DashboardUsersList = () => {
 					</div>
 				</div>
 				<div className='flex flex-col justify-center'>
-					<div
-						className="flex-grow overflow-y-auto mt-8 md:mt-16 max-h-[calc(100vh-320px)]"
-						>
+					<div className='flex-grow overflow-y-auto mt-8 md:mt-16 max-h-[calc(100vh-320px)]'>
 						<table className='w-full'>
 							<thead>
 								<tr className='text-dymAntiPop'>
@@ -325,11 +359,23 @@ const DashboardUsersList = () => {
 														</div>
 													</td>
 													<td className='py-4 px-4'>
-														<div>
-															{user.isActive
-																? 'Activo'
-																: 'No activo'}
-														</div>
+														<label className='inline-flex items-center cursor-pointer'>
+															<input
+																type='checkbox'
+																checked={
+																	!user.isActive
+																}
+																onChange={() =>
+																	handleCheckboxChange(
+																		user._id,
+																		user.isActive,
+																		user.name
+																	)
+																}
+																className='sr-only peer'
+															/>
+															<div className="relative w-11 h-6 peer-focus:outline-none rounded-full peer bg-dymAntiPop peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-red-500 peer-checked:after:bg-red-500 after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-green-500 after:border-green-500 after:border after:rounded-full after:h-5 after:w-5 after:transition-all"></div>
+														</label>
 													</td>
 													<td className='py-4 px-4'>
 														<div>
