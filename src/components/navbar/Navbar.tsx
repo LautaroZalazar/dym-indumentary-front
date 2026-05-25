@@ -66,61 +66,47 @@ const Navbar: React.FC<INavbarProps> = ({ onSearch }) => {
 	}, [showInput]);
 
 	return (
-		<nav className='bg-dymOrange top-0 w-full fixed flex justify-around items-center z-20'>
-			<div className='flex w-full justify-end items-center md:mr-4 h-12'>
-				<a
-						href='/'
-						className='text-white text-center hidden md:flex ml-4 rounded-full '>
-						<img src={logo.toString()} className='size-10'/>
-					</a>
-				<div className='w-full flex justify-end md:space-x-8 items-center pr-4'>
-					<div className='flex justify-end'>
+		<nav className='bg-dymOrange top-0 w-full fixed flex items-center z-20 h-16 shadow-md'>
+			<div className='flex w-full justify-between items-center px-4 md:px-6'>
+				<a href='/' className='flex items-center flex-shrink-0'>
+					<img src={logo.toString()} className='size-9'/>
+				</a>
+				<div className='flex items-center gap-1 md:gap-2'>
+					<div className='flex items-center'>
 						<input
 							type='text'
 							ref={inputRef}
-							className={`md:w-full transition-all duration-300 ease-in-out transform ${
+							className={`transition-all duration-300 ease-in-out ${
 								showInput
-									? 'w-full ml-10 px-2 opacity-100'
-									: 'w-0 ml-0 opacity-0'
-							} border rounded-md bg-white text-black`}
+									? 'w-36 sm:w-52 md:w-64 px-3 opacity-100'
+									: 'w-0 px-0 opacity-0'
+							} h-8 rounded-full bg-white/20 text-white placeholder-white/60 text-sm focus:outline-none focus:ring-2 focus:ring-white/40 border-0`}
 							placeholder='Buscar...'
-							style={{
-								visibility: showInput ? 'visible' : 'hidden',
-							}}
+							style={{ visibility: showInput ? 'visible' : 'hidden' }}
 							value={searchTerm}
 							onChange={handleSearch}
 							onKeyPress={(e) => {
-								if (e.key === 'Enter') {
-									enterKeySearch();
-								}
+								if (e.key === 'Enter') enterKeySearch();
 							}}
 						/>
 						<button
-							className={`text-white cursor-pointer hover:text-gray-300 transition ml-4
-							`}
+							className='text-white hover:bg-white/20 transition-colors duration-200 p-2 rounded-full cursor-pointer'
 							onClick={toggleSearch}>
-							<img src={searchIcon.toString()} />
+							<img src={searchIcon.toString()} className='size-5'/>
 						</button>
 					</div>
 					<a
 						href='/cart'
-						className='text-white text-center hidden md:flex'>
-						<img src={shoppingBag.toString()} />
+						className='text-white hover:bg-white/20 transition-colors duration-200 p-2 rounded-full hidden md:flex'>
+						<img src={shoppingBag.toString()} className='size-5'/>
 					</a>
-					<div
-						ref={dropdownRef}
-						className='text-white text-center relative'>
+					<div ref={dropdownRef} className='relative hidden md:flex'>
 						<button
 							onClick={() => setShowDropdown(!showDropdown)}
-							className='text-white text-center hidden md:flex'>
-							<img src={userIcon.toString()} alt='User Icon' />
+							className='text-white hover:bg-white/20 transition-colors duration-200 p-2 rounded-full'>
+							<img src={userIcon.toString()} alt='User Icon' className='size-5'/>
 						</button>
-
-						{showDropdown && (
-							<div>
-								<UserDropdown />
-							</div>
-						)}
+						{showDropdown && <UserDropdown />}
 					</div>
 				</div>
 			</div>

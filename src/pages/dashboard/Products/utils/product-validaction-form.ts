@@ -7,21 +7,6 @@ const validateProductForm = (
 ): boolean => {
 	const newErrors: IValidateProduct = {};
 
-	if (formData.combinations.length === 0) {
-		newErrors.combination =
-			'Debes agregar al menos una combinación de talle, color y stock';
-	} else {
-		formData.combinations.forEach((combination, index) => {
-			if (!combination.size || !combination.stock.length) {
-				if (!newErrors.combination) {
-					newErrors.combination = `Faltan datos en la combinación ${
-						index + 1
-					}`;
-				}
-			}
-		});
-	}
-
 	if (!formData.name) newErrors.name = 'El nombre es obligatorio';
 	if (!formData.price) newErrors.price = 'El precio es obligatorio';
 	else if (Number(formData.price) < 0)

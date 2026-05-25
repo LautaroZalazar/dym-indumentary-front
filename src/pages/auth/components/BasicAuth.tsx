@@ -6,12 +6,12 @@ const BasicAuth: React.FC<IBasicAuth> = ({ setIsSelected }) => {
 	return (
 		<div className="flex flex-col items-center justify-center gap-y-5 mt-4">
 			<Button
-				name="Sign In"
+				name="Registrarse"
 				primary={false}
 				onClick={() => setIsSelected('SignIn')}
 			/>
 			<Button
-				name="Log In"
+				name="Iniciar sesión"
 				primary={true}
 				onClick={() => setIsSelected('LogIn')}
 			/>

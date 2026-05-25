@@ -39,7 +39,6 @@ const ImageSlider:React.FC<IImageSliderProps> = ({ images }) => {
 
 	return (
 		<>
-			{' '}
 			<ModalImage
 				images={images}
 				activeIndex={activeIndex}
@@ -48,7 +47,7 @@ const ImageSlider:React.FC<IImageSliderProps> = ({ images }) => {
 			/>
 			<div className='flex items-center'>
 				<div className='flex justify-end w-full flex-col md:flex-row-reverse'>
-					<div className='relative w-full h-72 sm:h-80 md:h-96 lg:h-[40rem] rounded overflow-hidden'>
+					<div className='relative w-full h-72 sm:h-80 md:h-96 lg:h-[40rem] rounded-xl overflow-hidden bg-zinc-900 border border-zinc-800'>
 						{images.map((image, index: number) => (
 							<div
 								key={index}
@@ -62,27 +61,24 @@ const ImageSlider:React.FC<IImageSliderProps> = ({ images }) => {
 								}>
 								<img
 									src={image.url.toString()}
-									className='w-full h-full object-cover md:object-fit object-center p-2 border border-gray-200 cursor-pointer'
+									className='w-full h-full object-contain object-center cursor-zoom-in'
 									alt={`Slide ${index + 1}`}
 									onClick={toggleModal}
-									onMouseEnter={() =>
-										handleMouseEnter(activeIndex)
-									}
 									onTouchStart={handleTouchStart}
 									onTouchEnd={handleTouchEnd}
 								/>
 							</div>
 						))}
 					</div>
-					<div className='flex flex-row md:flex-col space-x-2 space-y-0 md:space-x-0 md:space-y-2 justify-center md:justify-normal mt-4 md:mt-0 md:mr-4'>
+					<div className='flex flex-row md:flex-col space-x-2 space-y-0 md:space-x-0 md:space-y-2 justify-center md:justify-normal mt-3 md:mt-0 md:mr-3'>
 						{images.map((image, index: number) => (
 							<button
 								key={index}
-								className={`h-10 w-10 md:h-16 md:w-16 overflow-hidden border-2 ${
+								className={`h-14 w-14 md:h-16 md:w-16 overflow-hidden rounded-lg border-2 transition-all duration-150 ${
 									index === activeIndex
-										? 'border-orange-500'
-										: 'border-gray-400'
-								} rounded`}
+										? 'border-dymOrange opacity-100'
+										: 'border-zinc-700 opacity-60 hover:opacity-90 hover:border-zinc-500'
+								}`}
 								onClick={() => handleThumbnailClick(index)}
 								onMouseEnter={() => handleMouseEnter(index)}>
 								<img

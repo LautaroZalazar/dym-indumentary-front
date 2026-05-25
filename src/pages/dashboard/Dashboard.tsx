@@ -12,6 +12,7 @@ const Dashboard = () => {
 		{ name: 'Agregar marca', ref: '/dashboard-add-brand' },
 		{ name: 'Lista de productos', ref: '/dashboard-products' },
 		{ name: 'Lista de usuarios', ref: '/dashboard-users' },
+		{ name: 'Stock bajo', ref: '/dashboard-low-stock' },
 		{ name: 'Crear producto', ref: '/dashboard-add-product' },
 	];
 

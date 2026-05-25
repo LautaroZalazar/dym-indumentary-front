@@ -9,11 +9,13 @@ import { useUserLoginMutation } from '../../../redux/slices/user.slice';
 import { useNavigate } from 'react-router-dom';
 import useMergeCarts from '../../../hooks/mergeCarts';
 import axios from 'axios';
+import ErrorModal from '../../../components/modals/error.modal';
 const baseUrl = import.meta.env.VITE_BACK_URL;
 
 const Login: React.FC<ILogin> = ({ setIsSelected }) => {
 	const [passwordVisibility, setPasswordVisibility] = useState('password');
 	const [disabled, setDisabled] = useState(true);
+	const [showModalError, setShowModalError] = useState('');
 
 	const initialState = {
 		email: '',
@@ -31,27 +33,36 @@ const Login: React.FC<ILogin> = ({ setIsSelected }) => {
 		e.preventDefault();
 		try {
 			const response = await userLogin(form);
-			if (!response.error) {
-				const expiryTimeMinutes = 60;
-				const expiryTime = new Date().getTime() + expiryTimeMinutes * 60 * 1000;
-				const sessionData = {
-					user: response.data,
-					expiryTime,
-				}
-				localStorage.setItem('user', JSON.stringify(sessionData));
-				const user = await axios.get(`${baseUrl}/v1/user/detail`, {
-					headers:{
-						'Content-Type': 'application/json; charset=UTF-8',
-						'Authorization': `Bearer ${response.data.token}`,
-					},
-				});
-				mergeCarts(user.data.cart._id)
-				navigate('/')
+			if (response.error) {
+				const message = (response.error as any)?.data?.message || 'Ha ocurrido un error al iniciar sesión';
+				setShowModalError(message);
+				return;
 			}
+
+			setShowModalError('');
+			const user = await axios.get(`${baseUrl}/v1/user/detail`, {
+				headers: {
+					'Content-Type': 'application/json; charset=UTF-8',
+					'Authorization': `Bearer ${response.data.token}`,
+				},
+			});
+			const role: string | undefined = user.data?.role?.name;
+
+			const expiryTimeMinutes = 60;
+			const expiryTime = new Date().getTime() + expiryTimeMinutes * 60 * 1000;
+			const sessionData = {
+				user: response.data,
+				role,
+				expiryTime,
+			};
+			localStorage.setItem('user', JSON.stringify(sessionData));
+
+			mergeCarts(user.data.cart._id);
+			navigate(role === 'ADMIN' || role === 'SELLER' ? '/dashboard' : '/');
 
 			setForm(initialState);
 		} catch (error: any) {
-			throw new Error(error.message);
+			setShowModalError('Ha ocurrido un error al iniciar sesión');
 		}
 	};
 
@@ -89,10 +100,11 @@ const Login: React.FC<ILogin> = ({ setIsSelected }) => {
 							setVisibility={setPasswordVisibility}
 						/>
 					</Input>
+					{showModalError && <ErrorModal message={showModalError} />}
 					<div className='mt-8 flex flex-col items-center'>
 						<Button
 							primary={true}
-							name='Log In'
+							name='Iniciar sesión'
 							onClick={handleSubmit}
 							disabled={disabled}
 						/>

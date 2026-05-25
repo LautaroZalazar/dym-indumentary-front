@@ -1,12 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import IEditProductModalProps from '../models/editproductmodalprops.interface';
 import { NavLink } from 'react-router-dom';
 import useOutsideClick from '../../../hooks/handleClickOutside';
 import xIcon from '../../../assets/SVG/x.svg';
-import axios from 'axios';
-import { IProductData } from '../../../models/product/product.model';
-
-const baseUrl = import.meta.env.VITE_BACK_URL;
+import { useFetchPublicVariantsQuery } from '../../../redux/slices/variant.slice';
+import { ISize } from '../../../models/product/size.model';
+import { IColor } from '../../../models/product/color.model';
 
 const EditProductModal: React.FC<IEditProductModalProps> = ({
 	onClose,
@@ -15,41 +14,21 @@ const EditProductModal: React.FC<IEditProductModalProps> = ({
 	isModalOpen,
 	setIsModalOpen,
 }) => {
-	const user = localStorage.getItem('user');
-	const [productData, setProductData] = useState<IProductData>();
 	const [selectedUpdate, setSelectedUpdate] = useState({
 		sizeId: '',
 		colorId: '',
 		colorHex: '',
 	});
 
+	const { data: variants } = useFetchPublicVariantsQuery(
+		product.product._id,
+		{ skip: !isModalOpen },
+	);
+
 	if (!isModalOpen) return null;
 
 	useEffect(() => {
-		const fetchProduct = async (id: string) => {
-			try {
-				if (user) {
-					const response = await axios.get(
-						`${baseUrl}/v1/product/${id}`,
-						{
-							headers: {
-								'Content-Type':
-									'application/json; charset=UTF-8',
-							},
-						}
-					);
-					setProductData(response.data);
-				}
-			} catch (error: any) {
-				throw new Error(error);
-			}
-		};
-		fetchProduct(product.product._id);
-	}, [isModalOpen]);
-
-	useEffect(() => {
 		setSelectedUpdate({
-			...selectedUpdate,
 			sizeId: product.size._id,
 			colorId: product.color._id,
 			colorHex: product.color.hex,
@@ -59,11 +38,11 @@ const EditProductModal: React.FC<IEditProductModalProps> = ({
 	const handleSizeChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
 		setSelectedUpdate({ ...selectedUpdate, sizeId: event.target.value });
 	};
-	const handleColorClick = (color: string, id: string) => {
+	const handleColorClick = (color: IColor) => {
 		setSelectedUpdate({
 			...selectedUpdate,
-			colorId: id,
-			colorHex: color,
+			colorId: color._id,
+			colorHex: color.hex,
 		});
 	};
 
@@ -87,32 +66,46 @@ const EditProductModal: React.FC<IEditProductModalProps> = ({
 		}
 	};
 
-	const filteredColor = productData?.inventory?.filter(
-		(i: any) => i.size._id === selectedUpdate.sizeId
-	);
+	const sizesAvailable: ISize[] = useMemo(() => {
+		if (!variants) return [];
+		const map = new Map<string, ISize>();
+		variants.forEach((v) => {
+			if (v.quantity > 0 && !map.has(v.size._id)) {
+				map.set(v.size._id, { _id: v.size._id, name: v.size.name });
+			}
+		});
+		return Array.from(map.values());
+	}, [variants]);
+
+	const colorsForSelectedSize: IColor[] = useMemo(() => {
+		if (!variants || !selectedUpdate.sizeId) return [];
+		const map = new Map<string, IColor>();
+		variants.forEach((v) => {
+			if (v.size._id === selectedUpdate.sizeId && v.quantity > 0) {
+				if (!map.has(v.color._id)) map.set(v.color._id, v.color);
+			}
+		});
+		return Array.from(map.values());
+	}, [variants, selectedUpdate.sizeId]);
 
 	const renderColorOptions = () =>
-		filteredColor?.flatMap((i) =>
-			i.stock?.map((e) => (
-				<button
-					key={e.color._id}
-					className={`border-2 ml-2 rounded-full w-6 h-6 focus:outline-none`}
-					style={{
-						backgroundColor:
-							selectedUpdate.colorHex === e.color.hex
-								? e.color.hex
-								: 'transparent',
-						borderColor: e.color.hex,
-					}}
-					onClick={() => handleColorClick(e.color.hex, e.color._id)}
-				/>
-			))
-		);
+		colorsForSelectedSize.map((c) => (
+			<button
+				key={c._id}
+				className={`border-2 ml-2 rounded-full w-6 h-6 focus:outline-none`}
+				style={{
+					backgroundColor:
+						selectedUpdate.colorHex === c.hex ? c.hex : 'transparent',
+					borderColor: c.hex,
+				}}
+				onClick={() => handleColorClick(c)}
+			/>
+		));
 
 	const renderSizeOptions = () => {
-		return productData?.inventory?.map((e) => (
-			<option key={e.size._id} value={e.size._id} data-name={e.size.name}>
-				{e.size.name}
+		return sizesAvailable.map((s) => (
+			<option key={s._id} value={s._id} data-name={s.name}>
+				{s.name}
 			</option>
 		));
 	};
@@ -134,7 +127,7 @@ const EditProductModal: React.FC<IEditProductModalProps> = ({
 						</div>
 						<div className='flex flex-row w-full justify-evenly text-center p-6'>
 							<div className='p-4'>
-								<label className='block mb-1'>Size</label>
+								<label className='block mb-1'>Talle</label>
 								<select
 									value={selectedUpdate.sizeId}
 									onChange={handleSizeChange}
@@ -156,7 +149,7 @@ const EditProductModal: React.FC<IEditProductModalProps> = ({
 							<button
 								onClick={onClose}
 								className='w-2/4 bg-dymBlack text-dymAntiPop'>
-								Cancel
+								Cancelar
 							</button>
 						</div>
 					</>

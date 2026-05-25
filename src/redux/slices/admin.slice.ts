@@ -32,6 +32,15 @@ export const adminSlice = createApi({
 				headers: AUTH_HEADERS,
 			}),
 		}),
+		createUserAdmin: builder.mutation({
+			query: (data) => ({
+				url: '/v1/admin/user',
+				method: 'POST',
+				body: data,
+				headers: AUTH_HEADERS,
+			}),
+		}),
+
 		fetchAdminProducts: builder.query<
 			any,
 			{
@@ -96,6 +105,7 @@ export const {
 	useCreateProductMutation,
 	useUpdateProductMutation,
 	useUpdateUserMutation,
+	useCreateUserAdminMutation,
 	useFetchAdminProductsQuery,
 	useFecthAllAdminUsersQuery,
 } = adminSlice;

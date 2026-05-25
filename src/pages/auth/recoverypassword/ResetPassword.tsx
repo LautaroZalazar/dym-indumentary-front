@@ -172,7 +172,7 @@ const ResetPassword: React.FC<IResetPassword> = () => {
 						<div className="mt-8 flex flex-col items-center">
 							<Button
 								primary={true}
-								name="Reset Password"
+								name="Restablecer contraseña"
 								onClick={handleSubmit}
 								disabled={disabled}
 							/>

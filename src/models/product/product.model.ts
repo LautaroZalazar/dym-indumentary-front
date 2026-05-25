@@ -1,6 +1,4 @@
-import { ISize } from './size.model';
 import { Brand } from './brand.model';
-import { IColor } from './color.model';
 import { Category } from './category.model';
 import { ISubCategory } from './subCategory.model';
 
@@ -15,20 +13,13 @@ export interface IProductData {
 	name: string;
 	description: string;
 	price: number;
-	stock: number;
 	gender: string;
 	image: IImage[];
 	isActive: boolean;
 	brand: Brand;
 	category: Category;
 	subCategory: ISubCategory;
-	inventory: Array<{
-		size: ISize;
-		stock: Array<{
-			quantity: number;
-			color: IColor;
-		}>;
-	}>;
+	totalStock?: number;
 }
 
 export interface IProduct {

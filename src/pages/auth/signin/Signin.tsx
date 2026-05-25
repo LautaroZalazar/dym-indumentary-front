@@ -13,6 +13,7 @@ import {
   validationEmail,
 } from "../utils/validations/password.validation";
 import ValidationToolTip from "../components/validationToolTip";
+import ErrorModal from "../../../components/modals/error.modal";
 
 const Signin: React.FC<ILogin> = ({ setIsSelected }) => {
   const [passwordVisibility, setPasswordVisibility] = useState("password");
@@ -26,6 +27,7 @@ const Signin: React.FC<ILogin> = ({ setIsSelected }) => {
     email: true,
     password: true,
   });
+  const [backendError, setBackendError] = useState('');
 
   const initialState = {
     name: "",
@@ -41,11 +43,18 @@ const Signin: React.FC<ILogin> = ({ setIsSelected }) => {
   const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     try {
-      await userRegister(form);
+      const response = await userRegister(form);
 
+      if (response.error) {
+        const message = (response.error as any)?.data?.message || 'Ha ocurrido un error al registrarse';
+        setBackendError(message);
+        return;
+      }
+
+      setBackendError('');
       setForm(initialState);
     } catch (error: any) {
-      throw new Error(error.message);
+      setBackendError('Ha ocurrido un error al registrarse');
     }
   };
 
@@ -176,13 +185,14 @@ const Signin: React.FC<ILogin> = ({ setIsSelected }) => {
               htmlFor="newsletter"
               className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
             >
-              Newsletter subscription
+              Suscripción al newsletter
             </label>
           </div>
+          {backendError && <ErrorModal message={backendError} />}
           <div className="mt-8 flex flex-col items-center">
             <Button
               primary={true}
-              name="Sign In"
+              name="Registrarse"
               onClick={handleSubmit}
               disabled={validateError()}
             />

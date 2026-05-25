@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { ISideBarProps } from './models/sidebar-props.interface';
 import { Category } from '../../models/product/category.model';
 import { Brand } from '../../models/product/brand.model';
@@ -69,14 +69,16 @@ const SideBar: React.FC<ISideBarProps> = ({ isOpen }) => {
 	return (
 		<div
 			className={`
-            fixed top-0 left-0 h-screen min-w-80 bg-dymBlack z-40 transition-transform duration-300 ease-in-out
+            fixed top-0 left-0 h-screen w-64 bg-dymBlack z-40 transition-transform duration-300 ease-in-out
             transform ${isOpen ? 'translate-x-0' : '-translate-x-full'}
             lg:relative lg:translate-x-0 lg:z-0
         `}>
-			<div className='p-4 overflow-y-auto pt-16'>
-				<div className='mb-6'>
+			<div className='p-5 overflow-y-auto pt-20'>
+				<p className='text-xs font-semibold text-zinc-500 uppercase tracking-widest mb-5'>Filtros</p>
+				<div className='mb-5 pb-5 border-b border-zinc-800'>
+					<p className='text-xs font-semibold text-zinc-500 uppercase tracking-wider mb-2'>Ordenar</p>
 					<select
-						className='block w-full border border-zinc-300 rounded p-2'
+						className='block w-full bg-zinc-900 border border-zinc-700 rounded-lg p-2.5 text-sm text-white focus:outline-none focus:border-dymOrange transition-colors'
 						value={sort}
 						onChange={handleSortChange}>
 						<option value=''>Todos los productos</option>
@@ -84,12 +86,12 @@ const SideBar: React.FC<ISideBarProps> = ({ isOpen }) => {
 						<option value='ASC'>Precio más bajo</option>
 					</select>
 				</div>
-				<div className='mb-4'>
+				<div className='mb-4 pb-4 border-b border-zinc-800'>
 					<button
 						onClick={() => toggleSection('category')}
-						className='flex justify-between w-full text-left font-bold'>
+						className='flex justify-between w-full text-left text-sm font-semibold text-white hover:text-dymOrange transition-colors py-1 group'>
 						Categorías
-						<span>{openSections.category ? '▲' : '▼'}</span>
+						<span className='text-zinc-500 group-hover:text-dymOrange'>{openSections.category ? '−' : '+'}</span>
 					</button>
 					{!categoriesIsLoading ? (
 						<>
@@ -101,7 +103,7 @@ const SideBar: React.FC<ISideBarProps> = ({ isOpen }) => {
 												key={category._id}
 												className='mb-2'>
 												<button
-													className='flex justify-between w-3/4 text-left font-bold text-white'
+													className='flex justify-between w-3/4 text-left text-sm font-semibold text-zinc-300 hover:text-dymOrange transition-colors group'
 													onClick={() =>
 														handleCategoryChange(
 															category._id
@@ -115,8 +117,8 @@ const SideBar: React.FC<ISideBarProps> = ({ isOpen }) => {
 														{selectedCategories.includes(
 															category._id
 														)
-															? '▲'
-															: '▼'}
+															? '−'
+															: '+'}
 													</span>
 												</button>
 												{selectedCategories.includes(
@@ -125,10 +127,10 @@ const SideBar: React.FC<ISideBarProps> = ({ isOpen }) => {
 													<div className='ml-4 mt-2'>
 														<label
 															key={category._id}
-															className='block text-white'>
+															className='block text-zinc-300 text-sm hover:text-white transition-colors cursor-pointer'>
 															<input
 																type='checkbox'
-																className='mr-2 form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out'
+																className='mr-2 accent-dymOrange h-4 w-4 cursor-pointer'
 																checked={filter.category.includes(
 																	category._id
 																)}
@@ -149,10 +151,10 @@ const SideBar: React.FC<ISideBarProps> = ({ isOpen }) => {
 																	key={
 																		subCategory._id
 																	}
-																	className='block text-white'>
+																	className='block text-zinc-300 text-sm hover:text-white transition-colors cursor-pointer'>
 																	<input
 																		type='checkbox'
-																		className='mr-2 form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out'
+																		className='mr-2 accent-dymOrange h-4 w-4 cursor-pointer'
 																		checked={filter.subCategory.includes(
 																			subCategory._id
 																		)}
@@ -191,24 +193,24 @@ const SideBar: React.FC<ISideBarProps> = ({ isOpen }) => {
 						<Skeleton_loader />
 					)}
 				</div>
-				<div className='mb-4'>
+				<div className='mb-4 pb-4 border-b border-zinc-800'>
 					<button
 						onClick={() => toggleSection('brand')}
-						className='flex justify-between w-full text-left font-bold'>
+						className='flex justify-between w-full text-left text-sm font-semibold text-white hover:text-dymOrange transition-colors py-1 group'>
 						Marca
-						<span>{openSections.brand ? '▲' : '▼'}</span>
+						<span className='text-zinc-500 group-hover:text-dymOrange'>{openSections.brand ? '−' : '+'}</span>
 					</button>
 					{!brandsIsLoading ? (
 						<>
 							{openSections.brand && brandsData && (
-								<div className='mt-2 max-h-24 overflow-y-auto'>
+								<div className='mt-2 max-h-40 overflow-y-auto space-y-1'>
 									{brandsData.map((brand: Brand) => (
 										<label
 											key={brand._id}
-											className='block'>
+											className='block text-zinc-300 text-sm hover:text-white transition-colors cursor-pointer'>
 											<input
 												type='checkbox'
-												className='mr-2'
+												className='mr-2 accent-dymOrange h-4 w-4 cursor-pointer'
 												checked={filter.brand.includes(
 													brand._id
 												)}
@@ -233,36 +235,32 @@ const SideBar: React.FC<ISideBarProps> = ({ isOpen }) => {
 						<Skeleton_loader />
 					)}
 				</div>
-				<div className='mb-4'>
+				<div className='mb-4 pb-4 border-b border-zinc-800'>
 					<button
 						onClick={() => toggleSection('size')}
-						className='flex justify-between w-full text-left font-bold'>
+						className='flex justify-between w-full text-left text-sm font-semibold text-white hover:text-dymOrange transition-colors py-1 group'>
 						Talle
-						<span>{openSections.size ? '▲' : '▼'}</span>
+						<span className='text-zinc-500 group-hover:text-dymOrange'>{openSections.size ? '−' : '+'}</span>
 					</button>
 					{!sizesIsLoading ? (
 						<>
 							{openSections.size && sizesData && (
-								<div className='mt-2 max-h-24 overflow-y-auto'>
-									{sizesData.map((size: ISizeMap) => (
-										<label key={size._id} className='block'>
-											<input
-												type='checkbox'
-												className='mr-2'
-												checked={filter.size.includes(
-													size._id
-												)}
-												onChange={(e) =>
-													handleFilterChange(
-														'size',
-														size._id,
-														e.target.checked
-													)
-												}
-											/>
-											{size.name.toUpperCase()}
-										</label>
-									))}
+								<div className='mt-3 flex flex-wrap gap-2'>
+									{sizesData.map((size: ISizeMap) => {
+										const isSelected = filter.size.includes(size._id);
+										return (
+											<button
+												key={size._id}
+												onClick={() => handleFilterChange('size', size._id, !isSelected)}
+												className={`px-3 py-1.5 rounded-full border text-xs font-semibold cursor-pointer transition-all duration-200 ${
+													isSelected
+														? 'bg-dymOrange border-dymOrange text-white'
+														: 'bg-transparent border-zinc-700 text-zinc-400 hover:border-dymOrange hover:text-white'
+												}`}>
+												{size.name.toUpperCase()}
+											</button>
+										);
+									})}
 								</div>
 							)}
 						</>
@@ -270,102 +268,32 @@ const SideBar: React.FC<ISideBarProps> = ({ isOpen }) => {
 						<Skeleton_loader />
 					)}
 				</div>
-				<div className='mb-4'>
+				<div className='mb-4 pb-4 border-b border-zinc-800'>
 					<button
 						onClick={() => toggleSection('gender')}
-						className='flex justify-between w-full text-left font-bold'>
+						className='flex justify-between w-full text-left text-sm font-semibold text-white hover:text-dymOrange transition-colors py-1 group'>
 						Género
-						<span>{openSections.gender ? '▲' : '▼'}</span>
+						<span className='text-zinc-500 group-hover:text-dymOrange'>{openSections.gender ? '−' : '+'}</span>
 					</button>
 					{!sizesIsLoading ? (
 						<>
 							{openSections.gender && (
-								<div className='mt-2 max-h-26 overflow-y-auto'>
-									<label className='block'>
-										<input
-											type='checkbox'
-											className='mr-2'
-											checked={filter.gender.includes(
-												'hombre'
-											)}
-											onChange={(e) =>
-												handleFilterChange(
-													'gender',
-													'hombre',
-													e.target.checked
-												)
-											}
-										/>
-										Hombre
-									</label>
-									<label className='block'>
-										<input
-											type='checkbox'
-											className='mr-2'
-											checked={filter.gender.includes(
-												'mujer'
-											)}
-											onChange={(e) =>
-												handleFilterChange(
-													'gender',
-													'mujer',
-													e.target.checked
-												)
-											}
-										/>
-										Mujer
-									</label>
-									<label className='block'>
-										<input
-											type='checkbox'
-											className='mr-2'
-											checked={filter.gender.includes(
-												'niño'
-											)}
-											onChange={(e) =>
-												handleFilterChange(
-													'gender',
-													'niño',
-													e.target.checked
-												)
-											}
-										/>
-										Niño
-									</label>
-									<label className='block'>
-										<input
-											type='checkbox'
-											className='mr-2'
-											checked={filter.gender.includes(
-												'niña'
-											)}
-											onChange={(e) =>
-												handleFilterChange(
-													'gender',
-													'niña',
-													e.target.checked
-												)
-											}
-										/>
-										Niña
-									</label>
-									<label className='block'>
-										<input
-											type='checkbox'
-											className='mr-2'
-											checked={filter.gender.includes(
-												'unisex'
-											)}
-											onChange={(e) =>
-												handleFilterChange(
-													'gender',
-													'unisex',
-													e.target.checked
-												)
-											}
-										/>
-										Unisex
-									</label>
+								<div className='mt-3 flex flex-wrap gap-2'>
+									{(['hombre', 'mujer', 'niño', 'niña', 'unisex'] as const).map((g) => {
+										const isSelected = filter.gender.includes(g);
+										return (
+											<button
+												key={g}
+												onClick={() => handleFilterChange('gender', g, !isSelected)}
+												className={`px-3 py-1.5 rounded-full border text-xs font-semibold cursor-pointer transition-all duration-200 ${
+													isSelected
+														? 'bg-dymOrange border-dymOrange text-white'
+														: 'bg-transparent border-zinc-700 text-zinc-400 hover:border-dymOrange hover:text-white'
+												}`}>
+												{g.charAt(0).toUpperCase() + g.slice(1)}
+											</button>
+										);
+									})}
 								</div>
 							)}
 						</>

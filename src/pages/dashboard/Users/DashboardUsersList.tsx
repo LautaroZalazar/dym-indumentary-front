@@ -14,6 +14,7 @@ import { IUserFilters } from '../models/filters.interface';
 import searchIcon from '../../../assets/SVG/searchIcon.svg';
 import x from '../../../assets/SVG/x.svg';
 import OrderModal from './components/OrderModal';
+import CreateUserModal from './components/CreateUserModal';
 
 const DashboardUsersList = () => {
 	const { data: roleData, isLoading: roleIsLoading } = useFetchRoleQuery('');
@@ -30,6 +31,7 @@ const DashboardUsersList = () => {
 		isActive: undefined,
 	});
 	const [activeUser, setActiveUser] = useState<string | null>(null);
+	const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
 	const [userUpdate] = useUpdateUserMutation();
 	const {
 		data: userData,
@@ -210,7 +212,7 @@ const DashboardUsersList = () => {
 	};
 
 	return (
-		<div className='min-h-screen flex flex-col overflow-hidden pt-12 pb-12 md:pb-0'>
+		<div className='flex flex-col flex-1'>
 			<div className='flex flex-col bg-dymBlack flex-grow p-2'>
 				<div className='flex flex-col md:flex-row md:space-x-16 space-y-4 md:space-y-0 mt-4'>
 					<div className='flex w-full md:w-1/4'>
@@ -274,6 +276,18 @@ const DashboardUsersList = () => {
 							</button>
 						)}
 					</div>
+				</div>
+				<div className='flex items-center justify-between mt-4 md:mt-6 px-2'>
+					<h2 className='text-lg font-bold text-white'>Usuarios</h2>
+					<button
+						onClick={() => setIsCreateModalOpen(true)}
+						className='flex items-center gap-2 px-4 py-2 bg-dymOrange text-white rounded-lg text-sm font-semibold hover:bg-dymOrange/80 transition-colors'
+					>
+						<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+							<path d="M12 5v14M5 12h14" />
+						</svg>
+						Crear usuario
+					</button>
 				</div>
 				<div className='flex flex-col justify-center'>
 					<div className='flex-grow overflow-y-auto mt-8 md:mt-16 max-h-[calc(100vh-320px)]'>
@@ -453,6 +467,11 @@ const DashboardUsersList = () => {
 				</div>
 			</div>
 			{MessageComponent && <MessageComponent />}
+			<CreateUserModal
+				isOpen={isCreateModalOpen}
+				onClose={() => setIsCreateModalOpen(false)}
+				roles={roleData || []}
+			/>
 		</div>
 	);
 };

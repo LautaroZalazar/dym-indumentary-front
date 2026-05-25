@@ -49,7 +49,7 @@ const OrderModal: React.FC<IOrderModalProps> = ({
 							<thead>
 								<tr className='text-dymAntiPop'>
 									<th className='py-2 px-4'>Producto/s</th>
-									<th className='py-2 px-4'>Status</th>
+									<th className='py-2 px-4'>Estado</th>
 									<th className='py-2 px-4'>Total</th>
 								</tr>
 							</thead>
