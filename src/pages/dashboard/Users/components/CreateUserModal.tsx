@@ -9,7 +9,7 @@ interface CreateUserModalProps {
 
 export default function CreateUserModal({ isOpen, onClose, roles }: CreateUserModalProps) {
   const [createUser, { isLoading }] = useCreateUserAdminMutation();
-  const { refetch } = useFecthAllAdminUsersQuery({ page: '1', limit: '10' });
+  const { refetch } = useFecthAllAdminUsersQuery({ page: 1, limit: 10 });
 
   const [form, setForm] = useState({
     name: '',
