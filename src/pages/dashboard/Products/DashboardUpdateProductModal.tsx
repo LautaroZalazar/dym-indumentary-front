@@ -4,8 +4,6 @@ import { useUpdateProductMutation } from '../../../redux/slices/admin.slice';
 import {
 	useFetchCategoriesQuery,
 	useFetchBrandsQuery,
-	useFetchColorsQuery,
-	useFetchSizeQuery,
 } from '../../../redux/slices/catalogs.silce';
 import { IUpdateProductProps } from './models/update-product-props.interface';
 import validateProductForm from '../Products/utils/product-validaction-form';
@@ -14,12 +12,11 @@ import { IValidateProduct } from './models/validate-product.interface';
 import xIcon from '../../../assets/SVG/x.svg';
 import Loader from '../../../components/loader';
 import { ICategories } from './models/categories.interface';
-import { ICombinationMap } from './models/combination-map.interface';
 import ICatalogMap from './models/catalog-map.interface';
-import ICombination from './models/combination.interface';
 import UploadImage from '../../../components/uploadImage/UploadImage';
 import { useMessage } from '../../../hooks/alertMessage';
 import { useConfirmModal } from '../../../components/confirm-modal/ConfirmModalContext';
+import VariantsTable from './components/VariantsTable';
 
 const DashboardUpdateProductModal: React.FC<IUpdateProductProps> = ({
 	productId,
@@ -45,8 +42,6 @@ const DashboardUpdateProductModal: React.FC<IUpdateProductProps> = ({
 	} = useFetchProductQuery(productId);
 	const { data: categoriesData } = useFetchCategoriesQuery('');
 	const { data: brandData } = useFetchBrandsQuery('');
-	const { data: colorData } = useFetchColorsQuery('');
-	const { data: sizeData } = useFetchSizeQuery('');
 	const [selectedCategory, setSelectedCategory] = useState<ICategories>({
 		_id: '',
 		name: '',
@@ -56,7 +51,7 @@ const DashboardUpdateProductModal: React.FC<IUpdateProductProps> = ({
 	const [errors, setErrors] = useState<IValidateProduct>({});
 	// TODO - Delete images in cloudinary - Pro fueature only
 	// const [cloudImageToDelete, setCloudImageToDelete] = useState<string[]>([]);
-	const [hoveredField, setHoveredField] = useState<string | null>(null);
+	const [, setHoveredField] = useState<string | null>(null);
 	const { MessageComponent, showMessage } = useMessage();
 	const { showConfirmModal } = useConfirmModal();
 
@@ -71,15 +66,7 @@ const DashboardUpdateProductModal: React.FC<IUpdateProductProps> = ({
 				brandId: productData.brand?._id || '',
 				image: productData.image || [],
 				gender: productData.gender || '',
-				combinations: productData.inventory.map(
-					(combination: ICombinationMap) => ({
-						size: combination.size._id,
-						stock: combination.stock.map((stock) => ({
-							color: stock.color._id,
-							quantity: stock.quantity,
-						})),
-					})
-				),
+				combinations: [],
 			});
 			setSelectedCategory({
 				_id: productData.category?._id || '',
@@ -106,58 +93,6 @@ const DashboardUpdateProductModal: React.FC<IUpdateProductProps> = ({
 			...formData,
 			[name]: value,
 		});
-	};
-
-	const handleCombinationChange = (
-		index: number,
-		field: keyof ICombination | string,
-		value: string | number
-	) => {
-		const newCombinations = [...formData.combinations];
-		if (field === 'sizeId') {
-			newCombinations[index] = {
-				...newCombinations[index],
-				size: value as string,
-			};
-		} else if (typeof field === 'string') {
-			const colorId = field;
-			const existingStockIndex = newCombinations[index].stock.findIndex(
-				(stock) => stock.color === colorId
-			);
-
-			if (existingStockIndex !== -1) {
-				newCombinations[index].stock[existingStockIndex] = {
-					...newCombinations[index].stock[existingStockIndex],
-					quantity: value as number,
-				};
-			} else {
-				newCombinations[index].stock.push({
-					color: colorId,
-					quantity: value as number,
-				});
-			}
-		}
-		setFormData({ ...formData, combinations: newCombinations });
-	};
-
-	const addCombination = () => {
-		setFormData({
-			...formData,
-			combinations: [
-				...formData.combinations,
-				{
-					size: '',
-					stock: [],
-				},
-			],
-		});
-	};
-
-	const removeCombination = (index: number) => {
-		const newCombinations = formData.combinations.filter(
-			(_, i) => i !== index
-		);
-		setFormData({ ...formData, combinations: newCombinations });
 	};
 
 	const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -198,7 +133,6 @@ const DashboardUpdateProductModal: React.FC<IUpdateProductProps> = ({
 					brand: formData.brandId,
 					category: formData.categoryId,
 					subCategory: formData.subCategoryId,
-					inventory: formData.combinations,
 				};
 				await updateProduct({
 					id: productId,
@@ -295,21 +229,14 @@ const DashboardUpdateProductModal: React.FC<IUpdateProductProps> = ({
 									<input
 										type='text'
 										placeholder='Nombre del producto'
-										className='rounded-md w-full h-10 pl-2'
+										className='w-full rounded-lg h-10 pl-3 bg-[#252030] border border-white/[0.1] text-dymAntiPop placeholder:text-dymAntiPop/35 focus:outline-none focus:border-dymOrange/60 focus:ring-1 focus:ring-dymOrange/20 transition-colors duration-150'
 										name='name'
 										value={formData.name}
 										onChange={handleInputChange}
 										autoComplete='off'
 									/>
 									{errors.name && (
-										<span
-											className={`absolute right-0 top-2/3 transform -translate-y-1/2 text-xs text-red-600 transition-opacity duration-200 ease-in-out ${
-												hoveredField === 'name'
-													? 'opacity-100'
-													: 'opacity-0'
-											}  mr-2`}>
-											{errors.name}
-										</span>
+										<p className='mt-1.5 text-xs text-red-400'>{errors.name}</p>
 									)}
 								</div>
 								<div
@@ -323,7 +250,7 @@ const DashboardUpdateProductModal: React.FC<IUpdateProductProps> = ({
 										type='number'
 										placeholder='Precio'
 										min={0}
-										className='rounded-md w-full h-10 pl-2 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:m-0'
+										className='w-full rounded-lg h-10 pl-3 bg-[#252030] border border-white/[0.1] text-dymAntiPop placeholder:text-dymAntiPop/35 focus:outline-none focus:border-dymOrange/60 focus:ring-1 focus:ring-dymOrange/20 transition-colors duration-150 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:m-0'
 										name='price'
 										value={formData.price}
 										onChange={handleInputChange}
@@ -341,14 +268,7 @@ const DashboardUpdateProductModal: React.FC<IUpdateProductProps> = ({
 										}}
 									/>
 									{errors.price && (
-										<span
-											className={`absolute right-0 top-2/3 transform -translate-y-1/2 text-xs text-red-600 transition-opacity duration-200 ease-in-out ${
-												hoveredField === 'price'
-													? 'opacity-100'
-													: 'opacity-0'
-											} mr-2`}>
-											{errors.price}
-										</span>
+										<p className='mt-1.5 text-xs text-red-400'>{errors.price}</p>
 									)}
 								</div>
 								<div
@@ -359,7 +279,7 @@ const DashboardUpdateProductModal: React.FC<IUpdateProductProps> = ({
 									onMouseLeave={handleMouseLeave}>
 									<label>Categoría</label>
 									<select
-										className='rounded-md w-full h-10 pl-2 cursor-pointer'
+										className='w-full rounded-lg h-10 pl-3 bg-[#252030] border border-white/[0.1] text-dymAntiPop focus:outline-none focus:border-dymOrange/60 focus:ring-1 focus:ring-dymOrange/20 transition-colors duration-150 cursor-pointer'
 										name='categoryId'
 										value={formData.categoryId}
 										onChange={handleCategoryChange}>
@@ -375,14 +295,7 @@ const DashboardUpdateProductModal: React.FC<IUpdateProductProps> = ({
 											)}
 									</select>
 									{errors.category && (
-										<span
-											className={`absolute right-0 top-2/3 transform -translate-y-1/2 text-xs text-red-600 transition-opacity duration-200 ease-in-out ${
-												hoveredField === 'categoryId'
-													? 'opacity-100'
-													: 'opacity-0'
-											} mr-6`}>
-											{errors.category}
-										</span>
+										<p className='mt-1.5 text-xs text-red-400'>{errors.category}</p>
 									)}
 								</div>
 								{selectedCategory.subCategories ? (
@@ -394,7 +307,7 @@ const DashboardUpdateProductModal: React.FC<IUpdateProductProps> = ({
 										onMouseLeave={handleMouseLeave}>
 										<label>Subcategoría</label>
 										<select
-											className='rounded-md w-full h-10 pl-2 cursor-pointer'
+											className='w-full rounded-lg h-10 pl-3 bg-[#252030] border border-white/[0.1] text-dymAntiPop focus:outline-none focus:border-dymOrange/60 focus:ring-1 focus:ring-dymOrange/20 transition-colors duration-150 cursor-pointer'
 											name='subCategoryId'
 											value={formData.subCategoryId}
 											onChange={handleInputChange}>
@@ -416,22 +329,14 @@ const DashboardUpdateProductModal: React.FC<IUpdateProductProps> = ({
 												)}
 										</select>
 										{errors.subCategory && (
-											<span
-												className={`absolute right-0 top-2/3 transform -translate-y-1/2 text-xs text-red-600 transition-opacity duration-200 ease-in-out ${
-													hoveredField ===
-													'subCategoryId'
-														? 'opacity-100'
-														: 'opacity-0'
-												} mr-6`}>
-												{errors.subCategory}
-											</span>
+											<p className='mt-1.5 text-xs text-red-400'>{errors.subCategory}</p>
 										)}
 									</div>
 								) : (
 									<>
 										{selectedCategory._id !== '' && (
 											<input
-												className='rounded-md w-full h-10 pl-2 bg-[#121212]'
+												className='w-full rounded-lg h-10 pl-3 bg-[#1a1620] border border-white/[0.06] text-dymAntiPop/30 cursor-not-allowed'
 												disabled
 												placeholder='No hay subcategoría seleccionada'
 											/>
@@ -446,7 +351,7 @@ const DashboardUpdateProductModal: React.FC<IUpdateProductProps> = ({
 									onMouseLeave={handleMouseLeave}>
 									<label>Marca</label>
 									<select
-										className='rounded-md w-full h-10 pl-2'
+										className='w-full rounded-lg h-10 pl-3 bg-[#252030] border border-white/[0.1] text-dymAntiPop placeholder:text-dymAntiPop/35 focus:outline-none focus:border-dymOrange/60 focus:ring-1 focus:ring-dymOrange/20 transition-colors duration-150'
 										name='brandId'
 										value={formData.brandId}
 										onChange={handleInputChange}>
@@ -460,14 +365,7 @@ const DashboardUpdateProductModal: React.FC<IUpdateProductProps> = ({
 											))}
 									</select>
 									{errors.brand && (
-										<span
-											className={`absolute right-0 top-3/4 transform -translate-y-1/2 text-xs text-red-600 transition-opacity duration-200 ease-in-out ${
-												hoveredField === 'brandId'
-													? 'opacity-100'
-													: 'opacity-0'
-											} mr-6`}>
-											{errors.brand}
-										</span>
+										<p className='mt-1.5 text-xs text-red-400'>{errors.brand}</p>
 									)}
 								</div>
 								<div
@@ -478,7 +376,7 @@ const DashboardUpdateProductModal: React.FC<IUpdateProductProps> = ({
 									onMouseLeave={handleMouseLeave}>
 									<label>Género</label>
 									<select
-										className='rounded-md w-full h-10 pl-2'
+										className='w-full rounded-lg h-10 pl-3 bg-[#252030] border border-white/[0.1] text-dymAntiPop placeholder:text-dymAntiPop/35 focus:outline-none focus:border-dymOrange/60 focus:ring-1 focus:ring-dymOrange/20 transition-colors duration-150'
 										name='gender'
 										value={formData.gender}
 										onChange={handleInputChange}>
@@ -489,14 +387,7 @@ const DashboardUpdateProductModal: React.FC<IUpdateProductProps> = ({
 										<option value='Unisex'>Unisex</option>
 									</select>
 									{errors.gender && (
-										<span
-											className={`absolute right-0 top-1/2 transform -translate-y-1/2 text-xs text-red-600 transition-opacity duration-200 ease-in-out ${
-												hoveredField === 'gender'
-													? 'opacity-100'
-													: 'opacity-0'
-											} mr-6`}>
-											{errors.gender}
-										</span>
+										<p className='mt-1.5 text-xs text-red-400'>{errors.gender}</p>
 									)}
 								</div>
 								<div
@@ -508,163 +399,17 @@ const DashboardUpdateProductModal: React.FC<IUpdateProductProps> = ({
 									<label>Descripción</label>
 									<textarea
 										placeholder='Descripción...'
-										className='rounded-md w-full h-20 max-h-20 p-2 text-break resize-none overflow-y-auto'
+										className='w-full rounded-lg p-3 h-24 bg-[#252030] border border-white/[0.1] text-dymAntiPop placeholder:text-dymAntiPop/35 focus:outline-none focus:border-dymOrange/60 focus:ring-1 focus:ring-dymOrange/20 transition-colors duration-150 resize-none overflow-y-auto'
 										name='description'
 										value={formData.description}
 										onChange={handleInputChange}
 									/>
 									{errors.description && (
-										<span
-											className={`absolute right-0 top-4 transform -translate-y-1/2 text-xs text-red-600 transition-opacity duration-200 ease-in-out ${
-												hoveredField === 'description'
-													? 'opacity-100'
-													: 'opacity-0'
-											} mr-2`}>
-											{errors.description}
-										</span>
+										<p className='mt-1.5 text-xs text-red-400'>{errors.description}</p>
 									)}
 								</div>
-								<div
-									className='flex flex-col w-full items-center'
-									onMouseEnter={() =>
-										handleMouseEnter('combination')
-									}
-									onMouseLeave={handleMouseLeave}>
-									{formData.combinations.map(
-										(combination, index) => (
-											<div
-												key={index}
-												className='flex flex-row w-full border border-dymOrange rounded-md mb-2'>
-												<div className='w-full flex flex-col md:flex-row md:space-x-2 justify-between items-center p-2 overflow-y-auto'>
-													<select
-														className='rounded-md w-32 h-10 pl-2'
-														value={combination.size}
-														onChange={(e) =>
-															handleCombinationChange(
-																index,
-																'sizeId',
-																e.target.value
-															)
-														}>
-														<option value='' hidden>
-															Selecciona un talle
-														</option>
-														{sizeData &&
-															sizeData.map(
-																(
-																	size: ICatalogMap
-																) => (
-																	<option
-																		key={
-																			size._id
-																		}
-																		value={
-																			size._id
-																		}>
-																		{
-																			size.name
-																		}
-																	</option>
-																)
-															)}
-													</select>
-													<div className='flex flex-col w-full mt-4 max-h-40 overflow-y-auto'>
-														<div className='grid grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4'>
-															{colorData &&
-																colorData.map(
-																	(
-																		color: ICatalogMap
-																	) => {
-																		const stock =
-																			combination.stock.find(
-																				(
-																					stock
-																				) =>
-																					stock.color ===
-																					color._id
-																			)
-																				?.quantity ||
-																			'';
-																		return (
-																			<div
-																				key={
-																					color._id
-																				}
-																				className='flex flex-col items-center space-x-2 mx-2 mb-2 pr-4 md:pr-2'>
-																				<span>
-																					{
-																						color.name
-																					}
-																				</span>
-																				<input
-																					type='number'
-																					placeholder={
-																						stock
-																							? `Stock: ${stock}`
-																							: 'Stock'
-																					}
-																					className={`rounded-md w-20 h-10 pl-2 ${
-																						stock
-																							? 'border border-dymOrange'
-																							: ''
-																					} [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:m-0`}
-																					value={
-																						stock
-																					}
-																					onChange={(
-																						e
-																					) =>
-																						handleCombinationChange(
-																							index,
-																							color._id,
-																							Number(
-																								e
-																									.target
-																									.value
-																							)
-																						)
-																					}
-																				/>
-																			</div>
-																		);
-																	}
-																)}
-														</div>
-													</div>
-												</div>
-												<div className='h-full w-6 flex justify-end items-start m-2'>
-													<button
-														className='text-xs'
-														type='button'
-														onClick={() =>
-															removeCombination(
-																index
-															)
-														}>
-														<img
-															src={xIcon.toString()}
-														/>
-													</button>
-												</div>
-											</div>
-										)
-									)}
-									<button
-										type='button'
-										onClick={addCombination}
-										className='mt-2 w-full flex justify-center items-center border border-dymOrange text-dymAntiPop rounded-lg p-2'>
-										Agregar talle, color y stock
-									</button>
-									{errors.combination && (
-										<span
-											className={`text-xs text-red-600 block mt-2 transition-opacity duration-200 ease-in-out ${
-												hoveredField === 'combination'
-													? 'opacity-100'
-													: 'opacity-0'
-											}`}>
-											{errors.combination}
-										</span>
-									)}
+								<div className='flex flex-col w-full items-center'>
+									<VariantsTable productId={productId} />
 								</div>
 								<div className='flex flex-col justify-center items-center p-2'>
 									{formData.image.length > 0 && (
@@ -712,31 +457,24 @@ const DashboardUpdateProductModal: React.FC<IUpdateProductProps> = ({
 										/>
 									</div>
 									{errors.image && (
-										<span
-											className={`text-xs text-red-600 block mt-2 transition-opacity duration-200 ease-in-out ${
-												hoveredField === 'image'
-													? 'opacity-100'
-													: 'opacity-0'
-											}`}>
-											{errors.image}
-										</span>
+										<p className='mt-1.5 text-xs text-red-400 text-center'>{errors.image}</p>
 									)}
 								</div>
 							</div>
 						</form>
 					</div>
 				</div>
-				<div className='mt-auto flex justify-evenly'>
+				<div className='mt-auto flex gap-3 pt-3 border-t border-white/[0.07]'>
 					<button
 						onClick={onSubmit}
-						className={`p-2 bg-dymOrange rounded-lg mt-4 hover:bg-dymOrange-dark transition-colors duration-300 ${
-							!isFormValid() && 'opacity-50 cursor-not-allowed'
+						className={`flex-1 py-2.5 bg-dymOrange hover:bg-dymOrange/90 text-white font-semibold rounded-lg transition-colors text-sm ${
+							!isFormValid() ? 'opacity-50 cursor-not-allowed' : ''
 						}`}
 						disabled={!isFormValid()}>
 						Actualizar producto
 					</button>
 					<button
-						className='p-2 border border-dymOrange rounded-lg mt-4 hover:bg-dymOrange-dark'
+						className='flex-1 py-2.5 border border-white/20 hover:border-white/40 text-dymAntiPop/60 hover:text-dymAntiPop font-medium rounded-lg transition-colors text-sm'
 						onClick={closeModal}>
 						Cancelar
 					</button>

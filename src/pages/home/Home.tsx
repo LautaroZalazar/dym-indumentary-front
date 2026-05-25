@@ -122,7 +122,7 @@ const Home: React.FC<IHomeProps> = ({ searchTerm }) => {
 
 	return (
 		<div className='h-screen overflow-hidden'>
-			<div className='lg:hidden fixed top-1 left-1 z-50'>
+			<div className='lg:hidden fixed top-3 left-2 z-50'>
 				<HamburgerButton
 					isOpen={isSidebarOpen}
 					onClick={toggleSidebar}
@@ -132,30 +132,42 @@ const Home: React.FC<IHomeProps> = ({ searchTerm }) => {
 			<div className='flex'>
 				<SideBar isOpen={isSidebarOpen} />
 
-				<div className='flex-grow p-2 pt-12'>
-					<div className='h-12 flex static justify-center items-center text-cemter'>
-						<h2 className='text-sm font-bold'>
+				<div className='flex-grow p-3 pt-16'>
+					<div className='h-10 flex items-center px-1 mb-1'>
+						<span className='text-xs font-medium text-zinc-500 uppercase tracking-wide'>
 							{productData.totalCount === 1
-								? productData.totalCount + ' Resultado'
-								: productData.totalCount + ' Resultados'}
-						</h2>
+								? `${productData.totalCount} resultado`
+								: `${productData.totalCount} resultados`}
+						</span>
 					</div>
-					<div
-						className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 max-h-[calc(100vh-150px)] md:max-h-[calc(100vh-110px)] overflow-y-auto pr-2'
-						ref={containerRef}>
-						{allProducts.map((product: IProductData) => (
-							<div
-								key={product._id}
-								className='max-w-xl mx-auto pb-2'>
-								<ProductCard product={product} />
-							</div>
-						))}
-						{isFetchingMore && hasMoreProducts && (
-							<div className='col-span-full flex justify-center py-4'>
-								<div className='w-6 h-6 border-4 border-dymOrange border-t-transparent border-solid rounded-full animate-spin'></div>
-							</div>
-						)}
-					</div>
+					{productData.totalCount === 0 ? (
+						<div className='flex flex-col items-center justify-center h-[calc(100vh-166px)] md:h-[calc(100vh-126px)] gap-4 text-center px-4'>
+							<svg xmlns='http://www.w3.org/2000/svg' className='w-16 h-16 text-zinc-600' fill='none' viewBox='0 0 24 24' stroke='currentColor' strokeWidth={1.2}>
+								<path strokeLinecap='round' strokeLinejoin='round' d='M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0z' />
+							</svg>
+							<p className='text-zinc-300 text-lg font-semibold'>Sin resultados</p>
+							<p className='text-zinc-500 text-sm max-w-xs'>
+								No encontramos productos que coincidan con los filtros seleccionados. Probá ajustando la búsqueda o eliminando algunos filtros.
+							</p>
+						</div>
+					) : (
+						<div
+							className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 max-h-[calc(100vh-166px)] md:max-h-[calc(100vh-126px)] overflow-y-auto pr-2 pb-16 md:pb-0'
+							ref={containerRef}>
+							{allProducts.map((product: IProductData) => (
+								<div
+									key={product._id}
+									className='max-w-xl mx-auto pb-2'>
+									<ProductCard product={product} />
+								</div>
+							))}
+							{isFetchingMore && hasMoreProducts && (
+								<div className='col-span-full flex justify-center py-4'>
+									<div className='w-6 h-6 border-4 border-dymOrange border-t-transparent border-solid rounded-full animate-spin'></div>
+								</div>
+							)}
+						</div>
+					)}
 				</div>
 			</div>
 		</div>

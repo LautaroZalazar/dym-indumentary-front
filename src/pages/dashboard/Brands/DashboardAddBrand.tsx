@@ -2,20 +2,17 @@ import { ChangeEvent, useState } from 'react';
 import { useCreatebrandMutation } from '../../../redux/slices/catalogs.silce';
 import { useMessage } from '../../../hooks/alertMessage';
 
+const inputCls =
+	'w-full rounded-lg h-10 pl-3 bg-[#252030] border border-white/[0.1] text-dymAntiPop placeholder:text-dymAntiPop/35 focus:outline-none focus:border-dymOrange/60 focus:ring-1 focus:ring-dymOrange/20 transition-colors duration-150';
+
 const DashboardAddBrand: React.FC = () => {
 	const [createBrand] = useCreatebrandMutation();
 	const [brands, setBrands] = useState([{ name: '' }]);
 	const { MessageComponent, showMessage } = useMessage();
 
-	const handleChange = (
-		index: number,
-		event: ChangeEvent<HTMLInputElement>
-	) => {
+	const handleChange = (index: number, event: ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = event.target;
-		const newSize = brands.map((size, i) =>
-			i === index ? { ...size, [name]: value } : size
-		);
-		setBrands(newSize);
+		setBrands(brands.map((brand, i) => (i === index ? { ...brand, [name]: value } : brand)));
 	};
 
 	const addBrandField = () => {
@@ -31,17 +28,11 @@ const DashboardAddBrand: React.FC = () => {
 		try {
 			for (const brand of brands) {
 				if (brand.name) {
-					const newBrand = {
-						brand: brand.name.toLowerCase(),
-					};
-					await createBrand(newBrand).unwrap();
-					showMessage(
-						'success',
-						'La marca se agregó correctamente',
-						3000
-					);
+					await createBrand({ brand: brand.name.toLowerCase() }).unwrap();
+					showMessage('success', 'La marca se agregó correctamente', 3000);
+				} else {
+					showMessage('error', 'El nombre no debe estar vacío', 3000);
 				}
-				showMessage('error', 'El nombre no debe estar vacío', 3000);
 			}
 			setBrands([{ name: '' }]);
 		} catch (error: any) {
@@ -51,37 +42,52 @@ const DashboardAddBrand: React.FC = () => {
 	};
 
 	return (
-		<form className='flex justify-center items-center w-full min-h-screen p-4 pt-12 pb-12 md:pb-0'>
-			<div className='flex flex-col justify-center items-center bg-dymBlack w-full max-w-lg rounded-lg shadow-lg space-y-6 p-4'>
-				{brands.map((brand, index) => (
-					<div
-						key={index}
-						className='flex items-center justify-between w-full'>
-						<input
-							name='name'
-							placeholder='Nombre de la marca'
-							className='p-2 rounded-lg border border-dymAntiPop w-full'
-							value={brand.name}
-							onChange={(e) => handleChange(index, e)}
-						/>
-						<button
-							type='button'
-							onClick={() => removeBrandField(index)}
-							className='text-red-500 hover:text-red-700 transition-all duration-300 ml-2'>
-							&times;
-						</button>
-					</div>
-				))}
-				<div className='flex flex-col justify-around md:flex-row w-full space-y-4 md:space-y-0 md:space-x-4'>
+		<form className='flex justify-center items-start w-full p-6 py-8'>
+			<div className='flex flex-col w-full max-w-lg bg-[#1E1A21] rounded-xl border border-white/[0.07] shadow-lg p-6'>
+				<h1 className='text-lg font-semibold text-dymAntiPop mb-1'>Agregar marcas</h1>
+				<p className='text-xs text-dymAntiPop/40 mb-6'>Podés agregar varias marcas a la vez.</p>
+
+				<div className='space-y-3'>
+					{brands.map((brand, index) => (
+						<div key={index} className='flex items-end gap-3'>
+							<div className='flex-1'>
+								{index === 0 && (
+									<label className='block text-xs font-medium text-dymAntiPop/55 mb-1.5'>
+										Nombre de la marca
+									</label>
+								)}
+								<input
+									name='name'
+									placeholder='Ej: Nike, Adidas...'
+									className={inputCls}
+									value={brand.name}
+									onChange={(e) => handleChange(index, e)}
+								/>
+							</div>
+							<button
+								type='button'
+								onClick={() => removeBrandField(index)}
+								disabled={brands.length === 1}
+								className='w-9 h-10 flex items-center justify-center rounded-lg text-dymAntiPop/35 hover:text-red-400 hover:bg-red-400/10 disabled:opacity-20 transition-colors text-xl leading-none'
+							>
+								×
+							</button>
+						</div>
+					))}
+				</div>
+
+				<div className='flex gap-3 mt-6 pt-5 border-t border-white/[0.07]'>
 					<button
 						type='button'
 						onClick={addBrandField}
-						className='p-2 border border-dymOrange rounded-lg w-full md:w-auto hover:bg-dymOrange transition-all duration-300'>
-						Añadir otra marca
+						className='flex-1 py-2.5 border border-white/15 hover:border-white/35 text-dymAntiPop/55 hover:text-dymAntiPop font-medium rounded-lg transition-colors text-sm'
+					>
+						+ Añadir otra
 					</button>
 					<button
 						onClick={handleSubmit}
-						className='p-2 border bg-dymOrange rounded-lg w-full md:w-auto transition-all duration-300'>
+						className='flex-1 py-2.5 bg-dymOrange hover:bg-dymOrange/90 text-white font-semibold rounded-lg transition-colors text-sm'
+					>
 						Guardar marcas
 					</button>
 				</div>

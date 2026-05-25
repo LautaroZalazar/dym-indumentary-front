@@ -41,7 +41,7 @@ const DashboardCategoriesList = () => {
 	if (categoryIsLoading) return <Loader />;
 
 	return (
-		<div className='min-h-screen flex flex-col overflow-hidden pt-12 pb-12 md:pb-0'>
+		<div className='flex flex-col flex-1'>
 			<div className='flex flex-col bg-dymBlack flex-grow p-2'>
 				<div className='flex flex-col md:flex-row md:space-x-24 space-y-4 mt-4'>
 					<input

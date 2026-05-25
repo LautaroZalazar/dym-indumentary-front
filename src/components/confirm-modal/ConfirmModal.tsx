@@ -14,13 +14,13 @@ const ConfirmModal: React.FC<IConfirmModalProps> = ({
 						type='button'
 						onClick={onAccept}
 						className='px-4 py-2 bg-dymOrange text-dymAntiPop rounded mr-2'>
-						Accept
+						Aceptar
 					</button>
 					<button
 						type='button'
 						onClick={onCancel}
 						className='px-4 py-2 bg-tansparent border border-dymOrange text-dymAntiPop rounded'>
-						Cancel
+						Cancelar
 					</button>
 				</div>
 			</div>
